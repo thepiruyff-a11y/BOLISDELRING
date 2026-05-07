@@ -1,51 +1,51 @@
 {
-"products": [
-{
-"id": 1,
-"name": "Maracumango El Rayo",
-"price": 2000,
-"stock": 15,
-"category": "Rudo",
-"image": "https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg",
-"color": "bg-orange-50"
-},
-{
-"id": 4,
-"name": "Coco El Enmascarado",
-"price": 2000,
-"stock": 18,
-"category": "Técnico",
-"image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
-"color": "bg-slate-50"
-},
-{
-"id": 2,
-"name": "Mango El Justiciero",
-"price": 2000,
-"stock": 20,
-"category": "Rudo",
-"image": "https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg",
-"color": "bg-yellow-50"
-}
-],
-"promos": [
-{
-"id": 101,
-"name": "Triángulo Infernal",
-"desc": "3 bolis por precio de infarto.",
-"price": 5000,
-"oldPrice": 6000,
-"color": "from-yellow-400 to-orange-500",
-"icon": "fa-bolt"
-},
-{
-"id": 102,
-"name": "La Cuadrilla del Ring",
-"desc": "6 bolis para todo el equipo.",
-"price": 10000,
-"oldPrice": 12000,
-"color": "from-red-600 to-red-800",
-"icon": "fa-fist-raised"
-}
-]
+  "products": [
+    {
+      "id": 1,
+      "name": "Maracumango El Rayo",
+      "price": 2000,
+      "stock": 15,
+      "category": "Rudo",
+      "image": "https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg",
+      "color": "bg-orange-50"
+    },
+    {
+      "id": 4,
+      "name": "Coco El Enmascarado",
+      "price": 2000,
+      "stock": 18,
+      "category": "Técnico",
+      "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
+      "color": "bg-slate-50"
+    },
+    {
+      "id": 2,
+      "name": "Mango El Justiciero",
+      "price": 2000,
+      "stock": 20,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg",
+      "color": "bg-yellow-50"
+    }
+  ],
+  "promos": [
+    {
+      "id": 101,
+      "name": "Triángulo Infernal",
+      "desc": "3 bolis por precio de infarto.",
+      "price": 5000,
+      "oldPrice": 6000,
+      "color": "from-yellow-400 to-orange-500",
+      "icon": "fa-bolt"
+    },
+    {
+      "id": 102,
+      "name": "La Cuadrilla del Ring",
+      "desc": "6 bolis para todo el equipo.",
+      "price": 10000,
+      "oldPrice": 12000,
+      "color": "from-red-600 to-red-800",
+      "icon": "fa-fist-raised"
+    }
+  ]
 }
