@@ -80,6 +80,15 @@
       "category": "Rudo",
       "image": "https://i.postimg.cc/3w9Kh7NX/8972928b-46ed-4a56-bfa9-29e549ffc444.jpg",
       "color": "bg-slate-50"
+    },
+    {
+      "id": 1778169382661,
+      "name": "NARANJA",
+      "price": 2000,
+      "stock": 10,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/d1ktjpQ9/240009be-118d-4591-b3dd-f56c5caa9ef2.jpg",
+      "color": "bg-slate-50"
     }
   ],
   "promos": [
