@@ -20,7 +20,6 @@
             background-position: center; 
         }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%); z-index: 1; }
-        .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         
         #admin-panel { display: none; }
         .admin-active #admin-panel { display: block; }
@@ -36,11 +35,8 @@
             backdrop-filter: blur(8px);
         }
 
-        @keyframes bounce-scale {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-        .cart-bump { animation: bounce-scale 0.3s ease-out; }
+        .sync-spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -50,21 +46,24 @@
             <div class="bg-red-600 p-2 rounded-lg text-white shadow-lg rotate-3">
                 <i class="fas fa-mask fa-lg"></i>
             </div>
-            <h1 class="text-2xl font-luck text-slate-900 tracking-wider">BOLIS <span class="text-red-600">DEL RING</span></h1>
+            <h1 class="text-2xl font-luck text-slate-900 tracking-wider uppercase">BOLIS <span class="text-red-600">DEL RING</span></h1>
         </div>
         
         <div class="flex items-center gap-4">
-            <div class="hidden md:flex gap-6 mr-4">
-                <a href="#promociones" class="text-sm font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-tighter">Promociones</a>
-                <a href="#catalogo" class="text-sm font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-tighter">Cartelera</a>
-                <a href="#contacto" class="text-sm font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-tighter">Contacto</a>
+            <div class="hidden lg:flex gap-6 mr-4">
+                <a href="#promociones" class="text-xs font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-widest">Promociones</a>
+                <a href="#catalogo" class="text-xs font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-widest">Cartelera</a>
+                <a href="#contacto" class="text-xs font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-widest">Contacto</a>
             </div>
             <button onclick="openSecurity()" class="p-2 text-slate-400 hover:text-red-600 transition-colors" title="Acceso Promotor">
                 <i class="fas fa-shield-alt text-xl"></i>
             </button>
+            <button id="sync-btn" onclick="syncDataFromGitHub()" class="p-2 text-blue-500 hover:text-blue-700 transition-colors hidden" title="Sincronizar con GitHub">
+                <i class="fas fa-sync-alt text-xl"></i>
+            </button>
             <button onclick="toggleCart()" class="relative p-2 text-slate-600 hover:text-red-500 transition-colors">
                 <i class="fas fa-shopping-basket text-xl"></i>
-                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
             </button>
         </div>
     </nav>
@@ -75,14 +74,12 @@
             <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2 uppercase">
                 ¡El peso pesado de la frescura!
             </span>
-            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg">
-                ¡UN GOLPE DE SABOR EN CADA MORDIDA! 🥊
-            </h2>
+            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg">¡UN GOLPE DE SABOR EN CADA MORDIDA! 🥊</h2>
             <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto">
-                No te dejes vencer por el calor. Pide tus bolis <span class="text-yellow-400">100% naturales, sin conservantes ni colorantes</span>, y gana la lucha contra la sed.
+                No te dejes vencer por el calor. Pide tus bolis <span class="text-yellow-400">100% naturales, sin conservantes ni colorantes</span>.
             </p>
-            <a href="#catalogo" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1">
-                VER EL CARTEL (CATÁLOGO)
+            <a href="#catalogo" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 uppercase">
+                Ver la cartelera
             </a>
         </div>
     </header>
@@ -93,44 +90,68 @@
                 <span class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-2 inline-block shadow-lg">Eventos Especiales</span>
                 <h3 class="text-4xl md:text-5xl font-luck text-slate-900 uppercase">¡COMBOS DE CAMPEONATO! 🏆</h3>
             </div>
-
-            <div id="promo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Inyectado por JS -->
-            </div>
+            <div id="promo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
 
-        <section id="catalogo" class="mb-16 pt-10 scroll-mt-24">
+        <section id="catalogo" class="mb-16 scroll-mt-24">
             <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4 border-b-4 border-red-600 pb-4">
                 <div>
                     <h3 class="text-4xl font-luck text-slate-800 uppercase">Cartelera de Sabores</h3>
-                    <p class="text-slate-500 font-bold text-sm">Escoge a tus favoritos para la batalla</p>
+                    <p class="text-slate-500 font-bold text-sm italic">Bolis 100% naturales, sin conservantes ni colorantes</p>
                 </div>
                 <div id="promotor-tag" class="hidden bg-yellow-400 text-slate-900 px-4 py-1 rounded-lg text-xs font-black border-2 border-slate-900 animate-pulse">MODO PROMOTOR ACTIVO</div>
             </div>
-
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
-                <!-- Inyectado por JS -->
-            </div>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]"></div>
         </section>
 
-        <section id="admin-panel" class="bg-white rounded-[2.5rem] p-8 shadow-2xl border-4 border-slate-900 mb-20">
-            <div class="text-center mb-8">
-                <h3 class="text-3xl font-luck text-slate-900 uppercase">Fichar Nuevo Luchador</h3>
-                <p class="text-slate-500 font-bold">Agrega un nuevo sabor a la cartelera oficial</p>
-            </div>
-            <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); addNewProduct();">
-                <input type="text" id="new-name" placeholder="Nombre (Ej: Mango 'El Terrible')" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                <input type="number" id="new-price" placeholder="Precio ($)" value="2000" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                <input type="number" id="new-stock" placeholder="Stock Inicial" value="10" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                <select id="new-category" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                    <option value="Rudo">Rudo (Agua)</option>
-                    <option value="Técnico">Técnico (Cremoso)</option>
-                </select>
-                <input type="url" id="new-image" placeholder="URL de la imagen" required class="md:col-span-2 p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                <button type="submit" class="md:col-span-2 bg-slate-900 text-white py-5 rounded-xl font-black text-xl hover:bg-red-600 transition-colors uppercase tracking-widest shadow-xl">
-                    ¡SUBIR AL CUADRILÁTERO!
+        <section id="admin-panel" class="space-y-8 mb-20">
+            <!-- Configuración GitHub -->
+            <div class="bg-blue-600 rounded-[2.5rem] p-8 shadow-2xl text-white">
+                <h3 class="text-3xl font-luck mb-6 uppercase flex items-center gap-3">
+                    <i class="fab fa-github"></i> Esquina Técnica (Configuración GitHub)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black uppercase opacity-80">GitHub Token (PAT)</label>
+                        <input type="password" id="gh-token" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 font-bold text-xs" placeholder="ghp_xxxx...">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black uppercase opacity-80">Usuario / Dueño</label>
+                        <input type="text" id="gh-owner" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 font-bold text-xs" placeholder="TuUsuario">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black uppercase opacity-80">Repositorio</label>
+                        <input type="text" id="gh-repo" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 font-bold text-xs" placeholder="bolis-web">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black uppercase opacity-80">Ruta del Archivo</label>
+                        <input type="text" id="gh-path" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 font-bold text-xs" value="data.json">
+                    </div>
+                </div>
+                <button onclick="saveGitHubConfig()" class="mt-6 bg-white text-blue-600 px-8 py-3 rounded-xl font-black uppercase text-sm shadow-xl hover:scale-105 transition-transform">
+                    Vincular Cuadrilátero
                 </button>
-            </form>
+            </div>
+
+            <!-- Formulario de Producto -->
+            <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl border-4 border-slate-900">
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-luck text-slate-900 uppercase">Fichar Nuevo Luchador</h3>
+                </div>
+                <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); addNewProduct();">
+                    <input type="text" id="new-name" placeholder="Nombre (Ej: Mango 'El Terrible')" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
+                    <input type="number" id="new-price" placeholder="Precio ($)" value="2000" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
+                    <input type="number" id="new-stock" placeholder="Stock Inicial" value="10" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
+                    <select id="new-category" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
+                        <option value="Rudo">Rudo (Agua)</option>
+                        <option value="Técnico">Técnico (Cremoso)</option>
+                    </select>
+                    <input type="url" id="new-image" placeholder="URL de la imagen" required class="md:col-span-2 p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
+                    <button type="submit" class="md:col-span-2 bg-slate-900 text-white py-5 rounded-xl font-black text-xl hover:bg-red-600 transition-colors uppercase tracking-widest shadow-xl">
+                        ¡SUBIR AL CUADRILÁTERO!
+                    </button>
+                </form>
+            </div>
         </section>
 
         <section id="domicilio" class="bg-white rounded-[2rem] p-8 shadow-2xl border-4 border-slate-900 max-w-2xl mx-auto mb-20 hidden scroll-mt-24">
@@ -187,33 +208,19 @@
         <div class="max-w-6xl mx-auto relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
                 <div class="space-y-6">
-                    <div class="flex items-center justify-center md:justify-start gap-3">
-                        <div class="bg-red-600 p-2 rounded-xl text-white shadow-lg rotate-3">
-                            <i class="fas fa-mask fa-2x"></i>
-                        </div>
-                        <h4 class="text-4xl font-luck tracking-wider leading-none">BOLIS <span class="text-red-600">DEL RING</span></h4>
-                    </div>
-                    <p class="text-slate-400 font-medium leading-relaxed">
-                        Bolis <span class="text-white font-bold">100% naturales</span>, elaborados con frutas seleccionadas. ¡Un nocaut al calor!
-                    </p>
+                    <h4 class="text-4xl font-luck tracking-wider">BOLIS <span class="text-red-600">DEL RING</span></h4>
+                    <p class="text-slate-400 font-medium">Bolis <span class="text-white font-bold">100% naturales</span>, sin conservantes ni colorantes. ¡Un nocaut al calor!</p>
                 </div>
                 <div class="space-y-6">
-                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Esquina de Contacto</h5>
-                    <ul class="space-y-4 text-slate-300">
-                        <li class="flex items-center justify-center md:justify-start gap-3">
-                            <i class="fas fa-phone-alt text-red-600"></i>
-                            <span class="font-bold">+57 314 586 5641</span>
-                        </li>
+                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Contacto</h5>
+                    <ul class="space-y-4 text-slate-300 font-bold">
+                        <li><i class="fas fa-phone-alt text-red-600 mr-2"></i> +57 314 586 5641</li>
+                        <li><i class="fab fa-whatsapp text-green-500 mr-2"></i> 314 586 5641</li>
                     </ul>
                 </div>
                 <div class="space-y-6">
-                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Horario de Combate</h5>
-                    <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
-                        <div class="flex justify-between gap-8 mb-2">
-                            <span class="text-slate-400">Lun - Sáb:</span>
-                            <span class="font-bold">10:00 AM - 7:00 PM</span>
-                        </div>
-                    </div>
+                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Combate Diario</h5>
+                    <p class="text-slate-400 font-bold">Lunes a Sábado <br> 10:00 AM - 7:00 PM</p>
                 </div>
             </div>
             <div class="pt-8 border-t border-slate-900 text-center text-xs text-slate-500">
@@ -234,26 +241,116 @@
         ];
 
         const defaultPromos = [
-            { id: 101, name: 'Triángulo Infernal', desc: 'Lleva 3 bolis de cualquier sabor por un precio de infarto.', price: 5000, oldPrice: 6000, color: 'from-yellow-400 to-orange-500', icon: 'fa-bolt' },
-            { id: 102, name: 'La Cuadrilla del Ring', desc: 'El equipo completo: 6 bolis para que nadie se quede fuera.', price: 10000, oldPrice: 12000, color: 'from-red-600 to-red-800', icon: 'fa-fist-raised' }
+            { id: 101, name: 'Triángulo Infernal', desc: '3 bolis por precio de infarto.', price: 5000, oldPrice: 6000, color: 'from-yellow-400 to-orange-500', icon: 'fa-bolt' },
+            { id: 102, name: 'La Cuadrilla del Ring', desc: '6 bolis para todo el equipo.', price: 10000, oldPrice: 12000, color: 'from-red-600 to-red-800', icon: 'fa-fist-raised' }
         ];
 
         let products = JSON.parse(localStorage.getItem('bolis_ring_db')) || defaultProducts;
         let promos = JSON.parse(localStorage.getItem('bolis_ring_promos')) || defaultPromos;
         let cart = [];
 
+        // --- GESTIÓN GITHUB ---
+        
+        function getGHConfig() {
+            return {
+                token: localStorage.getItem('gh_token'),
+                owner: localStorage.getItem('gh_owner'),
+                repo: localStorage.getItem('gh_repo'),
+                path: localStorage.getItem('gh_path') || 'data.json'
+            };
+        }
+
+        async function saveGitHubConfig() {
+            localStorage.setItem('gh_token', document.getElementById('gh-token').value);
+            localStorage.setItem('gh_owner', document.getElementById('gh-owner').value);
+            localStorage.setItem('gh_repo', document.getElementById('gh-repo').value);
+            localStorage.setItem('gh_path', document.getElementById('gh-path').value);
+            showNotice("Configuración guardada localmente 🛡️", true);
+            await syncDataToGitHub();
+        }
+
+        async function syncDataToGitHub() {
+            const cfg = getGHConfig();
+            if (!cfg.token || !cfg.owner || !cfg.repo) return;
+
+            showNotice("Sincronizando con la nube... ☁️", true);
+            
+            try {
+                // 1. Obtener el SHA del archivo existente (obligatorio para actualizar)
+                const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
+                    headers: { 'Authorization': `token ${cfg.token}` }
+                });
+                
+                let sha = null;
+                if (res.ok) {
+                    const data = await res.json();
+                    sha = data.sha;
+                }
+
+                // 2. Preparar el contenido
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos }, null, 2))));
+                
+                // 3. Subir el commit
+                const putRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Authorization': `token ${cfg.token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: "Actualización de Cartelera - Bolis del Ring 🥊",
+                        content: content,
+                        sha: sha
+                    })
+                });
+
+                if (putRes.ok) showNotice("¡Guardado en GitHub correctamente! 🚀", true);
+                else throw new Error("Fallo al subir");
+
+            } catch (err) {
+                console.error(err);
+                showNotice("Error al sincronizar con GitHub ❌");
+            }
+        }
+
+        async function syncDataFromGitHub() {
+            const cfg = getGHConfig();
+            if (!cfg.token || !cfg.owner || !cfg.repo) return;
+
+            const icon = document.querySelector('#sync-btn i');
+            icon.classList.add('sync-spinner');
+
+            try {
+                const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
+                    headers: { 'Authorization': `token ${cfg.token}` }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    const decoded = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+                    products = decoded.products;
+                    promos = decoded.promos;
+                    saveDataLocal();
+                    renderProducts();
+                    renderPromos();
+                    showNotice("Datos descargados de GitHub 🥊", true);
+                }
+            } catch (err) {
+                showNotice("Error al descargar datos ❌");
+            } finally {
+                icon.classList.remove('sync-spinner');
+            }
+        }
+
+        // --- RENDERIZADO Y LÓGICA ---
+
         function renderPromos() {
             const grid = document.getElementById('promo-grid');
             if (!grid) return;
-
-            grid.innerHTML = promos.map((p, index) => {
-                const textColor = p.color.includes('yellow') ? 'text-slate-900' : 'text-white';
-                const opacity = p.color.includes('yellow') ? 'opacity-20' : 'opacity-20';
-                
-                return `
-                <div class="relative bg-gradient-to-br ${p.color} rounded-[2.5rem] p-8 ${textColor} shadow-xl overflow-hidden group transition-all border-4 border-white ${!isPromotor ? 'hover:scale-[1.02] cursor-pointer' : ''}" 
+            grid.innerHTML = promos.map((p, index) => `
+                <div class="relative bg-gradient-to-br ${p.color} rounded-[2.5rem] p-8 ${p.color.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white ${!isPromotor ? 'hover:scale-[1.02] cursor-pointer' : ''}" 
                      onclick="${!isPromotor ? `addPromoToCart(${index})` : ''}">
-                    <div class="absolute -right-10 -top-10 ${opacity} group-hover:scale-110 transition-transform">
+                    <div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform">
                         <i class="fas ${p.icon} text-[15rem]"></i>
                     </div>
                     <div class="relative z-10">
@@ -265,43 +362,28 @@
                                 <span class="text-5xl font-black">$${p.price.toLocaleString()}</span>
                                 <span class="text-xl line-through opacity-60 font-bold">$${p.oldPrice.toLocaleString()}</span>
                             </div>
-                            <button class="mt-6 ${p.color.includes('yellow') ? 'bg-slate-900 text-white' : 'bg-yellow-400 text-slate-900'} px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">¡PEDIR RELEVO!</button>
                         ` : `
                             <div class="space-y-3 bg-white/20 p-4 rounded-2xl border border-white/30 backdrop-blur-sm">
-                                <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" 
-                                    class="w-full bg-white/90 border-0 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-lg outline-none" placeholder="Nombre Combo">
-                                <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" 
-                                    class="w-full bg-white/90 border-0 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs outline-none h-16" placeholder="Descripción">${p.desc}</textarea>
+                                <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" class="w-full bg-white/90 border-0 rounded-xl px-3 py-2 font-black text-slate-900 uppercase outline-none">
+                                <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" class="w-full bg-white/90 border-0 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs outline-none h-16">${p.desc}</textarea>
                                 <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="text-[9px] font-black uppercase block ml-1 mb-1">Precio Combo</label>
-                                        <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" 
-                                            class="w-full bg-white/90 border-0 rounded-xl px-3 py-2 font-black text-slate-900 text-sm outline-none">
-                                    </div>
-                                    <div>
-                                        <label class="text-[9px] font-black uppercase block ml-1 mb-1">Precio Original</label>
-                                        <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" 
-                                            class="w-full bg-white/90 border-0 rounded-xl px-3 py-2 font-black text-slate-900 text-sm outline-none">
-                                    </div>
+                                    <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-sm outline-none">
+                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-sm outline-none">
                                 </div>
                             </div>
                         `}
                     </div>
-                </div>`;
-            }).join('');
+                </div>`).join('');
         }
 
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             if (!grid) return;
-
-            grid.innerHTML = products.map(p => {
-                const badgeColor = p.category === 'Rudo' ? 'bg-red-600' : 'bg-blue-600';
-                return `
+            grid.innerHTML = products.map(p => `
                 <div class="product-card bg-white rounded-[2rem] overflow-hidden shadow-xl border-2 border-slate-100 flex flex-col h-full">
                     <div class="${p.color || 'bg-slate-50'} h-56 flex items-center justify-center relative overflow-hidden">
-                        <img src="${p.image}" class="product-image" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
-                        <div class="absolute top-4 left-4 ${badgeColor} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10">${p.category}</div>
+                        <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
+                        <div class="absolute top-4 left-4 ${p.category === 'Rudo' ? 'bg-red-600' : 'bg-blue-600'} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10">${p.category}</div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         ${!isPromotor ? `
@@ -309,48 +391,43 @@
                             <div class="text-3xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</div>
                         ` : `
                             <div class="space-y-3 mb-4 bg-yellow-50 p-4 rounded-2xl border-2 border-yellow-200">
-                                <input type="text" value="${p.name}" onchange="updateProperty(${p.id}, 'name', this.value)" 
-                                    class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm outline-none">
+                                <input type="text" value="${p.name}" onchange="updateProperty(${p.id}, 'name', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm outline-none">
                                 <div class="grid grid-cols-2 gap-2">
-                                    <input type="number" value="${p.price}" onchange="updateProperty(${p.id}, 'price', this.value)" 
-                                        class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
-                                    <input type="number" value="${p.stock}" onchange="updateProperty(${p.id}, 'stock', this.value)" 
-                                        class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
+                                    <input type="number" value="${p.price}" onchange="updateProperty(${p.id}, 'price', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
+                                    <input type="number" value="${p.stock}" onchange="updateProperty(${p.id}, 'stock', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
                                 </div>
                                 <button onclick="deleteProduct(${p.id})" class="w-full bg-red-100 text-red-600 py-2 rounded-xl text-xs font-black uppercase hover:bg-red-600 hover:text-white transition-colors">Eliminar</button>
                             </div>
                         `}
-                        <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''} 
-                            class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm">
+                        <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm">
                             ${p.stock > 0 ? '¡AL CARRITO!' : 'SIN STOCK'}
                         </button>
                     </div>
-                </div>`;
-            }).join('');
+                </div>`).join('');
         }
 
-        function updateProperty(id, property, value) {
+        async function updateProperty(id, property, value) {
             const prod = products.find(p => p.id === id);
             if (prod) {
                 if (property === 'price' || property === 'stock') prod[property] = parseInt(value) || 0;
                 else prod[property] = value;
-                saveData();
+                saveDataLocal();
                 renderProducts();
-                showNotice("Ficha de sabor actualizada 🥊", true);
+                await syncDataToGitHub();
             }
         }
 
-        function updatePromoProperty(index, property, value) {
+        async function updatePromoProperty(index, property, value) {
             if (promos[index]) {
                 if (property === 'price' || property === 'oldPrice') promos[index][property] = parseInt(value) || 0;
                 else promos[index][property] = value;
-                saveData();
+                saveDataLocal();
                 renderPromos();
-                showNotice("Promoción actualizada 🏆", true);
+                await syncDataToGitHub();
             }
         }
 
-        function saveData() { 
+        function saveDataLocal() { 
             localStorage.setItem('bolis_ring_db', JSON.stringify(products)); 
             localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
         }
@@ -366,13 +443,24 @@
             if (document.getElementById('pass-input').value === CLAVE) {
                 toggleAdminMode(true);
                 closeSecurity();
-            } else { showNotice("Clave de promotor incorrecta ❌"); }
+            } else { showNotice("Clave incorrecta ❌"); }
         }
 
         function toggleAdminMode(activate) {
             isPromotor = activate;
             document.body.classList.toggle('admin-active', isPromotor);
             document.getElementById('promotor-tag').classList.toggle('hidden', !isPromotor);
+            document.getElementById('sync-btn').classList.toggle('hidden', !isPromotor);
+            
+            // Cargar config actual en el panel
+            if (isPromotor) {
+                const cfg = getGHConfig();
+                document.getElementById('gh-token').value = cfg.token || '';
+                document.getElementById('gh-owner').value = cfg.owner || '';
+                document.getElementById('gh-repo').value = cfg.repo || '';
+                document.getElementById('gh-path').value = cfg.path;
+            }
+
             renderProducts();
             renderPromos();
         }
@@ -381,17 +469,15 @@
             const prod = products.find(p => p.id === id);
             if (!prod || prod.stock <= 0) return;
             const item = cart.find(i => i.id === id);
-            if (item) {
-                if (item.qty < prod.stock) item.qty++;
-                else { showNotice("No hay más stock disponible"); return; }
-            } else { cart.push({ ...prod, qty: 1 }); }
+            if (item) item.qty++;
+            else cart.push({ ...prod, qty: 1 });
             updateCartUI();
             showNotice(`${prod.name} al equipo 🥊`);
         }
 
         function addPromoToCart(index) {
             const promo = promos[index];
-            cart.push({ id: `promo-${Date.now()}`, name: `🔥 ${promo.name}`, price: promo.price, qty: 1, isPromo: true });
+            cart.push({ id: `promo-${Date.now()}`, name: `🔥 ${promo.name}`, price: promo.price, qty: 1 });
             updateCartUI();
             showNotice(`${promo.name} agregado 🏆`, true);
         }
@@ -404,7 +490,7 @@
 
             const cont = document.getElementById('cart-items');
             if (cart.length === 0) {
-                cont.innerHTML = `<p class="text-center text-slate-300 py-10 uppercase text-xs font-black">Tu equipaje está vacío</p>`;
+                cont.innerHTML = `<p class="text-center text-slate-300 py-10 uppercase text-xs font-black">Vacío</p>`;
                 document.getElementById('cart-total-display').innerText = "$0";
                 document.getElementById('checkout-btn').disabled = true;
             } else {
@@ -417,9 +503,9 @@
                             <p class="text-xs font-bold text-red-600">$${(item.price * item.qty).toLocaleString()}</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="updateCartQty(${idx}, -1)" class="w-6 h-6 text-slate-400 font-black hover:text-red-600 transition-colors">-</button>
-                            <span class="font-black text-xs min-w-[12px] text-center">${item.qty}</span>
-                            <button onclick="updateCartQty(${idx}, 1)" class="w-6 h-6 text-slate-400 font-black hover:text-blue-600 transition-colors">+</button>
+                            <button onclick="updateCartQty(${idx}, -1)" class="w-6 h-6 text-slate-400 font-black">-</button>
+                            <span class="font-black text-xs text-center">${item.qty}</span>
+                            <button onclick="updateCartQty(${idx}, 1)" class="w-6 h-6 text-slate-400 font-black">+</button>
                         </div>
                     </div>`;
                 }).join('');
@@ -430,10 +516,8 @@
         }
 
         function updateCartQty(idx, delta) {
-            const item = cart[idx];
-            if (!item) return;
-            item.qty += delta;
-            if (item.qty <= 0) cart.splice(idx, 1);
+            cart[idx].qty += delta;
+            if (cart[idx].qty <= 0) cart.splice(idx, 1);
             updateCartUI();
         }
 
@@ -456,20 +540,15 @@
             const n = document.getElementById('cust-name').value;
             const a = document.getElementById('cust-address').value;
             const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-            
             let msg = `*PEDIDO BOLIS DEL RING* 🥊\n\n*Retador:* ${n}\n*Dirección:* ${a}\n\n*EQUIPO:*\n`;
             cart.forEach(i => msg += `• ${i.qty}x ${i.name}\n`);
             msg += `\n*TOTAL: $${total.toLocaleString()}*`;
-            
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-            cart = []; 
-            updateCartUI(); 
-            document.getElementById('order-form').reset();
+            cart = []; updateCartUI(); 
             document.getElementById('domicilio').classList.add('hidden');
-            showNotice("¡Pedido enviado por WhatsApp! 🥊", true);
         }
 
-        function addNewProduct() {
+        async function addNewProduct() {
             const name = document.getElementById('new-name').value;
             const price = parseInt(document.getElementById('new-price').value);
             const stock = parseInt(document.getElementById('new-stock').value);
@@ -477,17 +556,17 @@
             const image = document.getElementById('new-image').value;
 
             products.push({ id: Date.now(), name, price, stock, category, image, color: 'bg-slate-50' });
-            saveData();
+            saveDataLocal();
             renderProducts();
             document.getElementById('add-product-form').reset();
-            showNotice("¡Nuevo luchador fichado! 🌟", true);
+            await syncDataToGitHub();
         }
 
-        function deleteProduct(id) {
+        async function deleteProduct(id) {
             products = products.filter(p => p.id !== id);
-            saveData();
+            saveDataLocal();
             renderProducts();
-            showNotice("Luchador fuera de combate", false);
+            await syncDataToGitHub();
         }
 
         function showNotice(msg, isSuccess = false) {
@@ -500,9 +579,13 @@
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 2500);
         }
 
-        window.onload = () => {
+        window.onload = async () => {
             renderProducts();
             renderPromos();
+            const cfg = getGHConfig();
+            if (cfg.token) {
+                await syncDataFromGitHub();
+            }
         };
     </script>
 </body>
