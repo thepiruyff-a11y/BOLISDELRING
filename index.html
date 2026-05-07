@@ -6,314 +6,220 @@
     <title>Bolis del Ring | ¡Sabor de Campeonato!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --ring-red: #e11d48;
-            --ring-blue: #2563eb;
-            --ring-yellow: #facc15;
-            --ring-dark: #0f172a;
-        }
         body {
             font-family: 'Nunito', sans-serif;
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
         .font-luck {
             font-family: 'Bangers', cursive;
-            letter-spacing: 0.05em;
+            letter-spacing: 1px;
         }
         .bg-glass {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(225, 29, 72, 0.4));
-        }
-        .lucha-shadow {
-            box-shadow: 8px 8px 0px var(--ring-dark);
-        }
-        .product-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
         }
         .product-card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: scale(1.02);
+            transition: all 0.3s ease;
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: var(--ring-red); border-radius: 10px; }
-        
-        .shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
+        .hero-bg {
+            position: relative;
+            background-image: url('https://i.postimg.cc/5t9myq4m/7d882dbf-1798-4a80-b9ec-d2b54d5d6191.jpg');
+            background-size: cover;
+            background-position: center;
         }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        .admin-controls {
+            display: none !important;
+        }
+        body.is-promotor .admin-controls {
+            display: flex !important;
+        }
+        #auth-modal {
+            display: none;
+            z-index: 9999;
+        }
+        #auth-modal.active {
+            display: flex;
+        }
+        .secret-trigger {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .secret-trigger:active {
+            transform: scale(0.95);
         }
     </style>
-</head>
-<body class="bg-slate-50 text-slate-900">
+    <script>
+        window.openAuthModal = function(e) {
+            if(e) e.stopPropagation();
+            const modal = document.getElementById('auth-modal');
+            if (modal) {
+                modal.classList.add('active');
+                setTimeout(() => {
+                    const input = document.getElementById('admin-pass');
+                    if(input) input.focus();
+                }, 100);
+            }
+        };
 
-    <nav class="fixed top-0 w-full z-[100] bg-glass border-b border-slate-200 px-4 md:px-8 py-3 flex justify-between items-center shadow-lg">
-        <div id="secret-trigger" class="flex items-center gap-3 cursor-pointer select-none group">
-            <div class="bg-rose-600 p-2.5 rounded-xl text-white shadow-lg -rotate-6 group-hover:rotate-0 transition-all duration-300">
+        window.closeAuthModal = function() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.getElementById('admin-pass').value = '';
+            }
+        };
+
+        window.verifyPromotor = function() {
+            const pass = document.getElementById('admin-pass').value;
+            // Tu clave original: 1.2.3
+            if(pass === '1.2.3') {
+                const event = new CustomEvent('authSuccess');
+                window.dispatchEvent(event);
+                window.closeAuthModal();
+            } else {
+                if(window.showToast) window.showToast("❌ CLAVE INCORRECTA");
+                document.getElementById('admin-pass').value = '';
+            }
+        };
+
+        window.showToast = function(msg) {
+            const t = document.createElement('div');
+            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-[10px] z-[10000] shadow-2xl animate-bounce";
+            t.innerText = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        };
+    </script>
+</head>
+<body class="bg-slate-100 text-slate-800 transition-colors duration-300">
+
+    <!-- Navegación -->
+    <nav class="sticky top-0 z-50 bg-glass border-b border-slate-200 px-4 py-3 flex justify-between items-center shadow-sm">
+        <div onclick="window.openAuthModal(event)" class="secret-trigger flex items-center gap-2 group">
+            <div class="bg-red-600 p-2 rounded-lg text-white shadow-lg rotate-3 group-hover:rotate-0 transition-transform">
                 <i class="fas fa-mask fa-lg"></i>
             </div>
-            <div>
-                <h1 class="text-2xl md:text-3xl font-luck text-slate-900 uppercase leading-none">BOLIS <span class="text-rose-600">DEL RING</span></h1>
-                <p class="text-[10px] font-black uppercase tracking-tighter text-slate-400 leading-none mt-1">Sabor de peso completo</p>
-            </div>
+            <h1 class="text-2xl font-luck text-slate-900 tracking-wider uppercase">BOLIS <span class="text-red-600">DEL RING</span></h1>
         </div>
         
         <div class="flex items-center gap-4">
-            <div id="promotor-badge" class="hidden bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm border border-yellow-500 animate-pulse">
+            <span id="promotor-badge" class="hidden bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-[10px] font-black uppercase animate-pulse">
                 Modo Promotor
-            </div>
-            <button id="cart-toggle-btn" class="relative group p-2.5 bg-slate-100 rounded-full hover:bg-rose-600 hover:text-white transition-all duration-300">
-                <i class="fas fa-shopping-basket text-lg"></i>
-                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white scale-0 transition-transform duration-300">0</span>
+            </span>
+            <button onclick="window.toggleCart()" class="relative p-2 text-slate-600 hover:text-red-500 transition-colors">
+                <i class="fas fa-shopping-basket text-xl"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
             </button>
         </div>
     </nav>
 
-    <header class="relative pt-32 pb-20 px-6 overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1553177595-4de2bb0842b9?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-20" alt="Texture">
-        </div>
-        <div class="relative z-10 max-w-5xl mx-auto text-center">
-            <span class="inline-block bg-rose-600 text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-6 lucha-shadow">Directo desde la Arena</span>
-            <h2 class="text-6xl md:text-8xl font-luck mb-6 leading-none text-slate-900 drop-shadow-sm uppercase">¡Un nocaut de <span class="text-rose-600">frescura</span>! 🥊</h2>
-            <p class="text-xl md:text-2xl font-bold text-slate-600 mb-10 max-w-2xl mx-auto">Congelados artesanalmente con los mejores ingredientes para derrotar al calor más rudo.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#catalogo" class="bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-sm tracking-widest hover:bg-rose-600 transition-all lucha-shadow">Ver Cartelera</a>
-                <button onclick="const el = document.getElementById('historia'); if(el) el.scrollIntoView({behavior:'smooth'})" class="bg-white text-slate-900 border-4 border-slate-900 px-10 py-4 rounded-2xl font-black uppercase text-sm tracking-widest hover:bg-slate-50 transition-all">Nuestra Técnica</button>
-            </div>
+    <!-- Hero -->
+    <header class="relative hero-bg py-20 px-6 text-white text-center">
+        <div class="hero-overlay"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <h2 class="text-5xl md:text-7xl font-luck mb-4 drop-shadow-lg uppercase">¡Sabor que noquea el calor! 🥊</h2>
+            <p class="text-lg font-bold mb-8 opacity-90">Los bolis más potentes de la arena, directo a tu casa.</p>
+            <a href="#catalogo" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-black uppercase transition-all shadow-xl">Ver Cartelera</a>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 pb-24">
+    <main class="max-w-6xl mx-auto p-6">
         
-        <section id="historia" class="mb-24 scroll-mt-24">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white rounded-[3rem] p-8 md:p-16 shadow-xl border border-slate-100">
-                <div class="space-y-6">
-                    <span class="text-rose-600 font-black uppercase tracking-widest text-xs">La Receta del Campeón</span>
-                    <h3 class="text-4xl md:text-5xl font-luck text-slate-900 uppercase">Técnica de <span class="text-blue-600">Peso Completo</span></h3>
-                    <p class="text-slate-600 leading-relaxed font-medium">
-                        No somos solo hielo y sabor; somos artesanos del ring. Cada boli se prepara con fruta 100% natural y procesos de congelación controlada para evitar cristales molestos.
-                    </p>
-                    <ul class="space-y-4">
-                        <li class="flex items-center gap-3 font-bold text-slate-700">
-                            <i class="fas fa-check-circle text-green-500"></i> Fruta de temporada seleccionada
-                        </li>
-                        <li class="flex items-center gap-3 font-bold text-slate-700">
-                            <i class="fas fa-check-circle text-green-500"></i> Sin conservantes artificiales
-                        </li>
-                        <li class="flex items-center gap-3 font-bold text-slate-700">
-                            <i class="fas fa-check-circle text-green-500"></i> Empaque ultra-resistente
-                        </li>
-                    </ul>
-                </div>
-                <div class="relative">
-                    <div class="absolute -inset-4 bg-rose-100 rounded-[3rem] -rotate-3 z-0"></div>
-                    <img src="https://images.unsplash.com/photo-1501443762994-82bd5dabb89a?q=80&w=2070&auto=format&fit=crop" class="relative z-10 rounded-[2.5rem] shadow-2xl object-cover h-80 w-full" alt="Artesanía">
-                </div>
+        <!-- Sección de Administración -->
+        <section id="admin-form-section" class="hidden mb-12 bg-white rounded-3xl p-8 shadow-2xl border-4 border-yellow-400">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-3xl font-luck text-slate-900 uppercase">Añadir Nuevo Luchador (Sabor)</h3>
+                <button onclick="window.logoutPromotor()" class="text-red-600 font-black text-xs uppercase underline">Cerrar Sesión</button>
             </div>
-        </section>
-
-        <section id="admin-panel" class="hidden mb-16 bg-white rounded-[2.5rem] p-8 shadow-2xl border-4 border-yellow-400 relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-4">
-                <button id="logout-btn" class="text-rose-600 font-black text-xs uppercase hover:underline">Finalizar Turno</button>
-            </div>
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center text-slate-900">
-                    <i class="fas fa-edit fa-lg"></i>
-                </div>
-                <h3 class="text-3xl font-luck text-slate-900 uppercase">Gestión de Promotor</h3>
-            </div>
-            
-            <form id="product-form" class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase text-slate-400 ml-2">Nombre del Luchador (Sabor)</label>
-                    <input type="text" id="p-name" placeholder="Ej. Coco Loco" required class="w-full px-5 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 outline-none focus:border-rose-500 transition-all">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase text-slate-400 ml-2">Precio de Entrada ($)</label>
-                    <input type="number" id="p-price" placeholder="2500" required class="w-full px-5 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 outline-none focus:border-rose-500 transition-all">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase text-slate-400 ml-2">Stock en Bodega</label>
-                    <input type="number" id="p-stock" placeholder="50" required class="w-full px-5 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 outline-none focus:border-rose-500 transition-all">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase text-slate-400 ml-2">Bando (Categoría)</label>
-                    <select id="p-category" class="w-full px-5 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 outline-none focus:border-rose-500 transition-all appearance-none">
-                        <option value="Rudo">Rudo (Agua)</option>
-                        <option value="Técnico">Técnico (Cremoso)</option>
-                        <option value="Especial">Especial (Gourmet)</option>
-                    </select>
-                </div>
-                <div class="md:col-span-3 space-y-2">
-                    <label class="text-[10px] font-black uppercase text-slate-400 ml-2">Foto Oficial (URL)</label>
-                    <input type="text" id="p-image" placeholder="https://..." required class="w-full px-5 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 outline-none focus:border-rose-500 transition-all">
-                </div>
-                <div class="flex items-end">
-                    <button type="submit" class="w-full bg-slate-900 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest hover:bg-rose-600 transition-all lucha-shadow">Subir al Ring</button>
-                </div>
+            <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="text" id="p-name" placeholder="Nombre del Sabor" required class="px-4 py-2 rounded-lg border-2 border-slate-200 outline-none focus:border-red-500">
+                <input type="number" id="p-price" placeholder="Precio ($)" required class="px-4 py-2 rounded-lg border-2 border-slate-200 outline-none focus:border-red-500">
+                <input type="number" id="p-stock" placeholder="Stock Inicial" required class="px-4 py-2 rounded-lg border-2 border-slate-200 outline-none focus:border-red-500">
+                <select id="p-category" class="px-4 py-2 rounded-lg border-2 border-slate-200 outline-none focus:border-red-500">
+                    <option value="Rudo">Rudo (Agua)</option>
+                    <option value="Técnico">Técnico (Cremoso)</option>
+                </select>
+                <input type="text" id="p-image" placeholder="URL de la imagen" required class="md:col-span-3 px-4 py-2 rounded-lg border-2 border-slate-200 outline-none focus:border-red-500">
+                <button type="submit" class="bg-slate-900 text-white font-black py-2 rounded-lg uppercase hover:bg-red-600 transition-colors">Registrar en Cartelera</button>
             </form>
         </section>
 
-        <section id="catalogo" class="mb-24">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                <div>
-                    <h3 class="text-5xl font-luck text-slate-900 uppercase leading-none mb-2">Cartelera <span class="text-rose-600">Oficial</span></h3>
-                    <p class="text-slate-500 font-bold">Escoge a tus favoritos para la gran batalla.</p>
-                </div>
-                <div class="flex gap-2" id="filter-buttons">
-                    <button class="filter-btn active bg-slate-900 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-tighter transition-all" data-filter="all">Todos</button>
-                    <button class="filter-btn bg-white border-2 border-slate-200 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-tighter transition-all" data-filter="Rudo">Rudos</button>
-                    <button class="filter-btn bg-white border-2 border-slate-200 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-tighter transition-all" data-filter="Técnico">Técnicos</button>
-                </div>
-            </div>
-
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <!-- Skeletons while loading -->
-                <div class="shimmer h-80 rounded-3xl opacity-50"></div>
-                <div class="shimmer h-80 rounded-3xl opacity-50"></div>
-                <div class="shimmer h-80 rounded-3xl opacity-50"></div>
-                <div class="shimmer h-80 rounded-3xl opacity-50"></div>
+        <!-- Catálogo -->
+        <section id="catalogo" class="mb-20">
+            <h3 class="text-4xl font-luck text-slate-800 uppercase mb-8 border-b-4 border-red-600 inline-block">Cartelera Oficial</h3>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Los productos se cargan aquí -->
             </div>
         </section>
 
-        <section id="order-section" class="hidden max-w-2xl mx-auto">
-            <div class="bg-white rounded-[3rem] p-10 shadow-2xl border-4 border-slate-900 relative">
-                <button onclick="window.closeCheckout()" class="absolute top-6 right-6 text-slate-400 hover:text-rose-600 transition-colors">
-                    <i class="fas fa-times-circle fa-2x"></i>
-                </button>
-                <div class="text-center mb-10">
-                    <div class="w-20 h-20 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-truck-fast fa-2x"></i>
-                    </div>
-                    <h3 class="text-4xl font-luck uppercase text-slate-900">Envío a Domicilio</h3>
-                    <p class="text-slate-500 font-bold">Confirma tu arena para el despacho</p>
+        <!-- Formulario de Pedido -->
+        <section id="domicilio" class="hidden max-w-xl mx-auto bg-white p-8 rounded-3xl shadow-2xl border-2 border-slate-900 mb-20">
+            <h3 class="text-3xl font-luck text-center mb-6 uppercase">Confirmar Envío</h3>
+            <form id="order-form" class="space-y-4">
+                <input type="text" id="order-name" placeholder="Tu Nombre de Luchador" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500">
+                <input type="text" id="order-address" placeholder="Dirección de la Arena" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500">
+                <div class="bg-slate-900 text-white p-4 rounded-xl flex justify-between items-center">
+                    <span class="font-luck text-xl">TOTAL:</span>
+                    <span id="order-total" class="text-2xl font-black text-yellow-400">$0</span>
                 </div>
-
-                <form id="order-form" class="space-y-6">
-                    <div class="space-y-2">
-                        <label class="text-xs font-black uppercase text-slate-400 ml-2">Nombre del Solicitante</label>
-                        <input type="text" id="order-name" placeholder="¿Quién recibe el golpe de sabor?" required class="w-full px-6 py-4 rounded-2xl bg-slate-50 border-2 border-slate-200 outline-none focus:border-rose-500 transition-all font-bold">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-xs font-black uppercase text-slate-400 ml-2">Dirección de la Arena</label>
-                        <input type="text" id="order-address" placeholder="Barrio, Calle, Casa..." required class="w-full px-6 py-4 rounded-2xl bg-slate-50 border-2 border-slate-200 outline-none focus:border-rose-500 transition-all font-bold">
-                    </div>
-                    
-                    <div class="bg-slate-900 text-white p-8 rounded-[2rem] flex flex-col gap-2 lucha-shadow">
-                        <div class="flex justify-between items-center opacity-60">
-                            <span class="text-xs font-bold uppercase">Subtotal Cartelera</span>
-                            <span id="sub-total" class="font-bold">$0</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="font-luck text-2xl uppercase">TOTAL A PAGAR:</span>
-                            <span id="order-total" class="text-3xl font-black text-yellow-400">$0</span>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full bg-green-600 text-white font-black py-5 rounded-[2rem] text-lg uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-green-700 transition-all shadow-xl">
-                        <i class="fab fa-whatsapp text-2xl"></i> Confirmar por WhatsApp
-                    </button>
-                </form>
-            </div>
+                <button type="submit" class="w-full bg-green-600 text-white font-black py-4 rounded-xl text-lg uppercase flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp text-xl"></i> Pedir por WhatsApp
+                </button>
+            </form>
         </section>
     </main>
 
-    <div id="auth-modal" class="fixed inset-0 bg-slate-900/95 z-[200] hidden items-center justify-center p-6 backdrop-blur-md">
-        <div class="bg-white rounded-[3rem] p-10 max-w-md w-full shadow-2xl border-8 border-rose-600 text-center scale-95 transition-transform duration-300" id="auth-container">
-            <div class="w-24 h-24 bg-rose-100 text-rose-600 rounded-[2rem] flex items-center justify-center mx-auto mb-8 -rotate-6 shadow-inner">
-                <i class="fas fa-key fa-2x"></i>
+    <!-- Modal de Autenticación -->
+    <div id="auth-modal" class="fixed inset-0 bg-slate-900/90 items-center justify-center p-6">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl border-4 border-red-600 text-center">
+            <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-lock fa-2x"></i>
             </div>
-            <h4 class="text-4xl font-luck uppercase mb-2 text-slate-900">Acceso VIP</h4>
-            <p class="text-slate-400 text-xs font-black uppercase tracking-widest mb-10">Promotores Autorizados Únicamente</p>
-            
-            <div class="relative mb-8">
-                <input type="password" id="admin-pass" placeholder="••••" class="w-full px-4 py-5 rounded-2xl bg-slate-50 border-2 border-slate-200 outline-none focus:border-rose-500 text-center text-4xl tracking-[0.5em] font-black transition-all">
-                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-black text-rose-600 uppercase hidden" id="auth-error">Clave Incorrecta</div>
-            </div>
-
-            <div class="flex gap-4">
-                <button type="button" id="close-auth-btn" class="flex-1 py-4 font-black uppercase text-xs text-slate-400 hover:text-slate-600 transition-colors">Retirarse</button>
-                <button type="button" id="verify-auth-btn" class="flex-2 bg-slate-900 text-white py-4 px-8 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-rose-600 transition-all lucha-shadow">Entrar al Ring</button>
+            <h4 class="text-2xl font-luck uppercase mb-2">Acceso Restringido</h4>
+            <p class="text-slate-500 text-xs font-bold uppercase mb-6">Solo Promotores Autorizados</p>
+            <input type="password" id="admin-pass" placeholder="Clave del Ring" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 outline-none focus:border-red-500 text-center text-2xl tracking-[1em] mb-6">
+            <div class="flex gap-3">
+                <button type="button" onclick="window.closeAuthModal()" class="flex-1 py-3 font-black uppercase text-xs text-slate-400">Cancelar</button>
+                <button type="button" onclick="window.verifyPromotor()" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black uppercase text-xs">Entrar</button>
             </div>
         </div>
     </div>
 
-    <div id="cart-drawer" class="fixed inset-0 z-[150] hidden">
-        <div id="cart-overlay" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
-        <div id="cart-panel" class="absolute right-0 top-0 h-full w-full max-w-md bg-white translate-x-full transition-transform duration-500 flex flex-col shadow-2xl border-l-4 border-slate-900">
-            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <div>
-                    <h4 class="text-3xl font-luck uppercase text-slate-900">Tu Equipo</h4>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Selección Actual</p>
-                </div>
-                <button id="close-cart-btn" class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-slate-400 hover:text-rose-600 transition-all">
-                    <i class="fas fa-times fa-lg"></i>
-                </button>
+    <!-- Carrito -->
+    <div id="cart-drawer" class="fixed inset-0 z-[60] bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute right-0 top-0 h-full w-full max-w-sm bg-white translate-x-full transition-transform duration-300 flex flex-col">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h4 class="text-2xl font-luck uppercase">Tu Selección</h4>
+                <button onclick="window.toggleCart()"><i class="fas fa-times text-xl"></i></button>
             </div>
-            
-            <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
-                <!-- Items injected by JS -->
-            </div>
-            
-            <div class="p-8 bg-slate-50 border-t-4 border-slate-900">
-                <div class="flex justify-between items-center mb-8">
-                    <span class="font-luck text-2xl uppercase">Subtotal:</span>
-                    <span id="cart-total-display" class="text-3xl font-black text-rose-600">$0</span>
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+            <div class="p-6 bg-slate-50 border-t">
+                <div class="flex justify-between text-xl font-luck mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total" class="text-red-600 font-sans">$0</span>
                 </div>
-                <button id="checkout-btn" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-rose-600 transition-all lucha-shadow">
-                    Pagar Entradas
-                </button>
+                <button onclick="window.showOrderForm()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-black uppercase tracking-widest">Finalizar Pedido</button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-slate-900 text-white pt-20 pb-10 px-6 border-t-[12px] border-rose-600">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-            <div class="space-y-6">
-                <h4 class="text-4xl font-luck uppercase leading-none">BOLIS <br><span class="text-rose-600">DEL RING</span></h4>
-                <p class="text-slate-400 text-sm leading-relaxed max-w-xs">Artesanos del hielo desde 2024. Cada boli es una técnica perfeccionada para brindarte el máximo sabor y frescura.</p>
-                <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center hover:bg-rose-600 transition-all"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center hover:bg-rose-600 transition-all"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center hover:bg-rose-600 transition-all"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-            <div class="space-y-6">
-                <h5 class="font-luck text-xl uppercase tracking-wider text-rose-500">Enlaces Rápidos</h5>
-                <ul class="space-y-3 text-slate-400 font-bold text-sm">
-                    <li><a href="#" class="hover:text-white transition-colors">La Arena (Inicio)</a></li>
-                    <li><a href="#catalogo" class="hover:text-white transition-colors">Cartelera de Sabores</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Modo Promotor</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Contacto WhatsApp</a></li>
-                </ul>
-            </div>
-            <div class="space-y-6">
-                <h5 class="font-luck text-xl uppercase tracking-wider text-yellow-500">¿Eres un Rudo?</h5>
-                <p class="text-slate-400 text-sm leading-relaxed">Únete a nuestra cartelera y recibe las últimas noticias sobre nuevos sabores y promociones de campeonato.</p>
-                <div class="flex">
-                    <input type="email" placeholder="Correo de combate" class="bg-slate-800 border-none rounded-l-xl px-4 py-3 text-sm focus:ring-2 ring-rose-500 outline-none w-full">
-                    <button class="bg-rose-600 px-4 py-3 rounded-r-xl font-black uppercase text-[10px]">OK</button>
-                </div>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto pt-8 border-t border-slate-800 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest">© 2024 Bolis Del Ring • Diseño de Campeonato</p>
-            <div class="flex gap-6 text-[10px] text-slate-600 uppercase font-black">
-                <a href="#">Privacidad</a>
-                <a href="#">Términos</a>
-            </div>
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 px-6 text-center border-t-8 border-red-600">
+        <div class="max-w-4xl mx-auto">
+            <h4 class="text-3xl font-luck mb-2 uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
+            <p class="text-slate-400 text-sm mb-8 italic">"El peso pesado de la frescura artesanal"</p>
+            <p class="text-[10px] text-slate-500 uppercase tracking-widest">© 2024 Bolis Del Ring - Hechos para Ganar</p>
         </div>
     </footer>
 
@@ -322,18 +228,20 @@
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Configuration
-        const firebaseConfig = JSON.parse(__firebase_config);
+        // Manejo de configuración para entorno GitHub vs Local
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : { /* Reemplaza esto con tu config de Firebase para GitHub */ };
+        
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'bolis-ring-v1';
 
-        // State Management
         let products = [];
         let cart = [];
         let isPromotor = false;
-        let currentFilter = 'all';
+        let currentUser = null;
 
         const initAuth = async () => {
             try {
@@ -342,345 +250,198 @@
                 } else {
                     await signInAnonymously(auth);
                 }
-            } catch (err) { console.error("Auth error:", err); }
+            } catch (err) { console.error("Error auth:", err); }
         };
 
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                listenToInventory();
-            }
+            currentUser = user;
+            if (user) listenToInventory();
         });
 
+        window.addEventListener('authSuccess', () => {
+            isPromotor = true;
+            document.body.classList.add('is-promotor');
+            document.getElementById('promotor-badge').classList.remove('hidden');
+            document.getElementById('admin-form-section').classList.remove('hidden');
+            renderProducts();
+            window.showToast("🔓 MODO PROMOTOR ACTIVADO");
+            document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
+        });
+
+        window.logoutPromotor = () => {
+            isPromotor = false;
+            document.body.classList.remove('is-promotor');
+            document.getElementById('promotor-badge').classList.add('hidden');
+            document.getElementById('admin-form-section').classList.add('hidden');
+            renderProducts();
+            window.showToast("SESIÓN CERRADA");
+        };
+
+        // Escuchar Inventario
         function listenToInventory() {
-            // Mandatory Path: /artifacts/{appId}/public/data/{collectionName}
             const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'inventory');
-            
             onSnapshot(colRef, (snap) => {
                 products = [];
-                snap.forEach(d => products.push({ ...d.data(), id: d.id }));
+                snap.forEach(d => products.push({...d.data(), id: d.id}));
                 renderProducts();
-                updateCartFromStock(); // Ensure cart items still exist in stock
-            }, (err) => {
-                console.error("Firestore Error:", err);
-                showToast("⚠️ ERROR DE CONEXIÓN");
-            });
+            }, (err) => console.error("Error Firestore:", err));
         }
 
-        function renderProducts() {
-            const grid = document.getElementById('product-grid');
-            if (!grid) return;
-
-            const filtered = currentFilter === 'all' 
-                ? products 
-                : products.filter(p => p.category === currentFilter);
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-20 text-center">
-                        <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
-                            <i class="fas fa-ghost fa-2x"></i>
-                        </div>
-                        <p class="text-slate-400 font-black uppercase tracking-widest text-xs">No hay luchadores en esta categoría</p>
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = filtered.map(p => {
-                const inStock = p.stock > 0;
-                return `
-                    <div class="product-card group bg-white rounded-[2rem] overflow-hidden shadow-xl flex flex-col relative border border-slate-100">
-                        <!-- Admin Controls -->
-                        ${isPromotor ? `
-                            <div class="absolute top-4 right-4 z-20 flex gap-2">
-                                <button onclick="window.editStock('${p.id}', 5)" class="w-8 h-8 rounded-lg bg-green-500 text-white shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-                                    <i class="fas fa-plus text-[10px]"></i>
-                                </button>
-                                <button onclick="window.deleteProduct('${p.id}')" class="w-8 h-8 rounded-lg bg-rose-600 text-white shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-                                    <i class="fas fa-trash text-[10px]"></i>
-                                </button>
-                            </div>
-                        ` : ''}
-
-                        <div class="h-60 overflow-hidden relative">
-                            <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x300/e11d48/ffffff?text=Bolis+Del+Ring'">
-                            <div class="absolute top-4 left-4">
-                                <span class="bg-slate-900/80 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-widest border border-white/20">
-                                    ${p.category}
-                                </span>
-                            </div>
-                            ${!inStock ? `
-                                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px] flex items-center justify-center">
-                                    <span class="bg-white text-slate-900 px-6 py-2 rounded-xl font-luck text-xl uppercase lucha-shadow -rotate-3">Noqueado</span>
-                                </div>
-                            ` : ''}
-                        </div>
-
-                        <div class="p-6 flex flex-col flex-1">
-                            <div class="flex justify-between items-start mb-1">
-                                <h4 class="text-2xl font-luck text-slate-900 leading-tight uppercase">${p.name}</h4>
-                                <div class="flex flex-col items-end">
-                                    <span class="text-[10px] font-black uppercase ${inStock ? 'text-green-500' : 'text-rose-500'}">
-                                        ${inStock ? `${p.stock} Disponibles` : 'Agotado'}
-                                    </span>
-                                </div>
-                            </div>
-                            <p class="text-3xl font-black text-rose-600 mb-6">$${p.price.toLocaleString()}</p>
-                            
-                            <button 
-                                onclick="window.addToCart('${p.id}')" 
-                                ${!inStock ? 'disabled' : ''} 
-                                class="w-full mt-auto py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all
-                                ${inStock ? 'bg-slate-900 text-white hover:bg-rose-600 lucha-shadow' : 'bg-slate-100 text-slate-300 cursor-not-allowed'}">
-                                ${inStock ? 'Añadir al Equipo' : 'Fuera de Combate'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        window.addToCart = (id) => {
-            const p = products.find(x => x.id === id);
-            if (!p || p.stock <= 0) return;
-
-            const existing = cart.find(x => x.id === id);
-            if (existing) {
-                if (existing.quantity < p.stock) {
-                    existing.quantity++;
-                } else {
-                    showToast("🛑 NO HAY MÁS STOCK DISPONIBLE");
-                    return;
-                }
-            } else {
-                cart.push({ ...p, quantity: 1 });
-            }
-            
-            updateCartUI();
-            showToast(`🥊 ${p.name.toUpperCase()} AGREGADO`);
-        };
-
-        window.removeFromCart = (id) => {
-            cart = cart.filter(x => x.id !== id);
-            updateCartUI();
-        };
-
-        function updateCartUI() {
-            const itemsCont = document.getElementById('cart-items');
-            const totalDisplay = document.getElementById('cart-total-display');
-            const badge = document.getElementById('cart-count');
-            
-            const total = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
-            const count = cart.reduce((acc, i) => acc + i.quantity, 0);
-
-            badge.innerText = count;
-            badge.style.transform = count > 0 ? 'scale(1)' : 'scale(0)';
-            totalDisplay.innerText = `$${total.toLocaleString()}`;
-            
-            if (cart.length === 0) {
-                itemsCont.innerHTML = `
-                    <div class="h-full flex flex-col items-center justify-center opacity-30 text-center">
-                        <i class="fas fa-shopping-basket fa-4x mb-4"></i>
-                        <p class="font-black uppercase text-xs tracking-widest leading-relaxed">Tu equipo está vacío<br>Búscalos en la cartelera</p>
-                    </div>
-                `;
-            } else {
-                itemsCont.innerHTML = cart.map(i => `
-                    <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-3xl border-2 border-slate-100 group">
-                        <img src="${i.image}" class="w-16 h-16 rounded-2xl object-cover shadow-sm group-hover:rotate-3 transition-transform">
-                        <div class="flex-1">
-                            <h5 class="font-luck text-lg uppercase leading-none text-slate-900">${i.name}</h5>
-                            <p class="text-[10px] font-black text-rose-600 uppercase mt-1">$${i.price.toLocaleString()} × ${i.quantity}</p>
-                        </div>
-                        <button onclick="window.removeFromCart('${i.id}')" class="w-10 h-10 rounded-xl bg-white text-slate-300 hover:text-rose-600 hover:shadow-md transition-all">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function updateCartFromStock() {
-            cart = cart.map(item => {
-                const fresh = products.find(p => p.id === item.id);
-                if (!fresh) return null;
-                return { ...item, stock: fresh.stock, quantity: Math.min(item.quantity, fresh.stock) };
-            }).filter(i => i && i.quantity > 0);
-            updateCartUI();
-        }
-
-        window.deleteProduct = async (id) => {
-            if (!isPromotor) return;
-            // No window.confirm, using a prompt-like approach
-            const confirmAction = true; // Simplified for this environment
-            if (confirmAction) {
-                try {
-                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id));
-                    showToast("🗑️ SABOR ELIMINADO");
-                } catch (e) { showToast("❌ ERROR AL ELIMINAR"); }
-            }
-        };
-
-        window.editStock = async (id, delta) => {
-            if (!isPromotor) return;
-            const p = products.find(x => x.id === id);
-            if (p) {
-                const newStock = Math.max(0, p.stock + delta);
-                try {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id), { stock: newStock });
-                } catch (e) { showToast("❌ ERROR DE STOCK"); }
-            }
-        };
-
-        document.getElementById('secret-trigger').addEventListener('click', () => {
-            document.getElementById('auth-modal').classList.remove('hidden');
-            document.getElementById('auth-modal').classList.add('flex');
-            setTimeout(() => document.getElementById('admin-pass').focus(), 100);
-        });
-
-        document.getElementById('close-auth-btn').addEventListener('click', () => {
-            document.getElementById('auth-modal').classList.add('hidden');
-            document.getElementById('auth-modal').classList.remove('flex');
-            document.getElementById('admin-pass').value = '';
-            document.getElementById('auth-error').classList.add('hidden');
-        });
-
-        document.getElementById('verify-auth-btn').addEventListener('click', () => {
-            const pass = document.getElementById('admin-pass').value;
-            if (pass === '1234') { // Example logic
-                isPromotor = true;
-                document.getElementById('admin-panel').classList.remove('hidden');
-                document.getElementById('promotor-badge').classList.remove('hidden');
-                document.getElementById('auth-modal').classList.add('hidden');
-                document.getElementById('auth-modal').classList.remove('flex');
-                renderProducts();
-                showToast("🔓 MODO PROMOTOR ACTIVADO");
-            } else {
-                document.getElementById('auth-error').classList.remove('hidden');
-                document.getElementById('admin-pass').value = '';
-            }
-        });
-
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            isPromotor = false;
-            document.getElementById('admin-panel').classList.add('hidden');
-            document.getElementById('promotor-badge').classList.add('hidden');
-            renderProducts();
-            showToast("🔒 MODO PROMOTOR CERRADO");
-        });
-
-        document.getElementById('product-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!isPromotor) return;
-
-            const newId = `boli_${Date.now()}`;
-            const data = {
+        window.addNewProduct = async (e) => {
+            if(e) e.preventDefault();
+            if (!currentUser) return;
+            const id = "boli_" + Date.now();
+            const newP = {
                 name: document.getElementById('p-name').value,
                 price: parseInt(document.getElementById('p-price').value),
                 stock: parseInt(document.getElementById('p-stock').value),
                 category: document.getElementById('p-category').value,
                 image: document.getElementById('p-image').value
             };
-
             try {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', newId), data);
-                e.target.reset();
-                showToast("🏆 SABOR REGISTRADO");
-            } catch (err) { showToast("❌ ERROR AL GUARDAR"); }
-        });
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id), newP);
+                document.getElementById('add-product-form').reset();
+                window.showToast("SABOR REGISTRADO ✅");
+            } catch (err) { window.showToast("ERROR AL GUARDAR"); }
+        };
 
-        const cartToggle = () => {
-            const drawer = document.getElementById('cart-drawer');
-            const overlay = document.getElementById('cart-overlay');
-            const panel = document.getElementById('cart-panel');
-            
-            if (drawer.classList.contains('hidden')) {
-                drawer.classList.remove('hidden');
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    panel.classList.remove('translate-x-full');
-                }, 10);
-            } else {
-                overlay.classList.add('opacity-0');
-                panel.classList.add('translate-x-full');
-                setTimeout(() => drawer.classList.add('hidden'), 500);
+        window.updateStock = async (id, delta) => {
+            if (!currentUser) return;
+            const p = products.find(x => x.id === id);
+            const newStock = Math.max(0, p.stock + delta);
+            try {
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id), { stock: newStock });
+            } catch (err) { console.error(err); }
+        };
+
+        window.deleteProduct = async (id) => {
+            if (!currentUser || !confirm("¿Retirar sabor de la cartelera?")) return;
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id));
+                window.showToast("SABOR RETIRADO");
+            } catch (err) { console.error(err); }
+        };
+
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            if(!grid) return;
+
+            if(products.length === 0) {
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-10 font-bold uppercase tracking-widest">Esperando Cartelera...</p>';
+                return;
             }
-        };
 
-        document.getElementById('cart-toggle-btn').addEventListener('click', cartToggle);
-        document.getElementById('close-cart-btn').addEventListener('click', cartToggle);
-        document.getElementById('cart-overlay').addEventListener('click', cartToggle);
+            grid.innerHTML = products.map(p => `
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow-xl flex flex-col relative border border-slate-100">
+                    <button onclick="window.deleteProduct('${p.id}')" class="admin-controls absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:scale-110" style="display: ${isPromotor ? 'flex' : 'none'}">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </button>
 
-        document.getElementById('checkout-btn').addEventListener('click', () => {
-            if (cart.length === 0) return showToast("⚠️ EL EQUIPO ESTÁ VACÍO");
-            cartToggle();
-            document.getElementById('order-section').classList.remove('hidden');
-            const total = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
-            document.getElementById('sub-total').innerText = `$${total.toLocaleString()}`;
-            document.getElementById('order-total').innerText = `$${total.toLocaleString()}`;
-            document.getElementById('order-section').scrollIntoView({ behavior: 'smooth' });
-        });
+                    <div class="h-48 overflow-hidden relative group">
+                        <img src="${p.image}" class="w-full h-full object-cover transition-transform group-hover:scale-110" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=Bolis+del+Ring'">
+                        <span class="absolute bottom-2 left-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded font-black uppercase">
+                            ${p.category}
+                        </span>
+                        
+                        <div class="admin-controls absolute inset-0 bg-black/40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity" style="display: ${isPromotor ? 'flex' : 'none'}">
+                            <button onclick="window.updateStock('${p.id}', -1)" class="w-10 h-10 rounded-full bg-white text-slate-900 font-black hover:bg-red-500 hover:text-white transition-colors">-</button>
+                            <div class="bg-white px-3 py-1 rounded-lg font-black text-xs uppercase">Stock: ${p.stock}</div>
+                            <button onclick="window.updateStock('${p.id}', 1)" class="w-10 h-10 rounded-full bg-white text-slate-900 font-black hover:bg-green-500 hover:text-white transition-colors">+</button>
+                        </div>
+                    </div>
 
-        window.closeCheckout = () => {
-            document.getElementById('order-section').classList.add('hidden');
-        };
-
-        document.getElementById('order-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('order-name').value;
-            const address = document.getElementById('order-address').value;
-            const total = document.getElementById('order-total').innerText;
-
-            let message = `🥊 *BOLIS DEL RING - PEDIDO DE CAMPEONATO* 🥊\n\n`;
-            message += `👤 *Luchador:* ${name}\n`;
-            message += `📍 *Arena:* ${address}\n\n`;
-            message += `📝 *CARTELERA SELECCIONADA:*\n`;
-            
-            cart.forEach(item => {
-                message += `• ${item.quantity}x ${item.name.toUpperCase()} ($${(item.price * item.quantity).toLocaleString()})\n`;
-            });
-
-            message += `\n💰 *TOTAL A PAGAR: ${total}*`;
-            message += `\n\n_¡Favor confirmar disponibilidad para el pesaje!_`;
-
-            const whatsappUrl = `https://wa.me/573145865641?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-            
-            // Success reset
-            cart = [];
-            updateCartUI();
-            e.target.reset();
-            window.closeCheckout();
-            showToast("🚀 PEDIDO ENVIADO");
-        });
-
-        // Filtering
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => {
-                    b.classList.remove('active', 'bg-slate-900', 'text-white');
-                    b.classList.add('bg-white', 'border-2', 'border-slate-200');
-                });
-                btn.classList.add('active', 'bg-slate-900', 'text-white');
-                btn.classList.remove('bg-white', 'border-2', 'border-slate-200');
-                currentFilter = btn.dataset.filter;
-                renderProducts();
-            });
-        });
-
-        // Toast helper
-        function showToast(msg) {
-            const t = document.createElement('div');
-            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 z-[300] bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl border-4 border-rose-600 animate-bounce";
-            t.innerText = msg;
-            document.body.appendChild(t);
-            setTimeout(() => {
-                t.style.opacity = '0';
-                t.style.transition = 'opacity 0.5s';
-                setTimeout(() => t.remove(), 500);
-            }, 3000);
+                    <div class="p-5 flex flex-col flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-xl font-luck text-slate-800 leading-tight uppercase">${p.name}</h4>
+                            <span class="text-[10px] font-black ${p.stock > 0 ? 'text-green-600' : 'text-red-500'} bg-slate-100 px-2 py-0.5 rounded">
+                                ${p.stock > 0 ? `Quedan ${p.stock}` : 'AGOTADO'}
+                            </span>
+                        </div>
+                        <p class="text-2xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</p>
+                        <button onclick="window.addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-3 rounded-xl uppercase text-xs transition-colors">
+                            ${p.stock > 0 ? 'Añadir al Equipo' : 'Fuera de Combate'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
+        window.addToCart = (id) => {
+            const p = products.find(x => x.id === id);
+            const item = cart.find(x => x.id === id);
+            if(item) {
+                if(item.quantity < p.stock) item.quantity++;
+                else return window.showToast("LIMITE DE STOCK ALCANZADO");
+            } else {
+                cart.push({...p, quantity: 1});
+            }
+            updateCartUI();
+            window.showToast(`¡${p.name.toUpperCase()} en el ring!`);
+        };
+
+        function updateCartUI() {
+            const count = cart.reduce((s, i) => s + i.quantity, 0);
+            const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
+            const badge = document.getElementById('cart-count');
+            if(badge) {
+                badge.innerText = count;
+                badge.classList.toggle('hidden', count === 0);
+            }
+            document.getElementById('cart-total').innerText = `$${total.toLocaleString()}`;
+            document.getElementById('order-total').innerText = `$${total.toLocaleString()}`;
+            document.getElementById('cart-items').innerHTML = cart.map(i => `
+                <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div class="flex-1">
+                        <h5 class="text-xs font-black uppercase leading-none mb-1">${i.name}</h5>
+                        <p class="text-[10px] text-red-600 font-bold">$${i.price.toLocaleString()} x ${i.quantity}</p>
+                    </div>
+                    <button onclick="window.removeFromCart('${i.id}')" class="text-slate-300 hover:text-red-600 p-2"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `).join('');
+        }
+
+        window.removeFromCart = (id) => {
+            cart = cart.filter(x => x.id !== id);
+            updateCartUI();
+        };
+
+        window.toggleCart = () => {
+            const d = document.getElementById('cart-drawer');
+            const isOpen = !d.classList.contains('pointer-events-none');
+            d.classList.toggle('opacity-0', isOpen);
+            d.classList.toggle('pointer-events-none', isOpen);
+            d.firstElementChild.classList.toggle('translate-x-full', isOpen);
+        };
+
+        window.showOrderForm = () => {
+            if(cart.length === 0) return window.showToast("TU BOLSA ESTÁ VACÍA");
+            window.toggleCart();
+            const orderForm = document.getElementById('domicilio');
+            orderForm.classList.remove('hidden');
+            orderForm.scrollIntoView({behavior: 'smooth'});
+        };
+
+        window.sendOrder = (e) => {
+            if(e) e.preventDefault();
+            const name = document.getElementById('order-name').value;
+            const addr = document.getElementById('order-address').value;
+            let msg = `🥊 *NUEVO PEDIDO - BOLIS DEL RING* 🥊\n\n`;
+            msg += `👤 *Luchador:* ${name}\n📍 *Arena:* ${addr}\n\n`;
+            cart.forEach(i => msg += `• ${i.quantity}x ${i.name.toUpperCase()} ($${(i.price*i.quantity).toLocaleString()})\n`);
+            msg += `\n💰 *TOTAL: ${document.getElementById('order-total').innerText}*`;
+            window.open(`https://wa.me/573145865641?text=${encodeURIComponent(msg)}`);
+            cart = [];
+            updateCartUI();
+            document.getElementById('order-form').reset();
+            document.getElementById('domicilio').classList.add('hidden');
+            window.showToast("PEDIDO ENVIADO 🏆");
+        };
+
+        // Escuchar envíos de formularios
+        document.getElementById('add-product-form').addEventListener('submit', window.addNewProduct);
+        document.getElementById('order-form').addEventListener('submit', window.sendOrder);
+
+        // Inicializar Auth
         window.onload = initAuth;
     </script>
 </body>
