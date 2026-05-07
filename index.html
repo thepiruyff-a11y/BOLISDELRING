@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolis del Ring | ¡Sabor de Campeonato!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .font-luck {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 1px;
+        }
+        .bg-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        .product-card:hover {
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+        .hero-bg {
+            position: relative;
+            background-image: url('https://i.postimg.cc/5t9myq4m/7d882dbf-1798-4a80-b9ec-d2b54d5d6191.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        #admin-panel {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: #f8fafc;
+            overflow-y: auto;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Navegación -->
+    <nav class="sticky top-0 z-50 bg-glass border-b border-slate-200 px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="bg-red-600 p-2 rounded-lg text-white shadow-lg rotate-3">
+                <i class="fas fa-mask fa-lg"></i>
+            </div>
+            <h1 class="text-2xl font-luck text-slate-900 tracking-wider uppercase tracking-tight">BOLIS <span class="text-red-600">DEL RING</span></h1>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <button onclick="toggleCart()" class="relative p-2 text-slate-600 hover:text-red-500 transition-colors">
+                <i class="fas fa-shopping-basket text-xl"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+            </button>
+            <a href="#contacto" class="hidden md:block text-slate-600 hover:text-red-600 font-bold transition-colors">CONTACTO</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative hero-bg py-28 px-6 overflow-hidden text-white">
+        <div class="hero-overlay"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2">
+                ¡EL PESO PESADO DE LA FRESCURA!
+            </span>
+            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-xl">
+                ¡UN GOLPE DE SABOR EN CADA MORDIDA! 🥊
+            </h2>
+            <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto drop-shadow-md">
+                No te dejes vencer por el calor. Pide tus bolis artesanales y gana la lucha contra la sed.
+            </p>
+            <a href="#catalogo" class="bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-lg active:translate-y-1">
+                VER EL CARTEL (CATÁLOGO)
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6">
+        <!-- Catálogo -->
+        <section id="catalogo" class="mb-16">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4 border-b-4 border-red-600 pb-4">
+                <h3 class="text-4xl font-luck text-slate-800 uppercase">La Cartelera de Sabores</h3>
+                <div class="flex gap-2">
+                    <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-lg text-sm font-black border-2 border-blue-200">TÉCNICOS</span>
+                    <span class="bg-red-100 text-red-700 px-4 py-1 rounded-lg text-sm font-black border-2 border-red-200">RUDOS</span>
+                </div>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Estado de carga -->
+                <div class="col-span-full text-center py-20">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-red-600 mb-4"></div>
+                    <p class="font-black text-slate-400 uppercase tracking-widest">Preparando el cuadrilátero...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Formulario de Pedido -->
+        <section id="domicilio" class="bg-white rounded-[2rem] p-8 shadow-2xl border-4 border-slate-900 max-w-2xl mx-auto mb-20 hidden">
+            <div class="text-center mb-8">
+                <div class="inline-block bg-red-100 text-red-600 p-4 rounded-full mb-4">
+                    <i class="fas fa-shipping-fast fa-2x"></i>
+                </div>
+                <h3 class="text-3xl font-luck text-slate-900 uppercase">Datos del Retador</h3>
+                <p class="text-slate-500 font-bold">¡Pide tu refuerzo congelado por WhatsApp!</p>
+            </div>
+
+            <form id="order-form" class="space-y-5" onsubmit="window.handleOrder(event)">
+                <div>
+                    <label class="block text-sm font-black text-slate-700 mb-1 uppercase">Nombre</label>
+                    <input type="text" id="cust-name" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-500 outline-none" placeholder="Tu nombre">
+                </div>
+                <div>
+                    <label class="block text-sm font-black text-slate-700 mb-1 uppercase">Arena de Entrega (Dirección)</label>
+                    <input type="text" id="cust-address" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-500 outline-none" placeholder="Barrio y dirección">
+                </div>
+
+                <div class="bg-slate-900 p-6 rounded-2xl text-white mt-6 flex justify-between items-center font-luck text-2xl">
+                    <span>TOTAL:</span>
+                    <span id="form-total" class="text-yellow-400 font-sans">$0</span>
+                </div>
+
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-black py-5 rounded-xl flex items-center justify-center gap-3 text-xl uppercase active:scale-95 transition-all">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                    SOLICITAR PEDIDO
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <!-- PANEL DE ADMINISTRACIÓN COMPLETO -->
+    <div id="admin-panel" class="p-4 md:p-8">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex justify-between items-center border-b-4 border-slate-900 pb-4 mb-8">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-luck uppercase">Promotor del Ring</h2>
+                    <p class="text-slate-500 font-bold text-sm">GESTIÓN DE INVENTARIO</p>
+                </div>
+                <div class="flex gap-2">
+                    <button id="seed-btn" onclick="window.seedDatabase()" class="hidden bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-black uppercase text-xs">Cargar Iniciales</button>
+                    <button onclick="closeAdmin()" class="bg-red-600 text-white px-6 py-2 rounded-lg font-black uppercase hover:bg-red-700">Cerrar</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Columna: Agregar Nuevo -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-slate-200 sticky top-8">
+                        <h4 class="text-xl font-luck mb-4 text-slate-800 uppercase flex items-center gap-2">
+                            <i class="fas fa-plus-circle text-blue-600"></i> Nuevo Boli
+                        </h4>
+                        <form id="add-product-form" class="space-y-4" onsubmit="window.addProduct(event)">
+                            <div>
+                                <label class="text-xs font-black text-slate-500 uppercase">Nombre del Sabor</label>
+                                <input type="text" id="new-name" required class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500" placeholder="Ej: Coco 'El Enmascarado'">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-xs font-black text-slate-500 uppercase">Precio</label>
+                                    <input type="number" id="new-price" required value="2000" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-black text-slate-500 uppercase">Stock Inicial</label>
+                                    <input type="number" id="new-stock" required value="10" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs font-black text-slate-500 uppercase">Categoría</label>
+                                <select id="new-category" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none">
+                                    <option value="Rudo">RUDO (Agua)</option>
+                                    <option value="Técnico">TÉCNICO (Leche)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs font-black text-slate-500 uppercase">URL Imagen</label>
+                                <input type="text" id="new-image" required class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500" placeholder="https://...">
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl hover:bg-blue-700 transition-colors uppercase tracking-widest text-sm shadow-lg">
+                                AGREGAR AL RING
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Columna: Lista y Stock -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-slate-200">
+                        <h4 class="text-xl font-luck mb-6 text-slate-800 uppercase flex items-center gap-2">
+                            <i class="fas fa-boxes text-red-600"></i> Inventario Actual
+                        </h4>
+                        <div id="admin-product-list" class="space-y-3">
+                            <!-- Productos admin inyectados -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carrito Modal -->
+    <div id="cart-drawer" class="fixed inset-0 z-[60] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl translate-x-full transition-transform duration-300 ease-out flex flex-col">
+            <div class="p-6 border-b flex justify-between items-center bg-slate-50">
+                <h4 class="text-2xl font-luck uppercase">Tu Equipaje</h4>
+                <button onclick="toggleCart()" class="p-2 text-slate-400 hover:text-red-600">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+            <div class="p-6 border-t bg-slate-900 text-white">
+                <div class="flex justify-between text-2xl font-luck mb-4">
+                    <span>SUBTOTAL:</span>
+                    <span id="cart-total-display" class="font-sans text-yellow-400">$0</span>
+                </div>
+                <button id="checkout-btn" onclick="goToCheckout()" disabled class="w-full bg-red-600 text-white py-4 rounded-xl font-black text-lg transition-all uppercase hover:bg-red-700">
+                    IR AL DOMICILIO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contacto" class="bg-slate-950 text-white py-16 px-6 border-t-8 border-red-600">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+            <div class="text-center md:text-left">
+                <h4 class="text-4xl font-luck mb-2 uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
+                <p class="text-slate-400 max-w-xs">El único boli que te saca del conteo de 10 contra el calor.</p>
+                <button onclick="openAdmin()" class="mt-8 text-slate-600 text-[10px] uppercase font-black hover:text-white transition-colors">ACCESO PROMOTOR</button>
+            </div>
+            <div class="flex flex-col items-center gap-4">
+                <div class="flex gap-4">
+                    <a href="#" class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-12 h-12 bg-gradient-to-tr from-yellow-500 via-red-500 to-purple-500 rounded-xl flex items-center justify-center hover:scale-110 transition-transform"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase y Lógica -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, setDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // CONFIGURACIÓN
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'bolis-ring-app';
+
+        let products = [];
+        let cart = [];
+        let userAuth = null;
+
+        // AUTH (Regla 3)
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) { console.error("Auth error:", err); }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            userAuth = user;
+            if (user) syncProducts();
+        });
+
+        // FIRESTORE (Regla 1)
+        function syncProducts() {
+            if (!userAuth) return;
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'inventory');
+            
+            onSnapshot(colRef, (snapshot) => {
+                const dbProducts = [];
+                snapshot.forEach(doc => dbProducts.push({ ...doc.data(), id: doc.id }));
+                products = dbProducts;
+                
+                // Mostrar botón de semilla si no hay productos
+                const seedBtn = document.getElementById('seed-btn');
+                if (products.length === 0) {
+                    seedBtn.classList.remove('hidden');
+                } else {
+                    seedBtn.classList.add('hidden');
+                }
+
+                renderProducts();
+                renderAdminList();
+            }, (error) => {
+                console.error("Snapshot error:", error);
+                document.getElementById('product-grid').innerHTML = `
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-red-500 font-bold">Error al conectar con la cartelera.</p>
+                    </div>
+                `;
+            });
+        }
+
+        // CARGAR DATOS INICIALES (SEMILLA)
+        window.seedDatabase = async () => {
+            if (!userAuth || !confirm("¿Quieres cargar los sabores iniciales?")) return;
+            const initial = [
+                { name: "Milo 'El Técnico'", price: 2500, stock: 15, category: "Técnico", image: "https://i.postimg.cc/zX8Z5Z5z/milo.png", color: "bg-blue-50" },
+                { name: "Coco 'El Enmascarado'", price: 2000, stock: 20, category: "Rudo", image: "https://i.postimg.cc/7Z6Z6Z6z/coco.png", color: "bg-red-50" },
+                { name: "Fresa 'La Luchadora'", price: 2200, stock: 12, category: "Técnico", image: "https://i.postimg.cc/8Z8Z8Z8z/fresa.png", color: "bg-blue-50" }
+            ];
+
+            try {
+                for (const p of initial) {
+                    const id = Date.now().toString() + Math.random().toString(36).substr(2, 5);
+                    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id), { ...p, id });
+                }
+                window.showNotice("¡Cartelera cargada!", true);
+            } catch (err) { console.error("Seed error:", err); }
+        };
+
+        // AGREGAR PRODUCTO
+        window.addProduct = async (e) => {
+            e.preventDefault();
+            if (!userAuth) return;
+
+            const newId = Date.now().toString();
+            const category = document.getElementById('new-category').value;
+            const newProduct = {
+                id: newId,
+                name: document.getElementById('new-name').value,
+                price: parseInt(document.getElementById('new-price').value),
+                stock: parseInt(document.getElementById('new-stock').value),
+                category: category,
+                image: document.getElementById('new-image').value,
+                color: category === 'Rudo' ? 'bg-red-50' : 'bg-blue-50'
+            };
+
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'inventory', newId);
+                await setDoc(docRef, newProduct);
+                document.getElementById('add-product-form').reset();
+                window.showNotice("¡SABOR AGREGADO!", true);
+            } catch (err) { console.error("Add error:", err); }
+        };
+
+        // ACTUALIZAR STOCK
+        window.updateStock = async (id, delta) => {
+            if (!userAuth) return;
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+            const newStock = Math.max(0, p.stock + delta);
+            
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id);
+                await updateDoc(docRef, { stock: newStock });
+            } catch (err) { console.error("Update error:", err); }
+        };
+
+        // ELIMINAR PRODUCTO
+        window.deleteProduct = async (id) => {
+            if (!confirm("¿Deseas retirar este sabor permanentemente?")) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id);
+                await deleteDoc(docRef);
+                window.showNotice("Sabor retirado.");
+            } catch (err) { console.error("Delete error:", err); }
+        };
+
+        // RENDER CATALOGO
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            if (products.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-white rounded-3xl border-4 border-dashed border-slate-200">
+                        <i class="fas fa-ghost text-4xl text-slate-200 mb-4"></i>
+                        <p class="font-black text-slate-400 uppercase tracking-widest">El ring está vacío.<br>Agrega sabores en el panel de promotor.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-200 flex flex-col">
+                    <div class="${p.color || 'bg-slate-50'} h-48 flex items-center justify-center p-4 relative">
+                        <img src="${p.image}" class="h-full w-full object-contain" alt="${p.name}" onerror="this.src='https://via.placeholder.com/200?text=Boli'">
+                        <div class="absolute top-2 left-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded font-black uppercase">${p.category}</div>
+                        <div class="absolute top-2 right-2 bg-white/90 px-2 py-1 rounded-full text-[10px] font-black border ${p.stock > 0 ? 'text-green-600' : 'text-red-500'}">
+                            ${p.stock > 0 ? `STOCK: ${p.stock}` : 'AGOTADO'}
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col">
+                        <h4 class="text-xl font-luck text-slate-800 leading-tight mb-2">${p.name}</h4>
+                        <div class="text-2xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</div>
+                        <button onclick="window.addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-3 rounded-xl transition-all uppercase tracking-widest text-xs">
+                            ${p.stock > 0 ? 'AL CARRITO' : 'AGOTADO'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // RENDER ADMIN
+        function renderAdminList() {
+            const list = document.getElementById('admin-product-list');
+            list.innerHTML = products.map(p => `
+                <div class="bg-slate-50 border border-slate-200 p-3 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover bg-white p-1 border" onerror="this.src='https://via.placeholder.com/50'">
+                        <div>
+                            <p class="font-black text-xs uppercase text-slate-800">${p.name}</p>
+                            <p class="text-[10px] font-bold text-slate-400">$${p.price} | ${p.category}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 ml-auto">
+                        <div class="flex items-center bg-white rounded-xl border p-1">
+                            <button onclick="window.updateStock('${p.id}', -1)" class="w-8 h-8 flex items-center justify-center hover:bg-red-50 rounded-lg font-black">-</button>
+                            <span class="w-10 text-center font-black text-sm">${p.stock}</span>
+                            <button onclick="window.updateStock('${p.id}', 1)" class="w-8 h-8 flex items-center justify-center hover:bg-green-50 rounded-lg font-black">+</button>
+                        </div>
+                        <button onclick="window.deleteProduct('${p.id}')" class="text-slate-300 hover:text-red-600 p-2">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // CARRITO Y OTROS
+        window.addToCart = (id) => {
+            const product = products.find(p => p.id === id);
+            if (!product || product.stock <= 0) return;
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                if (item.quantity < product.stock) item.quantity++;
+                else { window.showNotice("Sin más stock"); return; }
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            window.updateUI();
+            window.showNotice(`¡${product.name} agregado!`);
+        };
+
+        window.updateUI = () => {
+            const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+            document.getElementById('cart-count').innerText = totalItems;
+            document.getElementById('cart-count').classList.toggle('hidden', totalItems === 0);
+
+            let total = 0;
+            document.getElementById('cart-items').innerHTML = cart.map(item => {
+                total += item.price * item.quantity;
+                return `
+                    <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border">
+                        <img src="${item.image}" class="w-10 h-10 rounded object-cover" onerror="this.src='https://via.placeholder.com/40'">
+                        <div class="flex-1">
+                            <h5 class="font-black text-[10px] uppercase">${item.name}</h5>
+                            <p class="text-[10px] font-bold text-red-600">$${(item.price * item.quantity).toLocaleString()}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="window.changeQty('${item.id}', -1)" class="w-5 h-5 text-slate-400">-</button>
+                            <span class="font-black text-xs">${item.quantity}</span>
+                            <button onclick="window.changeQty('${item.id}', 1)" class="w-5 h-5 text-slate-400">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('cart-total-display').innerText = `$${total.toLocaleString()}`;
+            document.getElementById('form-total').innerText = `$${total.toLocaleString()}`;
+            document.getElementById('checkout-btn').disabled = cart.length === 0;
+        };
+
+        window.changeQty = (id, delta) => {
+            const item = cart.find(i => i.id === id);
+            const product = products.find(p => p.id === id);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity > product.stock) item.quantity = product.stock;
+                if (item.quantity <= 0) cart = cart.filter(i => i.id !== id);
+            }
+            window.updateUI();
+        };
+
+        window.handleOrder = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('cust-name').value;
+            const address = document.getElementById('cust-address').value;
+            const total = document.getElementById('form-total').innerText;
+            let message = `🥊 *NUEVO PEDIDO: BOLIS DEL RING* 🥊\n\n👤 *Luchador:* ${name}\n📍 *Arena:* ${address}\n\n📦 *DETALLE:* \n`;
+            cart.forEach(i => message += `- ${i.quantity}x ${i.name} ($${(i.price * i.quantity).toLocaleString()})\n`);
+            message += `\n💰 *TOTAL:* ${total}\n\n¡Favor confirmar pedido! 🚀`;
+            window.open(`https://wa.me/573145865641?text=${encodeURIComponent(message)}`, '_blank');
+        };
+
+        window.showNotice = (msg, isSuccess = false) => {
+            const t = document.createElement('div');
+            t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-xl text-white font-black text-xs uppercase tracking-widest shadow-2xl transition-all duration-500 ${isSuccess ? 'bg-blue-600' : 'bg-slate-900 border border-red-600'}`;
+            t.innerText = msg;
+            document.body.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
+        };
+
+        window.openAdmin = () => {
+            const p = prompt("ACCESO DE PROMOTOR (Pin):");
+            if (p === "1234") document.getElementById('admin-panel').style.display = 'block';
+            else alert("PIN INCORRECTO");
+        };
+
+        window.closeAdmin = () => document.getElementById('admin-panel').style.display = 'none';
+        window.toggleCart = () => {
+            const d = document.getElementById('cart-drawer');
+            const i = d.firstElementChild;
+            if (d.classList.contains('pointer-events-none')) {
+                d.classList.remove('opacity-0', 'pointer-events-none');
+                i.classList.remove('translate-x-full');
+            } else {
+                d.classList.add('opacity-0', 'pointer-events-none');
+                i.classList.add('translate-x-full');
+            }
+        };
+        window.goToCheckout = () => {
+            window.toggleCart();
+            document.getElementById('domicilio').classList.remove('hidden');
+            document.getElementById('domicilio').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        initAuth();
+    </script>
+</body>
+</html>
