@@ -79,7 +79,7 @@
                 ¡UN GOLPE DE SABOR EN CADA MORDIDA! 🥊
             </h2>
             <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto drop-shadow-md">
-                No te dejes vencer por el calor. Pide tus bolis artesanales y gana la lucha contra la sed con ingredientes 100% naturales.
+                No te dejes vencer por el calor. Pide tus bolis artesanales 100% naturales, sin conservantes ni colorantes, y gana la lucha contra la sed.
             </p>
             <a href="#catalogo" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1">
                 VER EL CARTEL (CATÁLOGO)
@@ -221,7 +221,7 @@
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 text-center md:text-left">
             <div>
                 <h4 class="text-4xl font-luck mb-2 uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
-                <p class="text-slate-400 max-w-xs mx-auto md:mx-0">El único boli que te saca del conteo de 10 contra el calor. Artesanales, naturales y deliciosos.</p>
+                <p class="text-slate-400 max-w-xs mx-auto md:mx-0">Bolis 100% naturales, sin conservantes ni colorantes. El único boli que te saca del conteo de 10 contra el calor.</p>
             </div>
             <div class="flex flex-col items-center gap-4">
                 <span class="font-luck text-xl text-yellow-400 uppercase">¡SÍGUENOS EN LA ARENA!</span>
@@ -278,12 +278,21 @@
                         <div class="text-3xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</div>
                         
                         ${isPromotor ? `
-                        <div class="flex items-center justify-between bg-yellow-50 p-3 rounded-2xl mb-4 border-2 border-yellow-200 shadow-inner">
-                            <span class="text-[10px] font-black uppercase text-yellow-700">Gestión de Stock</span>
-                            <div class="flex gap-2">
+                        <div class="flex flex-col gap-2 bg-yellow-50 p-3 rounded-2xl mb-4 border-2 border-yellow-200 shadow-inner">
+                            <span class="text-[10px] font-black uppercase text-yellow-700 text-center">Gestión de Inventario</span>
+                            <div class="flex items-center gap-2">
                                 <button onclick="changeStock(${p.id}, -1)" class="w-10 h-10 bg-white border-2 border-yellow-400 rounded-xl font-black hover:bg-yellow-400 transition-colors shadow-sm">-</button>
+                                
+                                <input type="number" 
+                                       value="${p.stock}" 
+                                       min="0"
+                                       onchange="updateStockDirectly(${p.id}, this.value)"
+                                       class="flex-1 w-full bg-white border-2 border-yellow-400 rounded-xl py-2 text-center font-black text-lg outline-none focus:border-red-500 shadow-inner"
+                                       title="Escribe la cantidad exacta">
+                                       
                                 <button onclick="changeStock(${p.id}, 1)" class="w-10 h-10 bg-white border-2 border-yellow-400 rounded-xl font-black hover:bg-yellow-400 transition-colors shadow-sm">+</button>
-                                <button onclick="deleteProduct(${p.id})" class="w-10 h-10 bg-red-100 text-red-600 border-2 border-red-200 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm">
+                                
+                                <button onclick="deleteProduct(${p.id})" class="w-10 h-10 bg-red-100 text-red-600 border-2 border-red-200 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm" title="Eliminar de cartelera">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
@@ -336,11 +345,26 @@
                 prod.stock = Math.max(0, prod.stock + delta);
                 saveData();
                 renderProducts();
-                // Actualizar carritos existentes si el stock baja
                 if (prod.stock === 0) {
                     cart = cart.filter(i => i.id !== id);
                     updateCartUI();
                 }
+            }
+        }
+
+        function updateStockDirectly(id, newValue) {
+            const prod = products.find(p => p.id === id);
+            if (prod) {
+                const val = parseInt(newValue);
+                prod.stock = isNaN(val) ? 0 : Math.max(0, val);
+                saveData();
+                renderProducts();
+                
+                if (prod.stock === 0) {
+                    cart = cart.filter(i => i.id !== id);
+                    updateCartUI();
+                }
+                showNotice("Stock actualizado 🥊", true);
             }
         }
 
