@@ -43,9 +43,6 @@
         body.is-promotor .admin-controls {
             display: flex !important;
         }
-        body.is-promotor #admin-form-section {
-            display: block !important;
-        }
         /* Estilos del Modal */
         #auth-modal {
             display: none;
@@ -79,42 +76,41 @@
             }
         };
 
-        window.closeAuthModal = function() {
-            const modal = document.getElementById('auth-modal');
-            if (modal) {
-                modal.classList.remove('active');
-                document.getElementById('admin-pass').value = '';
-            }
-        };
+            window.closeAuthModal = function() {
+                const modal = document.getElementById('auth-modal');
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.getElementById('admin-pass').value = '';
+                }
+            };
 
-        // Función de validación global
-        window.verifyPromotor = function() {
-            const pass = document.getElementById('admin-pass').value;
-            if(pass === '1.2.3') {
-                // Emitimos un evento personalizado que el módulo de Firebase escuchará
-                const event = new CustomEvent('authSuccess');
-                window.dispatchEvent(event);
-                window.closeAuthModal();
-            } else {
-                if(window.showToast) window.showToast("❌ CLAVE INCORRECTA");
-                document.getElementById('admin-pass').value = '';
-            }
-        };
+            // Función de validación global
+            window.verifyPromotor = function() {
+                const pass = document.getElementById('admin-pass').value;
+                if(pass === '1.2.3') {
+                    // Emitimos un evento personalizado que el módulo de Firebase escuchará
+                    const event = new CustomEvent('authSuccess');
+                    window.dispatchEvent(event);
+                    window.closeAuthModal();
+                } else {
+                    if(window.showToast) window.showToast("❌ CLAVE INCORRECTA");
+                    document.getElementById('admin-pass').value = '';
+                }
+            };
 
-        window.showToast = function(msg) {
-            const t = document.createElement('div');
-            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-[10px] z-[10000] shadow-2xl animate-bounce";
-            t.innerText = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        };
+            window.showToast = function(msg) {
+                const t = document.createElement('div');
+                t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-[10px] z-[10000] shadow-2xl animate-bounce";
+                t.innerText = msg;
+                document.body.appendChild(t);
+                setTimeout(() => t.remove(), 3000);
+            };
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 transition-colors duration-300">
 
     <!-- Navegación -->
     <nav class="sticky top-0 z-50 bg-glass border-b border-slate-200 px-4 py-3 flex justify-between items-center shadow-sm">
-        <!-- Logo Secreto (Botón de Administración) -->
         <div onclick="window.openAuthModal(event)" class="secret-trigger flex items-center gap-2 group">
             <div class="bg-red-600 p-2 rounded-lg text-white shadow-lg rotate-3 group-hover:rotate-0 transition-transform">
                 <i class="fas fa-mask fa-lg"></i>
@@ -146,7 +142,7 @@
     <main class="max-w-6xl mx-auto p-6">
         
         <!-- Sección de Administración -->
-        <section id="admin-form-section" class="hidden mb-12 bg-white rounded-3xl p-8 shadow-2xl border-4 border-yellow-400">
+        <section id="admin-form-section" class="hidden mb-12 bg-white rounded-3xl p-8 shadow-2xl border-4 border-yellow-400 animate-in fade-in slide-in-from-top-4 duration-500">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-3xl font-luck text-slate-900 uppercase">Añadir Nuevo Luchador (Sabor)</h3>
                 <button onclick="window.logoutPromotor()" class="text-red-600 font-black text-xs uppercase underline">Cerrar Sesión</button>
@@ -167,9 +163,7 @@
         <!-- Catálogo -->
         <section id="catalogo" class="mb-20">
             <h3 class="text-4xl font-luck text-slate-800 uppercase mb-8 border-b-4 border-red-600 inline-block">Cartelera Oficial</h3>
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Se renderiza mediante JS -->
-            </div>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </section>
 
         <!-- Formulario de Pedido -->
@@ -237,7 +231,6 @@
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Configuración de Firebase
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -249,7 +242,6 @@
         let isPromotor = false;
         let currentUser = null;
 
-        // --- AUTENTICACIÓN ---
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -265,15 +257,23 @@
             if (user) listenToInventory();
         });
 
-        // Escuchar éxito de autenticación global
+        // Escuchar éxito de autenticación global y actualizar UI
         window.addEventListener('authSuccess', () => {
             isPromotor = true;
             document.body.classList.add('is-promotor');
-            document.getElementById('promotor-badge').classList.remove('hidden');
-            renderProducts();
-            window.showToast("🔓 ACCESO CONCEDIDO");
+            
+            // Forzar visibilidad inmediata de secciones
+            const adminSection = document.getElementById('admin-form-section');
+            const badge = document.getElementById('promotor-badge');
+            
+            if(adminSection) adminSection.classList.remove('hidden');
+            if(badge) badge.classList.remove('hidden');
+            
+            renderProducts(); // Re-renderizar para mostrar botones de edición
+            window.showToast("🔓 MODO PROMOTOR ACTIVADO");
+            
             setTimeout(() => {
-                document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
+                adminSection.scrollIntoView({behavior: 'smooth'});
             }, 300);
         });
 
@@ -286,16 +286,15 @@
             }, (err) => console.error("Error Firestore:", err));
         }
 
-        // --- CERRAR SESIÓN ---
         window.logoutPromotor = () => {
             isPromotor = false;
             document.body.classList.remove('is-promotor');
             document.getElementById('promotor-badge').classList.add('hidden');
+            document.getElementById('admin-form-section').classList.add('hidden');
             renderProducts();
             window.showToast("SESIÓN CERRADA");
         };
 
-        // --- OPERACIONES CRUD ---
         window.addNewProduct = async (e) => {
             e.preventDefault();
             if (!currentUser) return;
@@ -324,41 +323,48 @@
         };
 
         window.deleteProduct = async (id) => {
-            if (!currentUser || !confirm("¿Retirar sabor?")) return;
+            if (!currentUser || !confirm("¿Retirar sabor de la cartelera?")) return;
             try {
                 await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id));
                 window.showToast("SABOR RETIRADO");
             } catch (err) { console.error(err); }
         };
 
-        // --- RENDERIZADO ---
         function renderProducts() {
             const grid = document.getElementById('product-grid');
+            if(!grid) return;
+
             if(products.length === 0) {
                 grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-10 font-bold uppercase tracking-widest">Esperando Cartelera...</p>';
                 return;
             }
+
             grid.innerHTML = products.map(p => `
                 <div class="product-card bg-white rounded-3xl overflow-hidden shadow-xl flex flex-col relative border border-slate-100">
-                    <button onclick="window.deleteProduct('${p.id}')" class="admin-controls absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:scale-110">
+                    <!-- Botón Eliminar (Visible solo en modo promotor) -->
+                    <button onclick="window.deleteProduct('${p.id}')" class="admin-controls absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:scale-110" style="display: ${isPromotor ? 'flex' : 'none'}">
                         <i class="fas fa-trash-alt text-xs"></i>
                     </button>
+
                     <div class="h-48 overflow-hidden relative group">
                         <img src="${p.image}" class="w-full h-full object-cover transition-transform group-hover:scale-110" onerror="this.src='https://via.placeholder.com/400x300?text=Sabor+Bolis'">
                         <span class="absolute bottom-2 left-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded font-black uppercase">
                             ${p.category}
                         </span>
-                        <div class="admin-controls absolute inset-0 bg-black/40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onclick="window.updateStock('${p.id}', -1)" class="w-10 h-10 rounded-full bg-white text-slate-900 font-black">-</button>
-                            <span class="text-white font-black">STOCK: ${p.stock}</span>
-                            <button onclick="window.updateStock('${p.id}', 1)" class="w-10 h-10 rounded-full bg-white text-slate-900 font-black">+</button>
+                        
+                        <!-- Controles de Stock (Visible solo en modo promotor) -->
+                        <div class="admin-controls absolute inset-0 bg-black/40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity" style="display: ${isPromotor ? 'flex' : 'none'}">
+                            <button onclick="window.updateStock('${p.id}', -1)" class="w-10 h-10 rounded-full bg-white text-slate-900 font-black hover:bg-red-500 hover:text-white transition-colors">-</button>
+                            <div class="bg-white px-3 py-1 rounded-lg font-black text-xs uppercase">Stock: ${p.stock}</div>
+                            <button onclick="window.updateStock('${p.id}', 1)" class="w-10 h-10 rounded-full bg-white text-slate-900 font-black hover:bg-green-500 hover:text-white transition-colors">+</button>
                         </div>
                     </div>
+
                     <div class="p-5 flex flex-col flex-1">
                         <div class="flex justify-between items-start mb-2">
                             <h4 class="text-xl font-luck text-slate-800 leading-tight uppercase">${p.name}</h4>
-                            <span class="text-xs font-black ${p.stock > 0 ? 'text-green-600' : 'text-red-500'}">
-                                ${p.stock > 0 ? `STOCK: ${p.stock}` : 'AGOTADO'}
+                            <span class="text-[10px] font-black ${p.stock > 0 ? 'text-green-600' : 'text-red-500'} bg-slate-100 px-2 py-0.5 rounded">
+                                ${p.stock > 0 ? `Quedan ${p.stock}` : 'AGOTADO'}
                             </span>
                         </div>
                         <p class="text-2xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</p>
@@ -370,13 +376,12 @@
             `).join('');
         }
 
-        // --- GESTIÓN DE CARRITO ---
         window.addToCart = (id) => {
             const p = products.find(x => x.id === id);
             const item = cart.find(x => x.id === id);
             if(item) {
                 if(item.quantity < p.stock) item.quantity++;
-                else return window.showToast("LIMITE DE STOCK");
+                else return window.showToast("LIMITE DE STOCK ALCANZADO");
             } else {
                 cart.push({...p, quantity: 1});
             }
@@ -388,17 +393,19 @@
             const count = cart.reduce((s, i) => s + i.quantity, 0);
             const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
             const badge = document.getElementById('cart-count');
-            badge.innerText = count;
-            badge.classList.toggle('hidden', count === 0);
+            if(badge) {
+                badge.innerText = count;
+                badge.classList.toggle('hidden', count === 0);
+            }
             document.getElementById('cart-total').innerText = `$${total.toLocaleString()}`;
             document.getElementById('order-total').innerText = `$${total.toLocaleString()}`;
             document.getElementById('cart-items').innerHTML = cart.map(i => `
-                <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl">
+                <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
                     <div class="flex-1">
-                        <h5 class="text-xs font-black uppercase">${i.name}</h5>
-                        <p class="text-xs text-red-600 font-bold">$${i.price.toLocaleString()} x ${i.quantity}</p>
+                        <h5 class="text-xs font-black uppercase leading-none mb-1">${i.name}</h5>
+                        <p class="text-[10px] text-red-600 font-bold">$${i.price.toLocaleString()} x ${i.quantity}</p>
                     </div>
-                    <button onclick="window.removeFromCart('${i.id}')" class="text-slate-300 hover:text-red-600"><i class="fas fa-trash-alt"></i></button>
+                    <button onclick="window.removeFromCart('${i.id}')" class="text-slate-300 hover:text-red-600 p-2"><i class="fas fa-trash-alt"></i></button>
                 </div>
             `).join('');
         }
@@ -419,8 +426,9 @@
         window.showOrderForm = () => {
             if(cart.length === 0) return window.showToast("TU BOLSA ESTÁ VACÍA");
             window.toggleCart();
-            document.getElementById('domicilio').classList.remove('hidden');
-            document.getElementById('domicilio').scrollIntoView({behavior: 'smooth'});
+            const orderForm = document.getElementById('domicilio');
+            orderForm.classList.remove('hidden');
+            orderForm.scrollIntoView({behavior: 'smooth'});
         };
 
         window.sendOrder = (e) => {
