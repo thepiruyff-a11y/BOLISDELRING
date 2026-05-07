@@ -38,38 +38,62 @@
         }
         /* Admin Classes */
         .admin-controls {
-            display: none;
+            display: none !important;
         }
         body.is-promotor .admin-controls {
-            display: flex;
+            display: flex !important;
         }
         body.is-promotor #admin-form-section {
-            display: block;
+            display: block !important;
         }
         /* Modal Style */
         #auth-modal {
             display: none;
+            z-index: 9999;
         }
         #auth-modal.active {
             display: flex;
         }
         /* Hidden Trigger */
         .secret-trigger {
-            cursor: pointer; /* Cambiado a pointer para asegurar respuesta */
+            cursor: pointer;
             transition: all 0.3s ease;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .secret-trigger:active {
             transform: scale(0.95);
         }
     </style>
+    <script>
+        // Funciones de apertura de modal fuera del módulo para asegurar disponibilidad global
+        window.openAuthModal = function(e) {
+            if(e) e.stopPropagation();
+            const modal = document.getElementById('auth-modal');
+            if (modal) {
+                modal.classList.add('active');
+                setTimeout(() => {
+                    const input = document.getElementById('admin-pass');
+                    if(input) input.focus();
+                }, 100);
+            }
+        };
+
+        window.closeAuthModal = function() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.getElementById('admin-pass').value = '';
+            }
+        };
+    </script>
 </head>
 <body class="bg-slate-100 text-slate-800 transition-colors duration-300">
 
     <!-- Navegación -->
     <nav class="sticky top-0 z-50 bg-glass border-b border-slate-200 px-4 py-3 flex justify-between items-center shadow-sm">
-        <!-- Todo este div es ahora el botón secreto -->
-        <div onclick="window.openAuthModal()" class="secret-trigger flex items-center gap-2 group">
+        <!-- Logo Secreto -->
+        <div onclick="window.openAuthModal(event)" class="secret-trigger flex items-center gap-2 group">
             <div class="bg-red-600 p-2 rounded-lg text-white shadow-lg rotate-3 group-hover:rotate-0 transition-transform">
                 <i class="fas fa-mask fa-lg"></i>
             </div>
@@ -144,7 +168,7 @@
     </main>
 
     <!-- Modal de Autenticación -->
-    <div id="auth-modal" class="fixed inset-0 z-[100] bg-slate-900/90 items-center justify-center p-6">
+    <div id="auth-modal" class="fixed inset-0 bg-slate-900/90 items-center justify-center p-6">
         <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl border-4 border-red-600 text-center">
             <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="fas fa-lock fa-2x"></i>
@@ -182,12 +206,6 @@
         <div class="max-w-4xl mx-auto">
             <h4 class="text-3xl font-luck mb-2 uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
             <p class="text-slate-400 text-sm mb-8 italic">"El peso pesado de la frescura artesanal"</p>
-            
-            <div class="flex justify-center gap-6 mb-10">
-                <a href="#" class="bg-white/10 p-3 rounded-full hover:bg-red-600 transition-colors"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="bg-white/10 p-3 rounded-full hover:bg-blue-600 transition-colors"><i class="fab fa-facebook-f"></i></a>
-            </div>
-            
             <p class="text-[10px] text-slate-500 uppercase tracking-widest">© 2024 Bolis Del Ring - Hechos para Ganar</p>
         </div>
     </footer>
@@ -197,7 +215,7 @@
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Configuración de Firebase (se inyecta automáticamente)
+        // Firebase Config
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -209,7 +227,7 @@
         let isPromotor = false;
         let currentUser = null;
 
-        // --- AUTENTICACIÓN ---
+        // --- AUTH ---
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -217,9 +235,7 @@
                 } else {
                     await signInAnonymously(auth);
                 }
-            } catch (err) {
-                console.error("Error en auth:", err);
-            }
+            } catch (err) { console.error("Error auth:", err); }
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -227,66 +243,43 @@
             if (user) listenToInventory();
         });
 
-        // --- DATOS EN TIEMPO REAL ---
         function listenToInventory() {
             const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'inventory');
             onSnapshot(colRef, (snap) => {
                 products = [];
                 snap.forEach(d => products.push({...d.data(), id: d.id}));
                 renderProducts();
-            }, (err) => {
-                console.error("Error de Firestore:", err);
-                showToast("Error conectando con la base de datos");
-            });
+            }, (err) => console.error("Error Firestore:", err));
         }
 
-        // --- PANEL DE CONTROL ---
-        window.openAuthModal = (e) => {
-            if(e) e.stopPropagation(); // Evitar propagación accidental
-            if(isPromotor) {
-                document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
-                return;
-            }
-            document.getElementById('auth-modal').classList.add('active');
-            setTimeout(() => document.getElementById('admin-pass').focus(), 100);
-        };
-
-        window.closeAuthModal = () => {
-            document.getElementById('auth-modal').classList.remove('active');
-            document.getElementById('admin-pass').value = '';
-        };
-
+        // --- EXPORTAR FUNCIONES AL WINDOW ---
         window.verifyPromotor = () => {
             const pass = document.getElementById('admin-pass').value;
             if(pass === '1.2.3') {
                 isPromotor = true;
-                applyPromotorMode();
+                document.body.classList.add('is-promotor');
+                document.getElementById('promotor-badge').classList.remove('hidden');
+                renderProducts();
                 window.closeAuthModal();
-                showToast("🔓 ACCESO CONCEDIDO, PROMOTOR");
+                showToast("🔓 ACCESO CONCEDIDO");
+                setTimeout(() => {
+                    document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
+                }, 300);
             } else {
                 showToast("❌ CLAVE INCORRECTA");
                 document.getElementById('admin-pass').value = '';
             }
         };
 
-        function applyPromotorMode() {
-            document.body.classList.toggle('is-promotor', isPromotor);
-            document.getElementById('promotor-badge').classList.toggle('hidden', !isPromotor);
-            renderProducts();
-            if(isPromotor) {
-                setTimeout(() => {
-                    document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
-                }, 300);
-            }
-        }
-
         window.logoutPromotor = () => {
             isPromotor = false;
-            applyPromotorMode();
+            document.body.classList.remove('is-promotor');
+            document.getElementById('promotor-badge').classList.add('hidden');
+            renderProducts();
             showToast("SESIÓN CERRADA");
         };
 
-        // --- ACCIONES CRUD ---
+        // --- CRUD ---
         window.addNewProduct = async (e) => {
             e.preventDefault();
             if (!currentUser) return;
@@ -315,23 +308,23 @@
         };
 
         window.deleteProduct = async (id) => {
-            if (!currentUser || !confirm("¿Retirar sabor definitivamente?")) return;
+            if (!currentUser || !confirm("¿Retirar sabor?")) return;
             try {
                 await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id));
                 showToast("SABOR RETIRADO");
             } catch (err) { console.error(err); }
         };
 
-        // --- RENDERIZADO UI ---
+        // --- UI RENDER ---
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             if(products.length === 0) {
-                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold py-10">Cargando cartelera...</p>';
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-10 font-bold">Cargando...</p>';
                 return;
             }
             grid.innerHTML = products.map(p => `
                 <div class="product-card bg-white rounded-3xl overflow-hidden shadow-xl flex flex-col relative border border-slate-100">
-                    <button onclick="window.deleteProduct('${p.id}')" class="admin-controls absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:scale-110 shadow-lg">
+                    <button onclick="window.deleteProduct('${p.id}')" class="admin-controls absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:scale-110">
                         <i class="fas fa-trash-alt text-xs"></i>
                     </button>
                     <div class="h-48 overflow-hidden relative group">
@@ -361,7 +354,7 @@
             `).join('');
         }
 
-        // --- CARRITO Y PEDIDOS ---
+        // --- CARRITO ---
         window.addToCart = (id) => {
             const p = products.find(x => x.id === id);
             const item = cart.find(x => x.id === id);
@@ -372,7 +365,7 @@
                 cart.push({...p, quantity: 1});
             }
             updateCartUI();
-            showToast(`¡${p.name} al equipo!`);
+            showToast(`¡${p.name} listo!`);
         };
 
         function updateCartUI() {
@@ -385,7 +378,6 @@
             document.getElementById('order-total').innerText = `$${total.toLocaleString()}`;
             document.getElementById('cart-items').innerHTML = cart.map(i => `
                 <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl">
-                    <img src="${i.image}" class="w-12 h-12 rounded object-cover" onerror="this.src='https://via.placeholder.com/50x50'">
                     <div class="flex-1">
                         <h5 class="text-xs font-black uppercase">${i.name}</h5>
                         <p class="text-xs text-red-600 font-bold">$${i.price.toLocaleString()} x ${i.quantity}</p>
@@ -409,7 +401,7 @@
         };
 
         window.showOrderForm = () => {
-            if(cart.length === 0) return showToast("AÑADE SABORES PRIMERO");
+            if(cart.length === 0) return showToast("AÑADE PRODUCTOS");
             window.toggleCart();
             document.getElementById('domicilio').classList.remove('hidden');
             document.getElementById('domicilio').scrollIntoView({behavior: 'smooth'});
@@ -433,13 +425,12 @@
 
         function showToast(msg) {
             const t = document.createElement('div');
-            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-[10px] z-[200] shadow-2xl animate-bounce";
+            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-[10px] z-[9999] shadow-2xl animate-bounce";
             t.innerText = msg;
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 3000);
         }
 
-        // Iniciar al cargar
         window.onload = initAuth;
     </script>
 </body>
