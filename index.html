@@ -74,9 +74,9 @@
             <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2 uppercase">
                 ¡El peso pesado de la frescura!
             </span>
-            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg">¡UN GOLPE DE SABOR EN CADA MORDIDA! 🥊</h2>
+            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg uppercase italic">¡Un golpe de sabor 100% natural! 🥊</h2>
             <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto">
-                No te dejes vencer por el calor. Pide tus bolis <span class="text-yellow-400">100% naturales, sin conservantes ni colorantes</span>.
+                Bolis artesanales <span class="text-yellow-400">sin conservantes ni colorantes</span>. ¡La lucha definitiva contra el calor!
             </p>
             <a href="#catalogo" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 uppercase">
                 Ver la cartelera
@@ -99,20 +99,19 @@
                     <h3 class="text-4xl font-luck text-slate-800 uppercase">Cartelera de Sabores</h3>
                     <p class="text-slate-500 font-bold text-sm italic">Bolis 100% naturales, sin conservantes ni colorantes</p>
                 </div>
-                <div id="promotor-tag" class="hidden bg-yellow-400 text-slate-900 px-4 py-1 rounded-lg text-xs font-black border-2 border-slate-900 animate-pulse">MODO PROMOTOR ACTIVO</div>
+                <div id="promotor-tag" class="hidden bg-yellow-400 text-slate-900 px-4 py-1 rounded-lg text-xs font-black border-2 border-slate-900 animate-pulse uppercase">Modo Promotor Activo</div>
             </div>
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]"></div>
         </section>
 
         <section id="admin-panel" class="space-y-8 mb-20">
-            <!-- Configuración GitHub -->
-            <div class="bg-blue-600 rounded-[2.5rem] p-8 shadow-2xl text-white">
+            <div class="bg-blue-600 rounded-[2.5rem] p-8 shadow-2xl text-white border-b-8 border-blue-800">
                 <h3 class="text-3xl font-luck mb-6 uppercase flex items-center gap-3">
-                    <i class="fab fa-github"></i> Esquina Técnica (Configuración GitHub)
+                    <i class="fab fa-github"></i> Esquina Técnica (Nube)
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="space-y-1">
-                        <label class="text-[10px] font-black uppercase opacity-80">GitHub Token (PAT)</label>
+                        <label class="text-[10px] font-black uppercase opacity-80">Token GitHub (PAT)</label>
                         <input type="password" id="gh-token" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 font-bold text-xs" placeholder="ghp_xxxx...">
                     </div>
                     <div class="space-y-1">
@@ -124,7 +123,7 @@
                         <input type="text" id="gh-repo" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 font-bold text-xs" placeholder="bolis-web">
                     </div>
                     <div class="space-y-1">
-                        <label class="text-[10px] font-black uppercase opacity-80">Ruta del Archivo</label>
+                        <label class="text-[10px] font-black uppercase opacity-80">Archivo</label>
                         <input type="text" id="gh-path" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 font-bold text-xs" value="data.json">
                     </div>
                 </div>
@@ -133,7 +132,6 @@
                 </button>
             </div>
 
-            <!-- Formulario de Producto -->
             <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl border-4 border-slate-900">
                 <div class="text-center mb-8">
                     <h3 class="text-3xl font-luck text-slate-900 uppercase">Fichar Nuevo Luchador</h3>
@@ -208,11 +206,11 @@
         <div class="max-w-6xl mx-auto relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
                 <div class="space-y-6">
-                    <h4 class="text-4xl font-luck tracking-wider">BOLIS <span class="text-red-600">DEL RING</span></h4>
-                    <p class="text-slate-400 font-medium">Bolis <span class="text-white font-bold">100% naturales</span>, sin conservantes ni colorantes. ¡Un nocaut al calor!</p>
+                    <h4 class="text-4xl font-luck tracking-wider uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
+                    <p class="text-slate-400 font-medium italic">Bolis <span class="text-white font-bold">100% naturales</span>, sin conservantes ni colorantes.</p>
                 </div>
                 <div class="space-y-6">
-                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Contacto</h5>
+                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Contacto Directo</h5>
                     <ul class="space-y-4 text-slate-300 font-bold">
                         <li><i class="fas fa-phone-alt text-red-600 mr-2"></i> +57 314 586 5641</li>
                         <li><i class="fab fa-whatsapp text-green-500 mr-2"></i> 314 586 5641</li>
@@ -224,12 +222,19 @@
                 </div>
             </div>
             <div class="pt-8 border-t border-slate-900 text-center text-xs text-slate-500">
-                <p>&copy; 2024 Bolis Del Ring. Todos los derechos reservados.</p>
+                <p>&copy; 2024 Bolis Del Ring. ¡El peso pesado de la frescura!</p>
             </div>
         </div>
     </footer>
 
     <script>
+        /* 
+           CONFIGURACIÓN OFICIAL DE LA ARENA:
+           Estos datos permiten que cualquier visitante vea tu cartelera actualizada.
+        */
+        const PUBLIC_OWNER = "thepiruyff-a11y"; 
+        const PUBLIC_REPO = "BOLISDELRING";  
+        
         const CLAVE = "1.2.3";
         const WHATSAPP_NUMBER = "573145865641";
         let isPromotor = false;
@@ -249,24 +254,13 @@
         let promos = JSON.parse(localStorage.getItem('bolis_ring_promos')) || defaultPromos;
         let cart = [];
 
-        // --- GESTIÓN GITHUB ---
-        
         function getGHConfig() {
             return {
                 token: localStorage.getItem('gh_token'),
-                owner: localStorage.getItem('gh_owner'),
-                repo: localStorage.getItem('gh_repo'),
+                owner: localStorage.getItem('gh_owner') || PUBLIC_OWNER,
+                repo: localStorage.getItem('gh_repo') || PUBLIC_REPO,
                 path: localStorage.getItem('gh_path') || 'data.json'
             };
-        }
-
-        async function saveGitHubConfig() {
-            localStorage.setItem('gh_token', document.getElementById('gh-token').value);
-            localStorage.setItem('gh_owner', document.getElementById('gh-owner').value);
-            localStorage.setItem('gh_repo', document.getElementById('gh-repo').value);
-            localStorage.setItem('gh_path', document.getElementById('gh-path').value);
-            showNotice("Configuración guardada localmente 🛡️", true);
-            await syncDataToGitHub();
         }
 
         async function syncDataToGitHub() {
@@ -274,9 +268,7 @@
             if (!cfg.token || !cfg.owner || !cfg.repo) return;
 
             showNotice("Sincronizando con la nube... ☁️", true);
-            
             try {
-                // 1. Obtener el SHA del archivo existente (obligatorio para actualizar)
                 const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
                     headers: { 'Authorization': `token ${cfg.token}` }
                 });
@@ -287,62 +279,42 @@
                     sha = data.sha;
                 }
 
-                // 2. Preparar el contenido
                 const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos }, null, 2))));
-                
-                // 3. Subir el commit
                 const putRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
                     method: 'PUT',
-                    headers: { 
-                        'Authorization': `token ${cfg.token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: "Actualización de Cartelera - Bolis del Ring 🥊",
-                        content: content,
-                        sha: sha
-                    })
+                    headers: { 'Authorization': `token ${cfg.token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: "Update Cartelera 🥊", content: content, sha: sha })
                 });
 
-                if (putRes.ok) showNotice("¡Guardado en GitHub correctamente! 🚀", true);
-                else throw new Error("Fallo al subir");
-
-            } catch (err) {
-                console.error(err);
-                showNotice("Error al sincronizar con GitHub ❌");
-            }
+                if (putRes.ok) showNotice("¡Guardado en GitHub! 🚀", true);
+            } catch (err) { showNotice("Error al sincronizar ❌"); }
         }
 
         async function syncDataFromGitHub() {
             const cfg = getGHConfig();
-            if (!cfg.token || !cfg.owner || !cfg.repo) return;
+            if (!cfg.owner || !cfg.repo) return;
 
             const icon = document.querySelector('#sync-btn i');
-            icon.classList.add('sync-spinner');
+            if(icon) icon.classList.add('sync-spinner');
 
             try {
-                const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
-                    headers: { 'Authorization': `token ${cfg.token}` }
-                });
+                // Si hay token lo usamos, si no, intentamos lectura pública
+                const headers = cfg.token ? { 'Authorization': `token ${cfg.token}` } : {};
+                const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, { headers });
 
                 if (res.ok) {
                     const data = await res.json();
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(data.content))));
                     products = decoded.products;
                     promos = decoded.promos;
-                    saveDataLocal();
+                    localStorage.setItem('bolis_ring_db', JSON.stringify(products));
+                    localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
                     renderProducts();
                     renderPromos();
-                    showNotice("Datos descargados de GitHub 🥊", true);
                 }
-            } catch (err) {
-                showNotice("Error al descargar datos ❌");
-            } finally {
-                icon.classList.remove('sync-spinner');
-            }
+            } catch (err) { console.warn("Modo offline o repo no configurado."); }
+            finally { if(icon) icon.classList.remove('sync-spinner'); }
         }
-
-        // --- RENDERIZADO Y LÓGICA ---
 
         function renderPromos() {
             const grid = document.getElementById('promo-grid');
@@ -355,7 +327,7 @@
                     </div>
                     <div class="relative z-10">
                         ${!isPromotor ? `
-                            <span class="bg-black/10 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black uppercase mb-4 inline-block italic">Combo Especial</span>
+                            <span class="bg-black/10 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black uppercase mb-4 inline-block italic">Combo de Campeonato</span>
                             <h4 class="text-4xl font-luck leading-none mb-2 italic uppercase">${p.name}</h4>
                             <p class="font-bold text-sm mb-6 opacity-90">${p.desc}</p>
                             <div class="flex items-end gap-3">
@@ -364,11 +336,11 @@
                             </div>
                         ` : `
                             <div class="space-y-3 bg-white/20 p-4 rounded-2xl border border-white/30 backdrop-blur-sm">
-                                <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" class="w-full bg-white/90 border-0 rounded-xl px-3 py-2 font-black text-slate-900 uppercase outline-none">
-                                <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" class="w-full bg-white/90 border-0 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs outline-none h-16">${p.desc}</textarea>
+                                <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase">
+                                <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-16">${p.desc}</textarea>
                                 <div class="grid grid-cols-2 gap-2">
-                                    <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-sm outline-none">
-                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-sm outline-none">
+                                    <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-sm">
+                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-sm">
                                 </div>
                             </div>
                         `}
@@ -387,11 +359,11 @@
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         ${!isPromotor ? `
-                            <h4 class="text-2xl font-luck text-slate-800 mb-1 leading-tight">${p.name}</h4>
+                            <h4 class="text-2xl font-luck text-slate-800 mb-1 leading-tight uppercase">${p.name}</h4>
                             <div class="text-3xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</div>
                         ` : `
                             <div class="space-y-3 mb-4 bg-yellow-50 p-4 rounded-2xl border-2 border-yellow-200">
-                                <input type="text" value="${p.name}" onchange="updateProperty(${p.id}, 'name', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm outline-none">
+                                <input type="text" value="${p.name}" onchange="updateProperty(${p.id}, 'name', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
                                 <div class="grid grid-cols-2 gap-2">
                                     <input type="number" value="${p.price}" onchange="updateProperty(${p.id}, 'price', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
                                     <input type="number" value="${p.stock}" onchange="updateProperty(${p.id}, 'stock', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
@@ -399,37 +371,40 @@
                                 <button onclick="deleteProduct(${p.id})" class="w-full bg-red-100 text-red-600 py-2 rounded-xl text-xs font-black uppercase hover:bg-red-600 hover:text-white transition-colors">Eliminar</button>
                             </div>
                         `}
-                        <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm">
-                            ${p.stock > 0 ? '¡AL CARRITO!' : 'SIN STOCK'}
+                        <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm shadow-lg active:scale-95">
+                            ${p.stock > 0 ? '¡Al Carrito! 🥊' : 'Agotado ❌'}
                         </button>
                     </div>
                 </div>`).join('');
         }
 
         async function updateProperty(id, property, value) {
-            const prod = products.find(p => p.id === id);
-            if (prod) {
-                if (property === 'price' || property === 'stock') prod[property] = parseInt(value) || 0;
-                else prod[property] = value;
-                saveDataLocal();
-                renderProducts();
-                await syncDataToGitHub();
+            const p = products.find(i => i.id === id);
+            if (p) {
+                p[property] = (property === 'price' || property === 'stock') ? parseInt(value) : value;
+                saveData(); renderProducts(); await syncDataToGitHub();
             }
         }
 
-        async function updatePromoProperty(index, property, value) {
-            if (promos[index]) {
-                if (property === 'price' || property === 'oldPrice') promos[index][property] = parseInt(value) || 0;
-                else promos[index][property] = value;
-                saveDataLocal();
-                renderPromos();
-                await syncDataToGitHub();
+        async function updatePromoProperty(idx, property, value) {
+            if (promos[idx]) {
+                promos[idx][property] = (property === 'price' || property === 'oldPrice') ? parseInt(value) : value;
+                saveData(); renderPromos(); await syncDataToGitHub();
             }
         }
 
-        function saveDataLocal() { 
-            localStorage.setItem('bolis_ring_db', JSON.stringify(products)); 
+        function saveData() {
+            localStorage.setItem('bolis_ring_db', JSON.stringify(products));
             localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
+        }
+
+        async function saveGitHubConfig() {
+            localStorage.setItem('gh_token', document.getElementById('gh-token').value);
+            localStorage.setItem('gh_owner', document.getElementById('gh-owner').value);
+            localStorage.setItem('gh_repo', document.getElementById('gh-repo').value);
+            localStorage.setItem('gh_path', document.getElementById('gh-path').value);
+            showNotice("¡Configuración Guardada! 🛡️", true);
+            await syncDataToGitHub();
         }
 
         function openSecurity() {
@@ -441,9 +416,8 @@
 
         function verifySecurity() {
             if (document.getElementById('pass-input').value === CLAVE) {
-                toggleAdminMode(true);
-                closeSecurity();
-            } else { showNotice("Clave incorrecta ❌"); }
+                toggleAdminMode(true); closeSecurity();
+            } else { showNotice("Clave Incorrecta ❌"); }
         }
 
         function toggleAdminMode(activate) {
@@ -451,8 +425,6 @@
             document.body.classList.toggle('admin-active', isPromotor);
             document.getElementById('promotor-tag').classList.toggle('hidden', !isPromotor);
             document.getElementById('sync-btn').classList.toggle('hidden', !isPromotor);
-            
-            // Cargar config actual en el panel
             if (isPromotor) {
                 const cfg = getGHConfig();
                 document.getElementById('gh-token').value = cfg.token || '';
@@ -460,37 +432,31 @@
                 document.getElementById('gh-repo').value = cfg.repo || '';
                 document.getElementById('gh-path').value = cfg.path;
             }
-
-            renderProducts();
-            renderPromos();
+            renderProducts(); renderPromos();
         }
 
         function addToCart(id) {
-            const prod = products.find(p => p.id === id);
-            if (!prod || prod.stock <= 0) return;
+            const p = products.find(i => i.id === id);
+            if (!p || p.stock <= 0) return;
             const item = cart.find(i => i.id === id);
-            if (item) item.qty++;
-            else cart.push({ ...prod, qty: 1 });
-            updateCartUI();
-            showNotice(`${prod.name} al equipo 🥊`);
+            if (item) item.qty++; else cart.push({ ...p, qty: 1 });
+            updateCartUI(); showNotice(`${p.name} al equipo 🥊`);
         }
 
-        function addPromoToCart(index) {
-            const promo = promos[index];
-            cart.push({ id: `promo-${Date.now()}`, name: `🔥 ${promo.name}`, price: promo.price, qty: 1 });
-            updateCartUI();
-            showNotice(`${promo.name} agregado 🏆`, true);
+        function addPromoToCart(idx) {
+            const promo = promos[idx];
+            cart.push({ id: `p-${Date.now()}`, name: `🔥 ${promo.name}`, price: promo.price, qty: 1 });
+            updateCartUI(); showNotice(`${promo.name} agregado! 🏆`, true);
         }
 
         function updateCartUI() {
             const count = cart.reduce((s, i) => s + i.qty, 0);
             const badge = document.getElementById('cart-count');
-            badge.innerText = count;
-            badge.classList.toggle('hidden', count === 0);
+            badge.innerText = count; badge.classList.toggle('hidden', count === 0);
 
             const cont = document.getElementById('cart-items');
             if (cart.length === 0) {
-                cont.innerHTML = `<p class="text-center text-slate-300 py-10 uppercase text-xs font-black">Vacío</p>`;
+                cont.innerHTML = `<p class="text-center text-slate-300 py-10 uppercase text-xs font-black">Tu equipaje está vacío</p>`;
                 document.getElementById('cart-total-display').innerText = "$0";
                 document.getElementById('checkout-btn').disabled = true;
             } else {
@@ -530,8 +496,7 @@
         }
 
         function goToCheckout() {
-            toggleCart();
-            document.getElementById('domicilio').classList.remove('hidden');
+            toggleCart(); document.getElementById('domicilio').classList.remove('hidden');
             document.getElementById('domicilio').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -544,8 +509,7 @@
             cart.forEach(i => msg += `• ${i.qty}x ${i.name}\n`);
             msg += `\n*TOTAL: $${total.toLocaleString()}*`;
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-            cart = []; updateCartUI(); 
-            document.getElementById('domicilio').classList.add('hidden');
+            cart = []; updateCartUI(); document.getElementById('domicilio').classList.add('hidden');
         }
 
         async function addNewProduct() {
@@ -554,38 +518,29 @@
             const stock = parseInt(document.getElementById('new-stock').value);
             const category = document.getElementById('new-category').value;
             const image = document.getElementById('new-image').value;
-
             products.push({ id: Date.now(), name, price, stock, category, image, color: 'bg-slate-50' });
-            saveDataLocal();
-            renderProducts();
-            document.getElementById('add-product-form').reset();
+            saveData(); renderProducts(); document.getElementById('add-product-form').reset();
             await syncDataToGitHub();
         }
 
         async function deleteProduct(id) {
             products = products.filter(p => p.id !== id);
-            saveDataLocal();
-            renderProducts();
-            await syncDataToGitHub();
+            saveData(); renderProducts(); await syncDataToGitHub();
         }
 
         function showNotice(msg, isSuccess = false) {
             const t = document.createElement('div');
             t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl text-white font-black shadow-xl transition-all duration-300 uppercase text-[10px] flex items-center gap-2 transform translate-y-10 opacity-0`;
             t.style.backgroundColor = isSuccess ? '#16a34a' : '#0f172a';
-            t.innerHTML = msg;
-            document.body.appendChild(t);
+            t.innerHTML = msg; document.body.appendChild(t);
             setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1'; }, 10);
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 2500);
         }
 
         window.onload = async () => {
-            renderProducts();
-            renderPromos();
-            const cfg = getGHConfig();
-            if (cfg.token) {
-                await syncDataFromGitHub();
-            }
+            renderProducts(); renderPromos();
+            // Intentar descargar datos automáticamente al cargar
+            await syncDataFromGitHub();
         };
     </script>
 </body>
