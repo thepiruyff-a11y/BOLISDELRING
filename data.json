@@ -1,4 +1,123 @@
 {
-  "products": [],
-  "promos": []
+  "products": [
+    {
+      "id": 1,
+      "name": "Maracumango \"El Rayo\"",
+      "price": 2000,
+      "stock": 14,
+      "category": "Rudo",
+      "image": "https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg",
+      "color": "bg-orange-50"
+    },
+    {
+      "id": 7,
+      "name": "Maracuyá \"Pasión\"",
+      "price": 2000,
+      "stock": 21,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/MGfD2Z9k/c9897761-341b-4afc-8148-53fb0c1ab63b.jpg",
+      "color": "bg-yellow-100"
+    },
+    {
+      "id": 8,
+      "name": "Fresa \"La Guerrera\"",
+      "price": 2000,
+      "stock": 14,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/RF9nsv8w/07931b69-3faa-40ea-ac84-4052aa03e81a.jpg",
+      "color": "bg-red-50"
+    },
+    {
+      "id": 9,
+      "name": "Piña",
+      "price": 2000,
+      "stock": 16,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/3w9Kh7NX/8972928b-46ed-4a56-bfa9-29e549ffc444.jpg",
+      "color": "bg-yellow-50"
+    },
+    {
+      "id": 10,
+      "name": "Naranja \"Sol de Arena\"",
+      "price": 2000,
+      "stock": 10,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/d1ktjpQ9/240009be-118d-4591-b3dd-f56c5caa9ef2.jpg",
+      "color": "bg-orange-100"
+    },
+    {
+      "id": 4,
+      "name": "Coco \"El Enmascarado\"",
+      "price": 2000,
+      "stock": 18,
+      "category": "Técnico",
+      "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
+      "color": "bg-slate-50"
+    },
+    {
+      "id": 2,
+      "name": "Mango \"El Justiciero\"",
+      "price": 2000,
+      "stock": 29,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg",
+      "color": "bg-yellow-50"
+    },
+    {
+      "id": 6,
+      "name": "Guanábana \"La Crema\"",
+      "price": 2000,
+      "stock": 15,
+      "category": "Técnico",
+      "image": "https://i.postimg.cc/HxPP0vvW/306ec7d5-2e25-49dd-9e4d-01f19cce4ca0.jpg",
+      "color": "bg-white"
+    },
+    {
+      "id": 3,
+      "name": "Uva",
+      "price": 2000,
+      "stock": 12,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/R01BRmKR/55917265-71c7-4857-9e9b-20a9af948c39.jpg",
+      "color": "bg-purple-50"
+    },
+    {
+      "id": 5,
+      "name": "Lulo \"Vengador Verde\"",
+      "price": 2000,
+      "stock": 10,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/ZnwYLmtN/c1b49da1-d979-4f90-a3f1-7a65cedf748c.jpg",
+      "color": "bg-lime-50"
+    },
+    {
+      "id": 1778165185225,
+      "name": "jan",
+      "price": 2000,
+      "stock": 10,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/HxPP0vvW/306ec7d5-2e25-49dd-9e4d-01f19cce4ca0.jpg",
+      "color": "bg-slate-50"
+    }
+  ],
+  "promos": [
+    {
+      "id": 101,
+      "name": "Triángulo Infernal",
+      "desc": "Lleva 3 bolis de cualquier sabor por un precio de infarto.",
+      "price": 5000,
+      "oldPrice": 6000,
+      "color": "from-yellow-400 to-orange-500",
+      "icon": "fa-bolt"
+    },
+    {
+      "id": 102,
+      "name": "La Cuadrilla del Ring",
+      "desc": "El equipo completo: 6 bolis para que nadie se quede fuera.",
+      "price": 10000,
+      "oldPrice": 12000,
+      "color": "from-red-600 to-red-800",
+      "icon": "fa-fist-raised"
+    }
+  ]
 }
