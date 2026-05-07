@@ -105,6 +105,7 @@
         </section>
 
         <section id="admin-panel" class="space-y-8 mb-20">
+            <!-- GitHub Config -->
             <div class="bg-blue-600 rounded-[2.5rem] p-8 shadow-2xl text-white border-b-8 border-blue-800">
                 <h3 class="text-3xl font-luck mb-6 uppercase flex items-center gap-3">
                     <i class="fab fa-github"></i> Esquina Técnica (Nube)
@@ -132,6 +133,27 @@
                 </button>
             </div>
 
+            <!-- Add Event Form -->
+            <div class="bg-red-600 rounded-[2.5rem] p-8 shadow-2xl text-white border-b-8 border-red-800">
+                <h3 class="text-3xl font-luck mb-6 uppercase flex items-center gap-3">
+                    <i class="fas fa-calendar-plus"></i> Organizar Nuevo Evento
+                </h3>
+                <form id="add-promo-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); addNewPromo();">
+                    <input type="text" id="new-promo-name" placeholder="Nombre del Combo (Ej: Combo Mortal)" required class="p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
+                    <input type="text" id="new-promo-desc" placeholder="Descripción breve" required class="p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
+                    <input type="number" id="new-promo-price" placeholder="Precio Especial ($)" required class="p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
+                    <input type="number" id="new-promo-old" placeholder="Precio Normal ($)" required class="p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-black uppercase mb-1 block">Finalización del Evento (Tiempo Limitado):</label>
+                        <input type="datetime-local" id="new-promo-expiry" required class="w-full p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
+                    </div>
+                    <button type="submit" class="md:col-span-2 bg-yellow-400 text-slate-900 py-5 rounded-xl font-black text-xl hover:bg-white transition-all uppercase tracking-widest shadow-xl">
+                        ¡LANZAR PROMOCIÓN!
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Product Form -->
             <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl border-4 border-slate-900">
                 <div class="text-center mb-8">
                     <h3 class="text-3xl font-luck text-slate-900 uppercase">Fichar Nuevo Luchador</h3>
@@ -243,8 +265,8 @@
         ];
 
         const defaultPromos = [
-            { id: 101, name: 'Triángulo Infernal', desc: '3 bolis por precio de infarto.', price: 5000, oldPrice: 6000, color: 'from-yellow-400 to-orange-500', icon: 'fa-bolt' },
-            { id: 102, name: 'La Cuadrilla del Ring', desc: '6 bolis para todo el equipo.', price: 10000, oldPrice: 12000, color: 'from-red-600 to-red-800', icon: 'fa-fist-raised' }
+            { id: 101, name: 'Triángulo Infernal', desc: '3 bolis por precio de infarto.', price: 5000, oldPrice: 6000, color: 'from-yellow-400 to-orange-500', icon: 'fa-bolt', expiry: '' },
+            { id: 102, name: 'La Cuadrilla del Ring', desc: '6 bolis para todo el equipo.', price: 10000, oldPrice: 12000, color: 'from-red-600 to-red-800', icon: 'fa-fist-raised', expiry: '' }
         ];
 
         let products = JSON.parse(localStorage.getItem('bolis_ring_db')) || defaultProducts;
@@ -312,18 +334,45 @@
             finally { if(icon) icon.classList.remove('sync-spinner'); }
         }
 
+        function getTimeRemaining(expiryDate) {
+            if (!expiryDate) return null;
+            const total = Date.parse(expiryDate) - Date.parse(new Date());
+            if (total <= 0) return null;
+            const days = Math.floor(total / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((total / 1000 / 60) % 60);
+            return { total, days, hours, minutes };
+        }
+
         function renderPromos() {
             const grid = document.getElementById('promo-grid');
             if (!grid) return;
-            grid.innerHTML = promos.map((p, index) => `
-                <div class="relative bg-gradient-to-br ${p.color} rounded-[2.5rem] p-8 ${p.color.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white ${!isPromotor ? 'hover:scale-[1.02] cursor-pointer' : ''}" 
-                     onclick="${!isPromotor ? `addPromoToCart(${index})` : ''}">
+            
+            grid.innerHTML = promos.map((p, index) => {
+                const timeLeft = getTimeRemaining(p.expiry);
+                const isExpired = p.expiry && !timeLeft;
+                
+                if (!isPromotor && (isExpired || !p.expiry)) return '';
+
+                return `
+                <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white ${!isPromotor ? 'hover:scale-[1.02] cursor-pointer' : 'border-dashed border-slate-400'}">
+                    
+                    ${isExpired && isPromotor ? '<div class="absolute inset-0 bg-black/40 z-20 flex items-center justify-center font-luck text-2xl uppercase rotate-12">Evento Finalizado</div>' : ''}
+                    
                     <div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform">
-                        <i class="fas ${p.icon} text-[15rem]"></i>
+                        <i class="fas ${p.icon || 'fa-star'} text-[15rem]"></i>
                     </div>
-                    <div class="relative z-10">
+                    
+                    <div class="relative z-10" onclick="${!isPromotor ? `addPromoToCart(${index})` : ''}">
                         ${!isPromotor ? `
-                            <span class="bg-black/10 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black uppercase mb-4 inline-block italic">Combo de Campeonato</span>
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-black/10 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black uppercase inline-block italic">Combo de Campeonato</span>
+                                ${timeLeft ? `
+                                    <span class="bg-red-600 text-white px-2 py-1 rounded-lg text-[10px] font-black animate-pulse">
+                                        <i class="fas fa-clock mr-1"></i> CIERRA EN: ${timeLeft.days}d ${timeLeft.hours}h
+                                    </span>
+                                ` : ''}
+                            </div>
                             <h4 class="text-4xl font-luck leading-none mb-2 italic uppercase">${p.name}</h4>
                             <p class="font-bold text-sm mb-6 opacity-90">${p.desc}</p>
                             <div class="flex items-end gap-3">
@@ -332,16 +381,30 @@
                             </div>
                         ` : `
                             <div class="space-y-3 bg-white/20 p-4 rounded-2xl border border-white/30 backdrop-blur-sm">
-                                <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase">
-                                <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-16">${p.desc}</textarea>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] font-black uppercase">Editor de Evento</span>
+                                    <button onclick="deletePromo(${index})" class="text-white hover:text-red-400 transition-colors"><i class="fas fa-trash"></i></button>
+                                </div>
+                                <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre del Evento">
+                                <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-12" placeholder="Descripción">${p.desc}</textarea>
                                 <div class="grid grid-cols-2 gap-2">
-                                    <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-sm">
-                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-sm">
+                                    <div>
+                                        <label class="text-[9px] font-black uppercase block mb-1">Precio</label>
+                                        <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] font-black uppercase block mb-1">Normal</label>
+                                        <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-black uppercase block mb-1">Finaliza el:</label>
+                                    <input type="datetime-local" value="${p.expiry || ''}" onchange="updatePromoProperty(${index}, 'expiry', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
                                 </div>
                             </div>
                         `}
                     </div>
-                </div>`).join('');
+                </div>`}).join('');
         }
 
         function renderProducts() {
@@ -529,6 +592,30 @@
             saveData(); renderProducts(); await syncDataToGitHub();
         }
 
+        async function addNewPromo() {
+            const name = document.getElementById('new-promo-name').value;
+            const desc = document.getElementById('new-promo-desc').value;
+            const price = parseInt(document.getElementById('new-promo-price').value);
+            const oldPrice = parseInt(document.getElementById('new-promo-old').value);
+            const expiry = document.getElementById('new-promo-expiry').value;
+            
+            promos.push({
+                id: Date.now(),
+                name, desc, price, oldPrice, expiry,
+                color: 'from-slate-700 to-slate-900',
+                icon: 'fa-star'
+            });
+            
+            saveData(); renderPromos(); document.getElementById('add-promo-form').reset();
+            showNotice("¡Evento Publicado! 🏆", true);
+            await syncDataToGitHub();
+        }
+
+        async function deletePromo(index) {
+            promos.splice(index, 1);
+            saveData(); renderPromos(); await syncDataToGitHub();
+        }
+
         function showNotice(msg, isSuccess = false) {
             const t = document.createElement('div');
             t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl text-white font-black shadow-xl transition-all duration-300 uppercase text-[10px] flex items-center gap-2 transform translate-y-10 opacity-0`;
@@ -541,6 +628,7 @@
         window.onload = async () => {
             renderProducts(); renderPromos();
             await syncDataFromGitHub();
+            setInterval(renderPromos, 60000);
         };
     </script>
 </body>
