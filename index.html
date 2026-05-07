@@ -228,10 +228,7 @@
     </footer>
 
     <script>
-        /* 
-           CONFIGURACIÓN OFICIAL DE LA ARENA:
-           Estos datos permiten que cualquier visitante vea tu cartelera actualizada.
-        */
+        /* CONFIGURACIÓN OFICIAL DE LA ARENA: */
         const PUBLIC_OWNER = "thepiruyff-a11y"; 
         const PUBLIC_REPO = "BOLISDELRING";  
         
@@ -298,7 +295,6 @@
             if(icon) icon.classList.add('sync-spinner');
 
             try {
-                // Si hay token lo usamos, si no, intentamos lectura pública
                 const headers = cfg.token ? { 'Authorization': `token ${cfg.token}` } : {};
                 const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, { headers });
 
@@ -360,7 +356,12 @@
                     <div class="p-6 flex-1 flex flex-col">
                         ${!isPromotor ? `
                             <h4 class="text-2xl font-luck text-slate-800 mb-1 leading-tight uppercase">${p.name}</h4>
-                            <div class="text-3xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-3xl font-black text-red-600">$${p.price.toLocaleString()}</div>
+                                <div class="px-3 py-1 rounded-full text-[10px] font-black uppercase ${p.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                    ${p.stock > 0 ? `Stock: ${p.stock}` : 'No disponible'}
+                                </div>
+                            </div>
                         ` : `
                             <div class="space-y-3 mb-4 bg-yellow-50 p-4 rounded-2xl border-2 border-yellow-200">
                                 <input type="text" value="${p.name}" onchange="updateProperty(${p.id}, 'name', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
@@ -539,7 +540,6 @@
 
         window.onload = async () => {
             renderProducts(); renderPromos();
-            // Intentar descargar datos automáticamente al cargar
             await syncDataFromGitHub();
         };
     </script>
