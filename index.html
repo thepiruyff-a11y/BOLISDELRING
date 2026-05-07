@@ -215,16 +215,16 @@
                         </div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
-                        <h4 class="text-2xl font-luck text-slate-800 leading-none mb-4">${p.name}</h4>
-                        <div class="text-3xl font-black text-red-600 mb-6">$${p.price.toLocaleString()}</div>
-                        
-                        <!-- Control de Stock: Solo visible si el Modo Promotor está ACTIVO -->
+                        <!-- Control de Stock y Eliminación: Solo visible si el Modo Promotor está ACTIVO -->
                         ${isPromotor ? `
                         <div class="flex items-center justify-between bg-yellow-50 p-2 rounded-xl mb-4 border-2 border-yellow-200">
-                            <span class="text-[10px] font-black uppercase text-yellow-700">Ajustar Stock: ${p.stock}</span>
+                            <span class="text-[10px] font-black uppercase text-yellow-700">Stock: ${p.stock}</span>
                             <div class="flex gap-1">
                                 <button onclick="changeStock(${p.id}, -1)" class="w-8 h-8 bg-white border-2 border-yellow-400 rounded-lg font-black hover:bg-yellow-400 transition-colors">-</button>
                                 <button onclick="changeStock(${p.id}, 1)" class="w-8 h-8 bg-white border-2 border-yellow-400 rounded-lg font-black hover:bg-yellow-400 transition-colors">+</button>
+                                <button onclick="deleteProduct(${p.id})" class="w-8 h-8 bg-red-100 text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-600 hover:text-white transition-all" title="Eliminar de la cartelera">
+                                    <i class="fas fa-trash-alt text-xs"></i>
+                                </button>
                             </div>
                         </div>
                         ` : ''}
@@ -278,6 +278,18 @@
                 saveData();
                 renderProducts();
             }
+        }
+
+        function deleteProduct(id) {
+            // Eliminamos el producto del array
+            products = products.filter(p => p.id !== id);
+            // También lo quitamos del carrito si estaba ahí para evitar errores
+            cart = cart.filter(item => item.id !== id);
+            
+            saveData();
+            updateCartUI();
+            renderProducts();
+            showNotice("Luchador fuera de la cartelera", false);
         }
 
         function addNewProduct() {
