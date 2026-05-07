@@ -53,6 +53,15 @@
       "category": "Rudo",
       "image": "https://i.postimg.cc/HxPP0vvW/306ec7d5-2e25-49dd-9e4d-01f19cce4ca0.jpg",
       "color": "bg-slate-50"
+    },
+    {
+      "id": 1778169351406,
+      "name": "MARACUYA",
+      "price": 2000,
+      "stock": 10,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/MGfD2Z9k/c9897761-341b-4afc-8148-53fb0c1ab63b.jpg",
+      "color": "bg-slate-50"
     }
   ],
   "promos": [
