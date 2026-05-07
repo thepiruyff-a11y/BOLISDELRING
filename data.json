@@ -99,7 +99,8 @@
       "price": 5000,
       "oldPrice": 6000,
       "color": "from-yellow-400 to-orange-500",
-      "icon": "fa-bolt"
+      "icon": "fa-bolt",
+      "expiry": "2026-05-07T12:48"
     },
     {
       "id": 102,
