@@ -55,12 +55,12 @@
         }
         /* Hidden Trigger */
         .secret-trigger {
-            cursor: default;
-            transition: all 0.5s ease;
+            cursor: pointer; /* Cambiado a pointer para asegurar respuesta */
+            transition: all 0.3s ease;
+            user-select: none;
         }
         .secret-trigger:active {
-            transform: scale(0.9);
-            opacity: 0.8;
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -68,9 +68,9 @@
 
     <!-- Navegación -->
     <nav class="sticky top-0 z-50 bg-glass border-b border-slate-200 px-4 py-3 flex justify-between items-center shadow-sm">
-        <div class="flex items-center gap-2">
-            <!-- Disparador secreto en el logo -->
-            <div onclick="window.openAuthModal()" class="secret-trigger bg-red-600 p-2 rounded-lg text-white shadow-lg rotate-3 hover:rotate-0 transition-transform">
+        <!-- Todo este div es ahora el botón secreto -->
+        <div onclick="window.openAuthModal()" class="secret-trigger flex items-center gap-2 group">
+            <div class="bg-red-600 p-2 rounded-lg text-white shadow-lg rotate-3 group-hover:rotate-0 transition-transform">
                 <i class="fas fa-mask fa-lg"></i>
             </div>
             <h1 class="text-2xl font-luck text-slate-900 tracking-wider uppercase">BOLIS <span class="text-red-600">DEL RING</span></h1>
@@ -197,7 +197,7 @@
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Firebase Config
+        // Configuración de Firebase (se inyecta automáticamente)
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -209,11 +209,16 @@
         let isPromotor = false;
         let currentUser = null;
 
+        // --- AUTENTICACIÓN ---
         const initAuth = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Error en auth:", err);
             }
         };
 
@@ -222,23 +227,28 @@
             if (user) listenToInventory();
         });
 
+        // --- DATOS EN TIEMPO REAL ---
         function listenToInventory() {
             const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'inventory');
             onSnapshot(colRef, (snap) => {
                 products = [];
                 snap.forEach(d => products.push({...d.data(), id: d.id}));
                 renderProducts();
-            }, (err) => console.error("Error cargando inventario:", err));
+            }, (err) => {
+                console.error("Error de Firestore:", err);
+                showToast("Error conectando con la base de datos");
+            });
         }
 
-        // --- AUTH MODAL ---
-        window.openAuthModal = () => {
+        // --- PANEL DE CONTROL ---
+        window.openAuthModal = (e) => {
+            if(e) e.stopPropagation(); // Evitar propagación accidental
             if(isPromotor) {
                 document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
                 return;
             }
             document.getElementById('auth-modal').classList.add('active');
-            document.getElementById('admin-pass').focus();
+            setTimeout(() => document.getElementById('admin-pass').focus(), 100);
         };
 
         window.closeAuthModal = () => {
@@ -252,9 +262,9 @@
                 isPromotor = true;
                 applyPromotorMode();
                 window.closeAuthModal();
-                showToast("MODO PROMOTOR ACTIVADO 🔓");
+                showToast("🔓 ACCESO CONCEDIDO, PROMOTOR");
             } else {
-                showToast("CLAVE INCORRECTA 🥊");
+                showToast("❌ CLAVE INCORRECTA");
                 document.getElementById('admin-pass').value = '';
             }
         };
@@ -264,7 +274,9 @@
             document.getElementById('promotor-badge').classList.toggle('hidden', !isPromotor);
             renderProducts();
             if(isPromotor) {
-                document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
+                setTimeout(() => {
+                    document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
+                }, 300);
             }
         }
 
@@ -274,7 +286,7 @@
             showToast("SESIÓN CERRADA");
         };
 
-        // --- CRUD ACTIONS ---
+        // --- ACCIONES CRUD ---
         window.addNewProduct = async (e) => {
             e.preventDefault();
             if (!currentUser) return;
@@ -303,18 +315,18 @@
         };
 
         window.deleteProduct = async (id) => {
-            if (!currentUser || !confirm("¿Retirar sabor del ring?")) return;
+            if (!currentUser || !confirm("¿Retirar sabor definitivamente?")) return;
             try {
                 await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id));
                 showToast("SABOR RETIRADO");
             } catch (err) { console.error(err); }
         };
 
-        // --- UI ---
+        // --- RENDERIZADO UI ---
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             if(products.length === 0) {
-                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold py-10">Esperando luchadores...</p>';
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold py-10">Cargando cartelera...</p>';
                 return;
             }
             grid.innerHTML = products.map(p => `
@@ -323,7 +335,7 @@
                         <i class="fas fa-trash-alt text-xs"></i>
                     </button>
                     <div class="h-48 overflow-hidden relative group">
-                        <img src="${p.image}" class="w-full h-full object-cover transition-transform group-hover:scale-110">
+                        <img src="${p.image}" class="w-full h-full object-cover transition-transform group-hover:scale-110" onerror="this.src='https://via.placeholder.com/400x300?text=Sabor+Bolis'">
                         <span class="absolute bottom-2 left-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded font-black uppercase">
                             ${p.category}
                         </span>
@@ -349,6 +361,7 @@
             `).join('');
         }
 
+        // --- CARRITO Y PEDIDOS ---
         window.addToCart = (id) => {
             const p = products.find(x => x.id === id);
             const item = cart.find(x => x.id === id);
@@ -359,7 +372,7 @@
                 cart.push({...p, quantity: 1});
             }
             updateCartUI();
-            showToast(`¡${p.name} al ring!`);
+            showToast(`¡${p.name} al equipo!`);
         };
 
         function updateCartUI() {
@@ -372,7 +385,7 @@
             document.getElementById('order-total').innerText = `$${total.toLocaleString()}`;
             document.getElementById('cart-items').innerHTML = cart.map(i => `
                 <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl">
-                    <img src="${i.image}" class="w-12 h-12 rounded object-cover">
+                    <img src="${i.image}" class="w-12 h-12 rounded object-cover" onerror="this.src='https://via.placeholder.com/50x50'">
                     <div class="flex-1">
                         <h5 class="text-xs font-black uppercase">${i.name}</h5>
                         <p class="text-xs text-red-600 font-bold">$${i.price.toLocaleString()} x ${i.quantity}</p>
@@ -396,7 +409,7 @@
         };
 
         window.showOrderForm = () => {
-            if(cart.length === 0) return showToast("CARRITO VACÍO");
+            if(cart.length === 0) return showToast("AÑADE SABORES PRIMERO");
             window.toggleCart();
             document.getElementById('domicilio').classList.remove('hidden');
             document.getElementById('domicilio').scrollIntoView({behavior: 'smooth'});
@@ -420,12 +433,13 @@
 
         function showToast(msg) {
             const t = document.createElement('div');
-            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-xs z-[100] shadow-2xl animate-bounce";
+            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-[10px] z-[200] shadow-2xl animate-bounce";
             t.innerText = msg;
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 3000);
         }
 
+        // Iniciar al cargar
         window.onload = initAuth;
     </script>
 </body>
