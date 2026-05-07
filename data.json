@@ -35,6 +35,15 @@
       "category": "Técnico",
       "image": "https://i.postimg.cc/ZnwYLmtN/c1b49da1-d979-4f90-a3f1-7a65cedf748c.jpg",
       "color": "bg-slate-50"
+    },
+    {
+      "id": 1778169324158,
+      "name": "UVA",
+      "price": 2000,
+      "stock": 10,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/R01BRmKR/55917265-71c7-4857-9e9b-20a9af948c39.jpg",
+      "color": "bg-slate-50"
     }
   ],
   "promos": [
