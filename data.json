@@ -71,6 +71,15 @@
       "category": "Rudo",
       "image": "https://i.postimg.cc/RF9nsv8w/07931b69-3faa-40ea-ac84-4052aa03e81a.jpg",
       "color": "bg-slate-50"
+    },
+    {
+      "id": 1778169370699,
+      "name": "PIÑA",
+      "price": 2000,
+      "stock": 10,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/3w9Kh7NX/8972928b-46ed-4a56-bfa9-29e549ffc444.jpg",
+      "color": "bg-slate-50"
     }
   ],
   "promos": [
