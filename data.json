@@ -2,7 +2,7 @@
 "products": [
 {
 "id": 1,
-"name": "Maracumango "El Rayo"",
+"name": "Maracumango El Rayo",
 "price": 2000,
 "stock": 15,
 "category": "Rudo",
@@ -11,7 +11,7 @@
 },
 {
 "id": 4,
-"name": "Coco "El Enmascarado"",
+"name": "Coco El Enmascarado",
 "price": 2000,
 "stock": 18,
 "category": "Técnico",
@@ -20,7 +20,7 @@
 },
 {
 "id": 2,
-"name": "Mango "El Justiciero"",
+"name": "Mango "El Justiciero",
 "price": 2000,
 "stock": 20,
 "category": "Rudo",
