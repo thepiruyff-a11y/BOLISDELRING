@@ -12,7 +12,7 @@
         .font-luck { font-family: 'Bangers', cursive; letter-spacing: 1px; }
         .bg-glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .product-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .product-card:hover { transform: translateY(-10px) rotate(1deg); }
+        .product-card:hover { transform: translateY(-5px); }
         .hero-bg { 
             position: relative; 
             background-image: url('https://i.postimg.cc/5t9myq4m/7d882dbf-1798-4a80-b9ec-d2b54d5d6191.jpg'); 
@@ -21,13 +21,10 @@
         }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%); z-index: 1; }
         .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .product-card:hover .product-image { transform: scale(1.1); }
         
         #admin-panel { display: none; }
         .admin-active #admin-panel { display: block; }
-        .admin-only { display: none; }
-        .admin-active .admin-only { display: flex; }
-
+        
         #security-modal {
             display: none;
             position: fixed;
@@ -39,7 +36,6 @@
             backdrop-filter: blur(8px);
         }
 
-        /* Animación para el badge del carrito */
         @keyframes bounce-scale {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.3); }
@@ -65,21 +61,20 @@
                 <i class="fas fa-shopping-basket text-xl"></i>
                 <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
             </button>
-            <a href="#contacto" class="hidden md:block text-slate-600 hover:text-red-600 font-bold transition-colors uppercase text-sm">Contacto</a>
         </div>
     </nav>
 
-    <header class="relative hero-bg py-32 px-6 overflow-hidden text-white">
+    <header class="relative hero-bg py-24 px-6 overflow-hidden text-white">
         <div class="hero-overlay"></div>
         <div class="max-w-4xl mx-auto text-center relative z-10">
             <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2 uppercase">
                 ¡El peso pesado de la frescura!
             </span>
-            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
+            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg">
                 ¡UN GOLPE DE SABOR EN CADA MORDIDA! 🥊
             </h2>
-            <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto drop-shadow-md">
-                No te dejes vencer por el calor. Pide tus bolis artesanales 100% naturales, sin conservantes ni colorantes, y gana la lucha contra la sed.
+            <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto">
+                No te dejes vencer por el calor. Pide tus bolis <span class="text-yellow-400">100% naturales, sin conservantes ni colorantes</span>, y gana la lucha contra la sed.
             </p>
             <a href="#catalogo" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1">
                 VER EL CARTEL (CATÁLOGO)
@@ -88,18 +83,16 @@
     </header>
 
     <main class="max-w-6xl mx-auto p-6">
-        <section id="catalogo" class="mb-16 pt-20">
+        <section id="catalogo" class="mb-16 pt-10">
             <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4 border-b-4 border-red-600 pb-4">
                 <h3 class="text-4xl font-luck text-slate-800 uppercase">La Cartelera de Sabores</h3>
                 <div class="flex flex-wrap justify-center gap-2">
-                    <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-lg text-sm font-black border-2 border-blue-200">TÉCNICOS (CREMOSOS)</span>
-                    <span class="bg-red-100 text-red-700 px-4 py-1 rounded-lg text-sm font-black border-2 border-red-200">RUDOS (AGUA)</span>
                     <div id="promotor-tag" class="hidden bg-yellow-400 text-slate-900 px-4 py-1 rounded-lg text-sm font-black border-2 border-slate-900 animate-pulse">MODO PROMOTOR</div>
                 </div>
             </div>
 
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Inyectado dinámicamente -->
+                <!-- Los productos se inyectan aquí -->
             </div>
         </section>
 
@@ -114,25 +107,25 @@
                     <input type="text" id="new-name" placeholder="Ej: Mango 'El Terrible'" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label class="text-xs font-black text-slate-400 uppercase ml-2">Precio de Entrada ($)</label>
-                    <input type="number" id="new-price" placeholder="Precio ($)" value="2000" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
+                    <label class="text-xs font-black text-slate-400 uppercase ml-2">Precio ($)</label>
+                    <input type="number" id="new-price" value="2000" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label class="text-xs font-black text-slate-400 uppercase ml-2">Stock en Nevera</label>
-                    <input type="number" id="new-stock" placeholder="Stock Inicial" value="10" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
+                    <label class="text-xs font-black text-slate-400 uppercase ml-2">Stock Inicial</label>
+                    <input type="number" id="new-stock" value="10" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
                 </div>
                 <div class="flex flex-col gap-1">
                     <label class="text-xs font-black text-slate-400 uppercase ml-2">Bando</label>
-                    <select id="new-category" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold appearance-none bg-white">
-                        <option value="Rudo">Rudo (Base Agua)</option>
-                        <option value="Técnico">Técnico (Base Leche)</option>
+                    <select id="new-category" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold bg-white">
+                        <option value="Rudo">Rudo (Agua)</option>
+                        <option value="Técnico">Técnico (Leche)</option>
                     </select>
                 </div>
-                <div class="flex flex-col gap-1 md:col-span-2">
-                    <label class="text-xs font-black text-slate-400 uppercase ml-2">Foto del Luchador (URL)</label>
-                    <input type="url" id="new-image" placeholder="https://ejemplo.com/foto.jpg" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
+                <div class="md:col-span-2 flex flex-col gap-1">
+                    <label class="text-xs font-black text-slate-400 uppercase ml-2">URL de la Imagen</label>
+                    <input type="url" id="new-image" placeholder="https://..." class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
                 </div>
-                <button type="button" onclick="addNewProduct()" class="md:col-span-2 bg-slate-900 text-white py-5 rounded-xl font-black text-xl hover:bg-red-600 transition-colors uppercase tracking-widest shadow-xl mt-4">
+                <button type="button" onclick="addNewProduct()" class="md:col-span-2 bg-slate-900 text-white py-5 rounded-xl font-black text-xl hover:bg-red-600 transition-colors uppercase shadow-xl mt-4">
                     ¡SUBIR AL CUADRILÁTERO!
                 </button>
             </form>
@@ -143,118 +136,137 @@
                 <div class="inline-block bg-red-100 text-red-600 p-4 rounded-full mb-4">
                     <i class="fas fa-shipping-fast fa-2x"></i>
                 </div>
-                <h3 class="text-3xl font-luck text-slate-900 uppercase">Datos del Retador (Cliente)</h3>
-                <p class="text-slate-500 font-bold">Completa tus datos para enviarte el equipo de frescura</p>
+                <h3 class="text-3xl font-luck text-slate-900 uppercase">Datos del Retador</h3>
             </div>
             <form id="order-form" class="space-y-5" onsubmit="handleOrderSubmit(event)">
-                <div class="space-y-1">
-                    <label class="text-xs font-black text-slate-400 uppercase ml-2">Tu Nombre / Alias</label>
-                    <input type="text" id="cust-name" required class="w-full px-4 py-4 rounded-xl border-2 border-slate-200 outline-none focus:border-red-500 font-bold" placeholder="¿Cómo te llamamos?">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-black text-slate-400 uppercase ml-2">Tu WhatsApp de Contacto</label>
-                    <input type="tel" id="cust-phone" required class="w-full px-4 py-4 rounded-xl border-2 border-slate-200 outline-none focus:border-red-500 font-bold" placeholder="Ej: 3145865641">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-black text-slate-400 uppercase ml-2">Dirección del Cuadrilátero (Entrega)</label>
-                    <input type="text" id="cust-address" required class="w-full px-4 py-4 rounded-xl border-2 border-slate-200 outline-none focus:border-red-500 font-bold" placeholder="Barrio, Calle y Número">
-                </div>
-                
+                <input type="text" id="cust-name" required class="w-full px-4 py-4 rounded-xl border-2 border-slate-200 font-bold outline-none focus:border-red-500" placeholder="¿Cómo te llamamos?">
+                <input type="tel" id="cust-phone" required class="w-full px-4 py-4 rounded-xl border-2 border-slate-200 font-bold outline-none focus:border-red-500" placeholder="Tu WhatsApp">
+                <input type="text" id="cust-address" required class="w-full px-4 py-4 rounded-xl border-2 border-slate-200 font-bold outline-none focus:border-red-500" placeholder="Dirección de entrega">
                 <div class="bg-slate-900 p-6 rounded-2xl text-white flex justify-between items-center font-luck text-2xl border-b-4 border-yellow-400">
-                    <span>TOTAL A PAGAR:</span>
+                    <span>TOTAL:</span>
                     <span id="form-total" class="text-yellow-400 font-sans">$0</span>
                 </div>
-                
-                <button type="submit" class="w-full bg-green-600 text-white font-black py-5 rounded-xl text-xl uppercase tracking-wider hover:bg-green-700 transition-all shadow-lg active:translate-y-1">
+                <button type="submit" class="w-full bg-green-600 text-white font-black py-5 rounded-xl text-xl uppercase tracking-wider hover:bg-green-700 transition-all shadow-lg">
                     <i class="fab fa-whatsapp mr-2"></i> ENVIAR PEDIDO POR WHATSAPP
-                </button>
-                <button type="button" onclick="document.getElementById('domicilio').classList.add('hidden')" class="w-full text-slate-400 font-bold py-2 text-sm uppercase">
-                    Seguir comprando
                 </button>
             </form>
         </section>
     </main>
 
-    <!-- Modal de Seguridad -->
     <div id="security-modal">
         <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl border-4 border-red-600 max-w-xs w-full text-center">
-            <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-red-200 shadow-inner">
-                <i class="fas fa-lock fa-2x"></i>
-            </div>
-            <h4 class="font-luck text-3xl mb-1 text-slate-900 uppercase">Seguridad</h4>
-            <p class="text-xs font-black text-slate-400 mb-6 uppercase tracking-tighter">Ingresa la clave de Promotor</p>
-            <input type="password" id="pass-input" class="w-full p-4 text-center text-3xl font-black border-2 border-slate-100 rounded-2xl mb-6 focus:border-red-500 outline-none tracking-widest" placeholder="***">
+            <h4 class="font-luck text-3xl mb-1 text-slate-900 uppercase">Acceso Promotor</h4>
+            <input type="password" id="pass-input" class="w-full p-4 text-center text-3xl font-black border-2 border-slate-100 rounded-2xl my-6 focus:border-red-500 outline-none" placeholder="***">
             <div class="flex gap-3">
-                <button onclick="closeSecurity()" class="flex-1 bg-slate-100 text-slate-500 py-3 rounded-xl font-black text-sm uppercase transition-colors hover:bg-slate-200">Cerrar</button>
-                <button onclick="verifySecurity()" class="flex-1 bg-red-600 text-white py-3 rounded-xl font-black text-sm uppercase shadow-lg hover:bg-red-700 transition-colors">Entrar</button>
+                <button onclick="closeSecurity()" class="flex-1 bg-slate-100 text-slate-500 py-3 rounded-xl font-black uppercase text-sm">Cerrar</button>
+                <button onclick="verifySecurity()" class="flex-1 bg-red-600 text-white py-3 rounded-xl font-black uppercase text-sm shadow-lg">Entrar</button>
             </div>
         </div>
     </div>
 
-    <!-- Carrito Lateral (Drawer) -->
     <div id="cart-drawer" class="fixed inset-0 z-[60] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl translate-x-full transition-transform duration-300 ease-out flex flex-col border-l-4 border-red-600">
             <div class="p-6 border-b flex justify-between items-center bg-slate-50">
-                <h4 class="text-2xl font-luck uppercase tracking-wide">Tu Equipaje</h4>
-                <button onclick="toggleCart()" class="p-2 text-slate-400 hover:text-red-600 transition-colors">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
+                <h4 class="text-2xl font-luck uppercase">Tu Equipaje</h4>
+                <button onclick="toggleCart()" class="text-slate-400 hover:text-red-600"><i class="fas fa-times text-2xl"></i></button>
             </div>
-            
-            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
-                <!-- Items del carrito -->
-            </div>
-            
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
             <div class="p-6 border-t bg-slate-900 text-white">
-                <div class="flex justify-between text-2xl font-luck mb-4">
-                    <span>SUBTOTAL:</span>
-                    <span id="cart-total-display" class="text-yellow-400">$0</span>
-                </div>
-                <button id="checkout-btn" onclick="goToCheckout()" disabled class="w-full bg-red-600 disabled:bg-slate-700 text-white py-4 rounded-xl font-black text-lg transition-all uppercase tracking-widest hover:bg-red-700">
-                    IR AL DOMICILIO
-                </button>
+                <div class="flex justify-between text-2xl font-luck mb-4"><span>SUBTOTAL:</span><span id="cart-total-display" class="text-yellow-400">$0</span></div>
+                <button id="checkout-btn" onclick="goToCheckout()" disabled class="w-full bg-red-600 disabled:bg-slate-700 text-white py-4 rounded-xl font-black text-lg transition-all uppercase">IR AL DOMICILIO</button>
             </div>
         </div>
     </div>
 
-    <footer id="contacto" class="bg-slate-950 text-white py-16 px-6 border-t-8 border-red-600">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 text-center md:text-left">
-            <div>
-                <h4 class="text-4xl font-luck mb-2 uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
-                <p class="text-slate-400 max-w-xs mx-auto md:mx-0">Bolis 100% naturales, sin conservantes ni colorantes. El único boli que te saca del conteo de 10 contra el calor.</p>
-            </div>
-            <div class="flex flex-col items-center gap-4">
-                <span class="font-luck text-xl text-yellow-400 uppercase">¡SÍGUENOS EN LA ARENA!</span>
-                <div class="flex gap-4">
-                    <a href="#" class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i class="fab fa-facebook-f text-xl"></i></a>
-                    <a href="#" class="w-12 h-12 bg-pink-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i class="fab fa-instagram text-xl"></i></a>
-                    <a href="https://wa.me/573145865641" target="_blank" class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i class="fab fa-whatsapp text-xl"></i></a>
-                </div>
-            </div>
-            <div class="text-sm">
-                <p class="font-bold text-slate-300 mb-2">HORARIO DE LUCHA:</p>
-                <p class="text-slate-500">Lunes a Domingo<br>10:00 AM - 7:00 PM</p>
-            </div>
+    <footer id="contacto" class="bg-slate-950 text-white pt-20 pb-8 px-6 rounded-t-[3rem] border-t-8 border-red-600 relative overflow-hidden">
+        <!-- Elemento decorativo de fondo -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+            <i class="fas fa-mask text-[20rem] absolute -bottom-20 -right-20 rotate-12"></i>
         </div>
-        <div class="mt-16 text-center text-slate-600 text-xs border-t border-slate-900 pt-8">
-            &copy; 2024 Bolis Del Ring. Todos los derechos reservados. <br>
-            Hecho con pasión por la frescura.
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
+                
+                <!-- Columna 1: Marca y Propósito -->
+                <div class="space-y-6">
+                    <div class="flex items-center justify-center md:justify-start gap-3">
+                        <div class="bg-red-600 p-2 rounded-xl text-white shadow-lg rotate-3">
+                            <i class="fas fa-mask fa-2x"></i>
+                        </div>
+                        <h4 class="text-4xl font-luck tracking-wider leading-none">BOLIS <span class="text-red-600">DEL RING</span></h4>
+                    </div>
+                    <p class="text-slate-400 font-medium leading-relaxed">
+                        Somos el peso pesado de la frescura. Bolis <span class="text-white font-bold">100% naturales</span>, elaborados con frutas seleccionadas, sin conservantes ni colorantes artificiales. ¡Un nocaut al calor!
+                    </p>
+                    <div class="flex justify-center md:justify-start gap-4">
+                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:-translate-y-1 transition-all"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 hover:-translate-y-1 transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/573145865641" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-green-600 hover:-translate-y-1 transition-all"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Contacto Rápido -->
+                <div class="space-y-6">
+                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Esquina de Contacto</h5>
+                    <ul class="space-y-4 text-slate-300">
+                        <li class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fas fa-phone-alt text-red-600"></i>
+                            <span class="font-bold">+57 314 586 5641</span>
+                        </li>
+                        <li class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fas fa-envelope text-red-600"></i>
+                            <span class="font-bold">pedidos@bolisdelring.com</span>
+                        </li>
+                        <li class="flex items-center justify-center md:justify-start gap-3 text-sm">
+                            <i class="fas fa-map-marker-alt text-red-600"></i>
+                            <span>Cali, Colombia - Envíos a toda la ciudad</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Horarios de Pelea -->
+                <div class="space-y-6">
+                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Horario de Combate</h5>
+                    <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 inline-block md:block">
+                        <div class="flex justify-between gap-8 mb-2">
+                            <span class="text-slate-400">Lun - Sáb:</span>
+                            <span class="font-bold">10:00 AM - 7:00 PM</span>
+                        </div>
+                        <div class="flex justify-between gap-8">
+                            <span class="text-slate-400">Dom y Fest:</span>
+                            <span class="font-bold text-red-500">Descanso del Guerrero</span>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-[10px] uppercase">
+                            ¡Pide el tuyo ahora mismo!
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Línea final -->
+            <div class="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+                <p>&copy; 2024 <span class="text-slate-300 font-bold">Bolis Del Ring</span>. Todos los derechos reservados.</p>
+                <div class="flex gap-6 uppercase tracking-tighter">
+                    <a href="#" class="hover:text-white transition-colors">Términos del Ring</a>
+                    <a href="#" class="hover:text-white transition-colors">Política de Frescura</a>
+                </div>
+                <p class="flex items-center gap-1">Hecho con <i class="fas fa-heart text-red-600"></i> para retadores reales</p>
+            </div>
         </div>
     </footer>
 
     <script>
         const CLAVE = "1.2.3";
-        let isPromotor = false;
         const WHATSAPP_NUMBER = "573145865641";
-
+        let isPromotor = false;
+        
         const defaultProducts = [
             { id: 1, name: 'Maracumango "El Rayo"', price: 2000, stock: 15, category: 'Rudo', image: 'https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg', color: 'bg-orange-50' },
-            { id: 7, name: 'Maracuyá "Pasión"', price: 2000, stock: 22, category: 'Rudo', image: 'https://i.postimg.cc/MGfD2Z9k/c9897761-341b-4afc-8148-53fb0c1ab63b.jpg', color: 'bg-yellow-100' },
-            { id: 8, name: 'Fresa "La Guerrera"', price: 2000, stock: 14, category: 'Rudo', image: 'https://i.postimg.cc/RF9nsv8w/07931b69-3faa-40ea-ac84-4052aa03e81a.jpg', color: 'bg-red-50' },
-            { id: 9, name: 'Piña "La Punzante"', price: 2000, stock: 16, category: 'Rudo', image: 'https://i.postimg.cc/3w9Kh7NX/8972928b-46ed-4a56-bfa9-29e549ffc444.jpg', color: 'bg-yellow-50' },
             { id: 4, name: 'Coco "El Enmascarado"', price: 2000, stock: 18, category: 'Técnico', image: 'https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png', color: 'bg-slate-50' },
-            { id: 2, name: 'Mango "El Justiciero"', price: 2000, stock: 20, category: 'Rudo', image: 'https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg', color: 'bg-yellow-50' },
-            { id: 6, name: 'Guanábana "La Crema"', price: 2000, stock: 15, category: 'Técnico', image: 'https://i.postimg.cc/HxPP0vvW/306ec7d5-2e25-49dd-9e4d-01f19cce4ca0.jpg', color: 'bg-white' }
+            { id: 2, name: 'Mango "El Justiciero"', price: 2000, stock: 20, category: 'Rudo', image: 'https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg', color: 'bg-yellow-50' }
         ];
 
         let products = JSON.parse(localStorage.getItem('bolis_ring_db')) || defaultProducts;
@@ -266,64 +278,73 @@
                 const badgeColor = p.category === 'Rudo' ? 'bg-red-600' : 'bg-blue-600';
                 return `
                 <div class="product-card bg-white rounded-[2rem] overflow-hidden shadow-xl border-2 border-slate-100 flex flex-col h-full">
-                    <div class="${p.color || 'bg-slate-50'} h-64 flex items-center justify-center relative overflow-hidden group">
-                        <img src="${p.image}" alt="${p.name}" class="product-image" onerror="this.src='https://placehold.co/400x400/eeeeee/999999?text=Boli+Ring'">
-                        <div class="absolute top-4 left-4 ${badgeColor} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10 shadow-lg">${p.category}</div>
-                        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur shadow-md border px-3 py-1 rounded-full text-[10px] font-black ${p.stock > 0 ? 'text-green-600' : 'text-red-500'} z-10">
-                            ${p.stock > 0 ? `EN RING: ${p.stock}` : 'FUERA DE COMBATE'}
-                        </div>
+                    <div class="${p.color || 'bg-slate-50'} h-56 flex items-center justify-center relative overflow-hidden">
+                        <img src="${p.image}" class="product-image" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
+                        <div class="absolute top-4 left-4 ${badgeColor} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10">${p.category}</div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
-                        <h4 class="text-2xl font-luck text-slate-800 mb-1 leading-tight">${p.name}</h4>
-                        <div class="text-3xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</div>
-                        
-                        ${isPromotor ? `
-                        <div class="flex flex-col gap-2 bg-yellow-50 p-3 rounded-2xl mb-4 border-2 border-yellow-200 shadow-inner">
-                            <span class="text-[10px] font-black uppercase text-yellow-700 text-center">Gestión de Inventario</span>
-                            <div class="flex items-center gap-2">
-                                <button onclick="changeStock(${p.id}, -1)" class="w-10 h-10 bg-white border-2 border-yellow-400 rounded-xl font-black hover:bg-yellow-400 transition-colors shadow-sm">-</button>
-                                
-                                <input type="number" 
-                                       value="${p.stock}" 
-                                       min="0"
-                                       onchange="updateStockDirectly(${p.id}, this.value)"
-                                       class="flex-1 w-full bg-white border-2 border-yellow-400 rounded-xl py-2 text-center font-black text-lg outline-none focus:border-red-500 shadow-inner"
-                                       title="Escribe la cantidad exacta">
-                                       
-                                <button onclick="changeStock(${p.id}, 1)" class="w-10 h-10 bg-white border-2 border-yellow-400 rounded-xl font-black hover:bg-yellow-400 transition-colors shadow-sm">+</button>
-                                
-                                <button onclick="deleteProduct(${p.id})" class="w-10 h-10 bg-red-100 text-red-600 border-2 border-red-200 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm" title="Eliminar de cartelera">
-                                    <i class="fas fa-trash-alt"></i>
+                        ${!isPromotor ? `
+                            <h4 class="text-2xl font-luck text-slate-800 mb-1 leading-tight">${p.name}</h4>
+                            <div class="text-3xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</div>
+                        ` : `
+                            <div class="space-y-3 mb-4 bg-yellow-50 p-4 rounded-2xl border-2 border-yellow-200">
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-[9px] font-black uppercase text-yellow-700 ml-1">Nombre del Luchador</label>
+                                    <input type="text" value="${p.name}" onchange="updateProperty(${p.id}, 'name', this.value)" 
+                                        class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm outline-none focus:border-red-500">
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="flex flex-col gap-1">
+                                        <label class="text-[9px] font-black uppercase text-yellow-700 ml-1">Precio ($)</label>
+                                        <input type="number" value="${p.price}" onchange="updateProperty(${p.id}, 'price', this.value)" 
+                                            class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm outline-none focus:border-red-500">
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="text-[9px] font-black uppercase text-yellow-700 ml-1">Stock Actual</label>
+                                        <input type="number" value="${p.stock}" onchange="updateProperty(${p.id}, 'stock', this.value)" 
+                                            class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm outline-none focus:border-red-500">
+                                    </div>
+                                </div>
+                                <button onclick="deleteProduct(${p.id})" class="w-full bg-red-100 text-red-600 py-2 rounded-xl text-xs font-black uppercase hover:bg-red-600 hover:text-white transition-all">
+                                    <i class="fas fa-trash-alt mr-2"></i>Eliminar del Ring
                                 </button>
                             </div>
-                        </div>
-                        ` : ''}
+                        `}
 
-                        <button onclick="addToCart(${p.id})" ${p.stock === 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300 cursor-not-allowed'} text-white font-black py-5 rounded-2xl transition-all uppercase tracking-widest text-sm shadow-lg active:translate-y-1">
-                            ${p.stock > 0 ? '<i class="fas fa-cart-plus mr-2"></i> ¡AL CARRITO!' : 'AGOTADO'}
+                        <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''} 
+                            class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300 cursor-not-allowed'} text-white font-black py-4 rounded-2xl transition-all uppercase tracking-widest text-sm shadow-md">
+                            ${p.stock > 0 ? '<i class="fas fa-cart-plus mr-2"></i>¡AL CARRITO!' : 'SIN STOCK'}
                         </button>
                     </div>
                 </div>
             `}).join('');
         }
 
-        function openSecurity() {
-            if (isPromotor) {
-                toggleAdminMode(false);
-                return;
+        function updateProperty(id, property, value) {
+            const prod = products.find(p => p.id === id);
+            if (prod) {
+                if (property === 'price' || property === 'stock') {
+                    prod[property] = Math.max(0, parseInt(value) || 0);
+                } else {
+                    prod[property] = value;
+                }
+                saveData();
+                renderProducts();
+                showNotice("Ficha actualizada 🥊", true);
             }
+        }
+
+        function openSecurity() {
+            if (isPromotor) return toggleAdminMode(false);
             document.getElementById('security-modal').style.display = 'flex';
             document.getElementById('pass-input').value = '';
             document.getElementById('pass-input').focus();
         }
 
-        function closeSecurity() {
-            document.getElementById('security-modal').style.display = 'none';
-        }
+        function closeSecurity() { document.getElementById('security-modal').style.display = 'none'; }
 
         function verifySecurity() {
-            const val = document.getElementById('pass-input').value;
-            if (val === CLAVE) {
+            if (document.getElementById('pass-input').value === CLAVE) {
                 toggleAdminMode(true);
                 closeSecurity();
                 showNotice("Modo Promotor Activado 🥊", true);
@@ -339,45 +360,6 @@
             renderProducts();
         }
 
-        function changeStock(id, delta) {
-            const prod = products.find(p => p.id === id);
-            if (prod) {
-                prod.stock = Math.max(0, prod.stock + delta);
-                saveData();
-                renderProducts();
-                if (prod.stock === 0) {
-                    cart = cart.filter(i => i.id !== id);
-                    updateCartUI();
-                }
-            }
-        }
-
-        function updateStockDirectly(id, newValue) {
-            const prod = products.find(p => p.id === id);
-            if (prod) {
-                const val = parseInt(newValue);
-                prod.stock = isNaN(val) ? 0 : Math.max(0, val);
-                saveData();
-                renderProducts();
-                
-                if (prod.stock === 0) {
-                    cart = cart.filter(i => i.id !== id);
-                    updateCartUI();
-                }
-                showNotice("Stock actualizado 🥊", true);
-            }
-        }
-
-        function deleteProduct(id) {
-            if(!confirm("¿Seguro que quieres retirar a este luchador de la cartelera?")) return;
-            products = products.filter(p => p.id !== id);
-            cart = cart.filter(item => item.id !== id);
-            saveData();
-            updateCartUI();
-            renderProducts();
-            showNotice("Luchador retirado", false);
-        }
-
         function addNewProduct() {
             const name = document.getElementById('new-name').value;
             const price = parseInt(document.getElementById('new-price').value);
@@ -386,219 +368,143 @@
             const image = document.getElementById('new-image').value;
 
             if (name && image && price > 0) {
-                products.push({ 
-                    id: Date.now(), 
-                    name, price, stock, category, image,
-                    color: category === 'Rudo' ? 'bg-red-50' : 'bg-blue-50' 
-                });
+                products.push({ id: Date.now(), name, price, stock, category, image, color: category === 'Rudo' ? 'bg-red-50' : 'bg-blue-50' });
                 saveData();
                 renderProducts();
                 document.getElementById('add-product-form').reset();
                 showNotice("¡Nuevo luchador fichado! 🌟", true);
-                window.scrollTo({ top: document.getElementById('catalogo').offsetTop - 100, behavior: 'smooth' });
-            } else {
-                showNotice("Faltan datos obligatorios", false);
             }
         }
 
-        function saveData() {
-            localStorage.setItem('bolis_ring_db', JSON.stringify(products));
+        function deleteProduct(id) {
+            if(!confirm("¿Retirar este sabor del ring?")) return;
+            products = products.filter(p => p.id !== id);
+            saveData();
+            renderProducts();
         }
+
+        function saveData() { localStorage.setItem('bolis_ring_db', JSON.stringify(products)); }
 
         function addToCart(id) {
             const prod = products.find(p => p.id === id);
             if (!prod || prod.stock <= 0) return;
-            
             const item = cart.find(i => i.id === id);
             if (item) {
-                if (item.qty < prod.stock) {
-                    item.qty++;
-                } else { 
-                    showNotice("Máximo stock alcanzado ✋"); 
-                    return; 
-                }
-            } else {
-                cart.push({ ...prod, qty: 1 });
-            }
+                if (item.qty < prod.stock) item.qty++;
+                else { showNotice("No hay más stock disponible"); return; }
+            } else { cart.push({ ...prod, qty: 1 }); }
             
-            // Animación del botón del carrito
-            const cartBtn = document.querySelector('button[onclick="toggleCart()"]');
-            cartBtn.classList.add('cart-bump');
-            setTimeout(() => cartBtn.classList.remove('cart-bump'), 300);
-
+            const btn = document.querySelector('button[onclick="toggleCart()"]');
+            btn.classList.add('cart-bump');
+            setTimeout(() => btn.classList.remove('cart-bump'), 300);
+            
             updateCartUI();
             showNotice(`${prod.name} al equipo 🥊`);
         }
 
         function updateCartUI() {
-            const countBadge = document.getElementById('cart-count');
-            const totalItems = cart.reduce((s, i) => s + i.qty, 0);
-            countBadge.innerText = totalItems;
-            countBadge.classList.toggle('hidden', totalItems === 0);
+            const count = cart.reduce((s, i) => s + i.qty, 0);
+            const badge = document.getElementById('cart-count');
+            badge.innerText = count;
+            badge.classList.toggle('hidden', count === 0);
 
-            const itemsCont = document.getElementById('cart-items');
-            const totalDisplay = document.getElementById('cart-total-display');
-            const checkoutBtn = document.getElementById('checkout-btn');
-            
+            const cont = document.getElementById('cart-items');
             if (cart.length === 0) {
-                itemsCont.innerHTML = `
-                    <div class="flex flex-col items-center justify-center py-20 text-slate-300">
-                        <i class="fas fa-shopping-basket text-6xl mb-4"></i>
-                        <p class="font-bold uppercase tracking-widest text-sm">Tu equipaje está vacío</p>
-                    </div>
-                `;
-                totalDisplay.innerText = "$0";
-                checkoutBtn.disabled = true;
+                cont.innerHTML = `<div class="py-10 text-center text-slate-300 font-bold uppercase text-xs">Vacio</div>`;
+                document.getElementById('cart-total-display').innerText = "$0";
+                document.getElementById('checkout-btn').disabled = true;
             } else {
                 let total = 0;
-                itemsCont.innerHTML = cart.map(item => {
+                cont.innerHTML = cart.map(item => {
                     total += item.price * item.qty;
                     return `
-                        <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-3xl border border-slate-200 group transition-all hover:bg-white hover:shadow-md">
-                            <div class="w-16 h-16 rounded-2xl overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
-                                <img src="${item.image}" class="w-full h-full object-cover">
+                        <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border">
+                            <img src="${item.image}" class="w-10 h-10 object-cover rounded-lg">
+                            <div class="flex-1 min-w-0">
+                                <h5 class="text-[10px] font-black uppercase text-slate-400 truncate">${item.name}</h5>
+                                <p class="text-xs font-bold text-red-600">$${(item.price * item.qty).toLocaleString()}</p>
                             </div>
-                            <div class="flex-1">
-                                <h5 class="text-[10px] font-black uppercase text-slate-400 leading-tight">${item.category}</h5>
-                                <h4 class="font-bold text-slate-800 text-sm leading-tight">${item.name}</h4>
-                                <p class="text-xs font-black text-red-600 mt-1">$${(item.price * item.qty).toLocaleString()}</p>
+                            <div class="flex items-center gap-2">
+                                <button onclick="updateCartQty(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center text-slate-400"><i class="fas fa-minus text-[10px]"></i></button>
+                                <span class="font-black text-xs">${item.qty}</span>
+                                <button onclick="updateCartQty(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center text-slate-400"><i class="fas fa-plus text-[10px]"></i></button>
                             </div>
-                            <div class="flex items-center gap-2 bg-white p-1 rounded-xl border shadow-sm">
-                                <button onclick="changeCartQty(${item.id}, -1)" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-red-600 transition-colors"><i class="fas fa-minus text-[10px]"></i></button>
-                                <span class="font-black text-sm min-w-[20px] text-center">${item.qty}</span>
-                                <button onclick="changeCartQty(${item.id}, 1)" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-blue-600 transition-colors"><i class="fas fa-plus text-[10px]"></i></button>
-                            </div>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
-                totalDisplay.innerText = `$${total.toLocaleString()}`;
+                document.getElementById('cart-total-display').innerText = `$${total.toLocaleString()}`;
                 document.getElementById('form-total').innerText = `$${total.toLocaleString()}`;
-                checkoutBtn.disabled = false;
+                document.getElementById('checkout-btn').disabled = false;
             }
         }
 
-        function changeCartQty(id, delta) {
+        function updateCartQty(id, delta) {
             const item = cart.find(i => i.id === id);
             const prod = products.find(p => p.id === id);
-            if (!item || !prod) return;
-            
-            if (delta > 0) {
-                if (item.qty < prod.stock) item.qty++;
-                else showNotice("Máximo stock alcanzado");
-            } else {
+            if (delta > 0 && item.qty < prod.stock) item.qty++;
+            else if (delta < 0) {
                 item.qty--;
                 if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
-            }
+            } else if (delta > 0) showNotice("Stock máximo");
             updateCartUI();
         }
 
         function toggleCart() {
-            const drawer = document.getElementById('cart-drawer');
-            const inner = drawer.firstElementChild;
-            if (drawer.classList.contains('pointer-events-none')) {
-                drawer.classList.remove('opacity-0', 'pointer-events-none');
-                inner.classList.remove('translate-x-full');
-            } else {
-                drawer.classList.add('opacity-0', 'pointer-events-none');
-                inner.classList.add('translate-x-full');
-            }
+            const d = document.getElementById('cart-drawer');
+            const i = d.firstElementChild;
+            const open = d.classList.contains('pointer-events-none');
+            d.classList.toggle('opacity-0', !open);
+            d.classList.toggle('pointer-events-none', !open);
+            i.classList.toggle('translate-x-full', !open);
         }
 
         function goToCheckout() {
             toggleCart();
-            const formSection = document.getElementById('domicilio');
-            formSection.classList.remove('hidden');
-            setTimeout(() => {
-                formSection.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+            document.getElementById('domicilio').classList.remove('hidden');
+            setTimeout(() => document.getElementById('domicilio').scrollIntoView({ behavior: 'smooth' }), 100);
         }
 
         function handleOrderSubmit(e) {
             e.preventDefault();
-            
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const address = document.getElementById('cust-address').value;
+            const n = document.getElementById('cust-name').value;
+            const p = document.getElementById('cust-phone').value;
+            const a = document.getElementById('cust-address').value;
             const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
 
-            // Construcción del mensaje para WhatsApp con formato profesional
-            let message = `*NUEVO PEDIDO - BOLIS DEL RING* 🥊\n\n`;
-            message += `*Retador:* ${name}\n`;
-            message += `*Teléfono:* ${phone}\n`;
-            message += `*Dirección:* ${address}\n\n`;
-            message += `*EQUIPO DE FRESCURA:*\n`;
-            
-            cart.forEach(item => {
-                message += `• ${item.qty}x ${item.name} ($${(item.price * item.qty).toLocaleString()})\n`;
-            });
-            
-            message += `\n*TOTAL A PAGAR: $${total.toLocaleString()}* 💰\n\n`;
-            message += `_¡Quedo atento a la confirmación para el envío!_`;
+            let msg = `*NUEVO PEDIDO - BOLIS DEL RING* 🥊\n\n`;
+            msg += `*Retador:* ${n}\n*WhatsApp:* ${p}\n*Dirección:* ${a}\n\n`;
+            msg += `*EQUIPO:*\n`;
+            cart.forEach(i => msg += `• ${i.qty}x ${i.name} ($${(i.price * i.qty).toLocaleString()})\n`);
+            msg += `\n*TOTAL: $${total.toLocaleString()}* 💰`;
 
-            const encodedMsg = encodeURIComponent(message);
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMsg}`;
-
-            // Reducir stock localmente para simular la venta
+            // Descontar stock localmente
             cart.forEach(item => {
                 const prod = products.find(p => p.id === item.id);
                 if(prod) prod.stock = Math.max(0, prod.stock - item.qty);
             });
-            
             saveData();
             renderProducts();
+
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
             
-            // Abrir WhatsApp en una nueva pestaña
-            window.open(waUrl, '_blank');
-            
-            // Limpiar estado después del pedido
+            // Limpiar
             cart = [];
             updateCartUI();
             document.getElementById('order-form').reset();
             document.getElementById('domicilio').classList.add('hidden');
-            
-            showNotice("¡Pedido generado! Redirigiendo a WhatsApp... 🏆", true);
+            showNotice("¡Pedido enviado al cuadrilátero!", true);
         }
 
         function showNotice(msg, isSuccess = false) {
             const t = document.createElement('div');
-            t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-8 py-4 rounded-2xl text-white font-black shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-all duration-300 uppercase text-xs tracking-widest flex items-center gap-3 transform translate-y-20 opacity-0`;
+            t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl text-white font-black shadow-xl transition-all duration-300 uppercase text-[10px] tracking-widest flex items-center gap-2 transform translate-y-10 opacity-0`;
             t.style.backgroundColor = isSuccess ? '#16a34a' : '#0f172a';
-            if(!isSuccess) t.style.border = '2px solid #dc2626';
-            
-            const icon = isSuccess ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-info-circle"></i>';
-            t.innerHTML = `${icon} <span>${msg}</span>`;
-            
+            t.innerHTML = `${isSuccess ? '<i class="fas fa-check"></i>' : '<i class="fas fa-info-circle"></i>'} ${msg}`;
             document.body.appendChild(t);
-            
-            // Animación de entrada
-            setTimeout(() => {
-                t.style.transform = 'translate(-50%, 0)';
-                t.style.opacity = '1';
-            }, 10);
-
-            // Animación de salida
-            setTimeout(() => { 
-                t.style.transform = 'translate(-50%, 20px)';
-                t.style.opacity = '0'; 
-                setTimeout(() => t.remove(), 500); 
-            }, 3000);
+            setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1'; }, 10);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 2500);
         }
 
-        // Inicialización
-        window.onload = () => {
-            renderProducts();
-            updateCartUI();
-            console.log("🥊 Bolis del Ring listos para el combate.");
-        };
-
-        // Manejar cierre de modal al presionar ESC
-        window.onkeydown = (e) => {
-            if(e.key === "Escape") {
-                closeSecurity();
-                const drawer = document.getElementById('cart-drawer');
-                if(!drawer.classList.contains('opacity-0')) toggleCart();
-            }
-        };
+        window.onload = renderProducts;
     </script>
 </body>
 </html>
