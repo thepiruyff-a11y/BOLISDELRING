@@ -62,6 +62,15 @@
       "category": "Rudo",
       "image": "https://i.postimg.cc/MGfD2Z9k/c9897761-341b-4afc-8148-53fb0c1ab63b.jpg",
       "color": "bg-slate-50"
+    },
+    {
+      "id": 1778169361237,
+      "name": "FRESA",
+      "price": 2000,
+      "stock": 10,
+      "category": "Rudo",
+      "image": "https://i.postimg.cc/RF9nsv8w/07931b69-3faa-40ea-ac84-4052aa03e81a.jpg",
+      "color": "bg-slate-50"
     }
   ],
   "promos": [
