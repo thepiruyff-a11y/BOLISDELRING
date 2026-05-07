@@ -63,11 +63,11 @@
         </div>
         
         <div class="flex items-center gap-4">
-            <button onclick="toggleCart()" class="relative p-2 text-slate-600 hover:text-red-500 transition-colors">
+            <button onclick="window.toggleCart()" class="relative p-2 text-slate-600 hover:text-red-500 transition-colors">
                 <i class="fas fa-shopping-basket text-xl"></i>
                 <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
             </button>
-            <a href="#contacto" class="hidden md:block text-slate-600 hover:text-red-600 font-bold transition-colors">CONTACTO</a>
+            <a href="#contacto" class="hidden md:block text-slate-600 hover:text-red-600 font-bold transition-colors uppercase font-black">Contacto</a>
         </div>
     </nav>
 
@@ -78,14 +78,14 @@
             <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2">
                 ¡EL PESO PESADO DE LA FRESCURA!
             </span>
-            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-xl">
-                ¡UN GOLPE DE SABOR EN CADA MORDIDA! 🥊
+            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-xl uppercase">
+                ¡Un golpe de sabor en cada mordida! 🥊
             </h2>
             <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto drop-shadow-md">
                 No te dejes vencer por el calor. Pide tus bolis artesanales y gana la lucha contra la sed.
             </p>
-            <a href="#catalogo" class="bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-lg active:translate-y-1">
-                VER EL CARTEL (CATÁLOGO)
+            <a href="#catalogo" class="bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-lg active:translate-y-1 inline-block uppercase">
+                Ver el Cartel
             </a>
         </div>
     </header>
@@ -96,8 +96,8 @@
             <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4 border-b-4 border-red-600 pb-4">
                 <h3 class="text-4xl font-luck text-slate-800 uppercase">La Cartelera de Sabores</h3>
                 <div class="flex gap-2">
-                    <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-lg text-sm font-black border-2 border-blue-200">TÉCNICOS</span>
-                    <span class="bg-red-100 text-red-700 px-4 py-1 rounded-lg text-sm font-black border-2 border-red-200">RUDOS</span>
+                    <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-lg text-sm font-black border-2 border-blue-200 uppercase">Técnicos</span>
+                    <span class="bg-red-100 text-red-700 px-4 py-1 rounded-lg text-sm font-black border-2 border-red-200 uppercase">Rudos</span>
                 </div>
             </div>
 
@@ -137,28 +137,27 @@
 
                 <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-black py-5 rounded-xl flex items-center justify-center gap-3 text-xl uppercase active:scale-95 transition-all">
                     <i class="fab fa-whatsapp text-2xl"></i>
-                    SOLICITAR PEDIDO
+                    Solicitar Pedido
                 </button>
             </form>
         </section>
     </main>
 
-    <!-- PANEL DE ADMINISTRACIÓN COMPLETO -->
+    <!-- PANEL DE ADMINISTRACIÓN -->
     <div id="admin-panel" class="p-4 md:p-8">
         <div class="max-w-5xl mx-auto">
             <div class="flex justify-between items-center border-b-4 border-slate-900 pb-4 mb-8">
                 <div>
                     <h2 class="text-3xl md:text-4xl font-luck uppercase">Promotor del Ring</h2>
-                    <p class="text-slate-500 font-bold text-sm">GESTIÓN DE INVENTARIO</p>
+                    <p class="text-slate-500 font-bold text-sm uppercase">Gestión de Inventario</p>
                 </div>
                 <div class="flex gap-2">
                     <button id="seed-btn" onclick="window.seedDatabase()" class="hidden bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-black uppercase text-xs">Cargar Iniciales</button>
-                    <button onclick="closeAdmin()" class="bg-red-600 text-white px-6 py-2 rounded-lg font-black uppercase hover:bg-red-700">Cerrar</button>
+                    <button onclick="window.closeAdmin()" class="bg-red-600 text-white px-6 py-2 rounded-lg font-black uppercase hover:bg-red-700">Cerrar</button>
                 </div>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Columna: Agregar Nuevo -->
                 <div class="lg:col-span-1">
                     <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-slate-200 sticky top-8">
                         <h4 class="text-xl font-luck mb-4 text-slate-800 uppercase flex items-center gap-2">
@@ -166,7 +165,7 @@
                         </h4>
                         <form id="add-product-form" class="space-y-4" onsubmit="window.addProduct(event)">
                             <div>
-                                <label class="text-xs font-black text-slate-500 uppercase">Nombre del Sabor</label>
+                                <label class="text-xs font-black text-slate-500 uppercase">Nombre</label>
                                 <input type="text" id="new-name" required class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500" placeholder="Ej: Coco 'El Enmascarado'">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
@@ -175,7 +174,7 @@
                                     <input type="number" id="new-price" required value="2000" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500">
                                 </div>
                                 <div>
-                                    <label class="text-xs font-black text-slate-500 uppercase">Stock Inicial</label>
+                                    <label class="text-xs font-black text-slate-500 uppercase">Stock</label>
                                     <input type="number" id="new-stock" required value="10" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500">
                                 </div>
                             </div>
@@ -190,22 +189,19 @@
                                 <label class="text-xs font-black text-slate-500 uppercase">URL Imagen</label>
                                 <input type="text" id="new-image" required class="w-full bg-slate-50 p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500" placeholder="https://...">
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl hover:bg-blue-700 transition-colors uppercase tracking-widest text-sm shadow-lg">
-                                AGREGAR AL RING
+                            <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl hover:bg-blue-700 transition-colors uppercase text-sm shadow-lg">
+                                Agregar al Ring
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <!-- Columna: Lista y Stock -->
                 <div class="lg:col-span-2">
                     <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-slate-200">
                         <h4 class="text-xl font-luck mb-6 text-slate-800 uppercase flex items-center gap-2">
                             <i class="fas fa-boxes text-red-600"></i> Inventario Actual
                         </h4>
-                        <div id="admin-product-list" class="space-y-3">
-                            <!-- Productos admin inyectados -->
-                        </div>
+                        <div id="admin-product-list" class="space-y-3"></div>
                     </div>
                 </div>
             </div>
@@ -217,7 +213,7 @@
         <div class="absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl translate-x-full transition-transform duration-300 ease-out flex flex-col">
             <div class="p-6 border-b flex justify-between items-center bg-slate-50">
                 <h4 class="text-2xl font-luck uppercase">Tu Equipaje</h4>
-                <button onclick="toggleCart()" class="p-2 text-slate-400 hover:text-red-600">
+                <button onclick="window.toggleCart()" class="p-2 text-slate-400 hover:text-red-600">
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
@@ -227,8 +223,8 @@
                     <span>SUBTOTAL:</span>
                     <span id="cart-total-display" class="font-sans text-yellow-400">$0</span>
                 </div>
-                <button id="checkout-btn" onclick="goToCheckout()" disabled class="w-full bg-red-600 text-white py-4 rounded-xl font-black text-lg transition-all uppercase hover:bg-red-700">
-                    IR AL DOMICILIO
+                <button id="checkout-btn" onclick="window.goToCheckout()" disabled class="w-full bg-red-600 text-white py-4 rounded-xl font-black text-lg transition-all uppercase hover:bg-red-700">
+                    Ir al Domicilio
                 </button>
             </div>
         </div>
@@ -238,9 +234,12 @@
     <footer id="contacto" class="bg-slate-950 text-white py-16 px-6 border-t-8 border-red-600">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
             <div class="text-center md:text-left">
-                <h4 class="text-4xl font-luck mb-2 uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
+                <h4 class="text-4xl font-luck mb-2 uppercase">Bolis <span class="text-red-600">del Ring</span></h4>
                 <p class="text-slate-400 max-w-xs">El único boli que te saca del conteo de 10 contra el calor.</p>
-                <button onclick="openAdmin()" class="mt-8 text-slate-600 text-[10px] uppercase font-black hover:text-white transition-colors">ACCESO PROMOTOR</button>
+                <!-- Botón de administración corregido -->
+                <button onclick="window.openAdmin()" class="mt-8 bg-slate-900 border border-slate-700 px-4 py-2 rounded-lg text-slate-500 text-[10px] uppercase font-black hover:text-white hover:border-white transition-all">
+                    <i class="fas fa-lock mr-2"></i> Acceso Promotor
+                </button>
             </div>
             <div class="flex flex-col items-center gap-4">
                 <div class="flex gap-4">
@@ -255,10 +254,10 @@
     <!-- Firebase y Lógica -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc, updateDoc, setDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // CONFIGURACIÓN
+        // CONFIGURACIÓN GLOBAL
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -269,7 +268,42 @@
         let cart = [];
         let userAuth = null;
 
-        // AUTH (Regla 3)
+        // FUNCIONES DE UI (Asignadas a window para que funcionen con onclick)
+        window.openAdmin = () => {
+            const p = prompt("ACCESO DE PROMOTOR (Pin):");
+            if (p === "1234") {
+                document.getElementById('admin-panel').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            } else if (p !== null) {
+                alert("PIN INCORRECTO. Vuelve a intentarlo.");
+            }
+        };
+
+        window.closeAdmin = () => {
+            document.getElementById('admin-panel').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        window.toggleCart = () => {
+            const d = document.getElementById('cart-drawer');
+            const i = d.firstElementChild;
+            if (d.classList.contains('pointer-events-none')) {
+                d.classList.remove('opacity-0', 'pointer-events-none');
+                i.classList.remove('translate-x-full');
+            } else {
+                d.classList.add('opacity-0', 'pointer-events-none');
+                i.classList.add('translate-x-full');
+            }
+        };
+
+        window.goToCheckout = () => {
+            window.toggleCart();
+            const form = document.getElementById('domicilio');
+            form.classList.remove('hidden');
+            form.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // AUTH
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -277,7 +311,7 @@
                 } else {
                     await signInAnonymously(auth);
                 }
-            } catch (err) { console.error("Auth error:", err); }
+            } catch (err) { console.error("Error de autenticación:", err); }
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -285,7 +319,7 @@
             if (user) syncProducts();
         });
 
-        // FIRESTORE (Regla 1)
+        // FIRESTORE SYNC
         function syncProducts() {
             if (!userAuth) return;
             const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'inventory');
@@ -295,50 +329,40 @@
                 snapshot.forEach(doc => dbProducts.push({ ...doc.data(), id: doc.id }));
                 products = dbProducts;
                 
-                // Mostrar botón de semilla si no hay productos
                 const seedBtn = document.getElementById('seed-btn');
-                if (products.length === 0) {
-                    seedBtn.classList.remove('hidden');
-                } else {
-                    seedBtn.classList.add('hidden');
-                }
+                if (products.length === 0) seedBtn.classList.remove('hidden');
+                else seedBtn.classList.add('hidden');
 
                 renderProducts();
                 renderAdminList();
             }, (error) => {
-                console.error("Snapshot error:", error);
-                document.getElementById('product-grid').innerHTML = `
-                    <div class="col-span-full text-center py-10">
-                        <p class="text-red-500 font-bold">Error al conectar con la cartelera.</p>
-                    </div>
-                `;
+                console.error("Error en Snapshot:", error);
             });
         }
 
-        // CARGAR DATOS INICIALES (SEMILLA)
+        // ACCIONES DE BASE DE DATOS
         window.seedDatabase = async () => {
             if (!userAuth || !confirm("¿Quieres cargar los sabores iniciales?")) return;
             const initial = [
-                { name: "Milo 'El Técnico'", price: 2500, stock: 15, category: "Técnico", image: "https://i.postimg.cc/zX8Z5Z5z/milo.png", color: "bg-blue-50" },
-                { name: "Coco 'El Enmascarado'", price: 2000, stock: 20, category: "Rudo", image: "https://i.postimg.cc/7Z6Z6Z6z/coco.png", color: "bg-red-50" },
+                { name: "Milo 'El Técnico'", price: 2500, stock: 15, category: "Técnico", image: "https://i.postimg.cc/mD8ZfL6N/boli-milo.jpg", color: "bg-blue-50" },
+                { name: "Coco 'El Enmascarado'", price: 2000, stock: 20, category: "Rudo", image: "https://i.postimg.cc/W3pY7H8q/boli-coco.jpg", color: "bg-red-50" },
                 { name: "Fresa 'La Luchadora'", price: 2200, stock: 12, category: "Técnico", image: "https://i.postimg.cc/8Z8Z8Z8z/fresa.png", color: "bg-blue-50" }
             ];
 
             try {
                 for (const p of initial) {
-                    const id = Date.now().toString() + Math.random().toString(36).substr(2, 5);
+                    const id = "boli_" + Math.random().toString(36).substr(2, 9);
                     await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id), { ...p, id });
                 }
                 window.showNotice("¡Cartelera cargada!", true);
-            } catch (err) { console.error("Seed error:", err); }
+            } catch (err) { console.error("Error en Seed:", err); }
         };
 
-        // AGREGAR PRODUCTO
         window.addProduct = async (e) => {
             e.preventDefault();
             if (!userAuth) return;
 
-            const newId = Date.now().toString();
+            const newId = "boli_" + Date.now();
             const category = document.getElementById('new-category').value;
             const newProduct = {
                 id: newId,
@@ -351,44 +375,38 @@
             };
 
             try {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'inventory', newId);
-                await setDoc(docRef, newProduct);
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', newId), newProduct);
                 document.getElementById('add-product-form').reset();
-                window.showNotice("¡SABOR AGREGADO!", true);
-            } catch (err) { console.error("Add error:", err); }
+                window.showNotice("¡Sabor agregado!", true);
+            } catch (err) { console.error("Error al agregar:", err); }
         };
 
-        // ACTUALIZAR STOCK
         window.updateStock = async (id, delta) => {
             if (!userAuth) return;
             const p = products.find(item => item.id === id);
             if (!p) return;
             const newStock = Math.max(0, p.stock + delta);
-            
             try {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id);
-                await updateDoc(docRef, { stock: newStock });
-            } catch (err) { console.error("Update error:", err); }
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id), { stock: newStock });
+            } catch (err) { console.error("Error de stock:", err); }
         };
 
-        // ELIMINAR PRODUCTO
         window.deleteProduct = async (id) => {
-            if (!confirm("¿Deseas retirar este sabor permanentemente?")) return;
+            if (!confirm("¿Retirar este sabor del ring permanentemente?")) return;
             try {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id);
-                await deleteDoc(docRef);
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id));
                 window.showNotice("Sabor retirado.");
-            } catch (err) { console.error("Delete error:", err); }
+            } catch (err) { console.error("Error al borrar:", err); }
         };
 
-        // RENDER CATALOGO
+        // RENDERIZADO
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             if (products.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full text-center py-20 bg-white rounded-3xl border-4 border-dashed border-slate-200">
-                        <i class="fas fa-ghost text-4xl text-slate-200 mb-4"></i>
-                        <p class="font-black text-slate-400 uppercase tracking-widest">El ring está vacío.<br>Agrega sabores en el panel de promotor.</p>
+                        <i class="fas fa-mask text-4xl text-slate-200 mb-4"></i>
+                        <p class="font-black text-slate-400 uppercase tracking-widest">El ring está vacío.<br>Agrega sabores como promotor.</p>
                     </div>
                 `;
                 return;
@@ -404,17 +422,16 @@
                         </div>
                     </div>
                     <div class="p-5 flex-1 flex flex-col">
-                        <h4 class="text-xl font-luck text-slate-800 leading-tight mb-2">${p.name}</h4>
+                        <h4 class="text-xl font-luck text-slate-800 leading-tight mb-2 uppercase">${p.name}</h4>
                         <div class="text-2xl font-black text-red-600 mb-4">$${p.price.toLocaleString()}</div>
-                        <button onclick="window.addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-3 rounded-xl transition-all uppercase tracking-widest text-xs">
-                            ${p.stock > 0 ? 'AL CARRITO' : 'AGOTADO'}
+                        <button onclick="window.addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-3 rounded-xl transition-all uppercase text-xs">
+                            ${p.stock > 0 ? 'Al Carrito' : 'Agotado'}
                         </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // RENDER ADMIN
         function renderAdminList() {
             const list = document.getElementById('admin-product-list');
             list.innerHTML = products.map(p => `
@@ -427,12 +444,12 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-4 ml-auto">
-                        <div class="flex items-center bg-white rounded-xl border p-1">
-                            <button onclick="window.updateStock('${p.id}', -1)" class="w-8 h-8 flex items-center justify-center hover:bg-red-50 rounded-lg font-black">-</button>
+                        <div class="flex items-center bg-white rounded-xl border p-1 shadow-sm">
+                            <button onclick="window.updateStock('${p.id}', -1)" class="w-8 h-8 flex items-center justify-center hover:bg-red-50 rounded-lg font-black text-red-600">-</button>
                             <span class="w-10 text-center font-black text-sm">${p.stock}</span>
-                            <button onclick="window.updateStock('${p.id}', 1)" class="w-8 h-8 flex items-center justify-center hover:bg-green-50 rounded-lg font-black">+</button>
+                            <button onclick="window.updateStock('${p.id}', 1)" class="w-8 h-8 flex items-center justify-center hover:bg-green-50 rounded-lg font-black text-green-600">+</button>
                         </div>
-                        <button onclick="window.deleteProduct('${p.id}')" class="text-slate-300 hover:text-red-600 p-2">
+                        <button onclick="window.deleteProduct('${p.id}')" class="text-slate-300 hover:text-red-600 p-2 transition-colors">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
@@ -440,40 +457,41 @@
             `).join('');
         }
 
-        // CARRITO Y OTROS
+        // CARRITO
         window.addToCart = (id) => {
             const product = products.find(p => p.id === id);
             if (!product || product.stock <= 0) return;
             const item = cart.find(i => i.id === id);
             if (item) {
                 if (item.quantity < product.stock) item.quantity++;
-                else { window.showNotice("Sin más stock"); return; }
+                else { window.showNotice("Sin más stock disponible"); return; }
             } else {
                 cart.push({ ...product, quantity: 1 });
             }
             window.updateUI();
-            window.showNotice(`¡${product.name} agregado!`);
+            window.showNotice(`¡${product.name} al carrito!`);
         };
 
         window.updateUI = () => {
             const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
-            document.getElementById('cart-count').innerText = totalItems;
-            document.getElementById('cart-count').classList.toggle('hidden', totalItems === 0);
+            const counter = document.getElementById('cart-count');
+            counter.innerText = totalItems;
+            counter.classList.toggle('hidden', totalItems === 0);
 
             let total = 0;
             document.getElementById('cart-items').innerHTML = cart.map(item => {
                 total += item.price * item.quantity;
                 return `
                     <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border">
-                        <img src="${item.image}" class="w-10 h-10 rounded object-cover" onerror="this.src='https://via.placeholder.com/40'">
+                        <img src="${item.image}" class="w-10 h-10 rounded object-cover border" onerror="this.src='https://via.placeholder.com/40'">
                         <div class="flex-1">
-                            <h5 class="font-black text-[10px] uppercase">${item.name}</h5>
+                            <h5 class="font-black text-[10px] uppercase truncate w-24">${item.name}</h5>
                             <p class="text-[10px] font-bold text-red-600">$${(item.price * item.quantity).toLocaleString()}</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="window.changeQty('${item.id}', -1)" class="w-5 h-5 text-slate-400">-</button>
+                            <button onclick="window.changeQty('${item.id}', -1)" class="w-6 h-6 flex items-center justify-center bg-white border rounded shadow-sm">-</button>
                             <span class="font-black text-xs">${item.quantity}</span>
-                            <button onclick="window.changeQty('${item.id}', 1)" class="w-5 h-5 text-slate-400">+</button>
+                            <button onclick="window.changeQty('${item.id}', 1)" class="w-6 h-6 flex items-center justify-center bg-white border rounded shadow-sm">+</button>
                         </div>
                     </div>
                 `;
@@ -489,7 +507,7 @@
             const product = products.find(p => p.id === id);
             if (item) {
                 item.quantity += delta;
-                if (item.quantity > product.stock) item.quantity = product.stock;
+                if (item.quantity > (product?.stock || 0)) item.quantity = product.stock;
                 if (item.quantity <= 0) cart = cart.filter(i => i.id !== id);
             }
             window.updateUI();
@@ -508,34 +526,10 @@
 
         window.showNotice = (msg, isSuccess = false) => {
             const t = document.createElement('div');
-            t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-xl text-white font-black text-xs uppercase tracking-widest shadow-2xl transition-all duration-500 ${isSuccess ? 'bg-blue-600' : 'bg-slate-900 border border-red-600'}`;
+            t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-xl text-white font-black text-xs uppercase tracking-widest shadow-2xl transition-all duration-500 transform translate-y-0 ${isSuccess ? 'bg-blue-600' : 'bg-slate-900 border border-red-600'}`;
             t.innerText = msg;
             document.body.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
-        };
-
-        window.openAdmin = () => {
-            const p = prompt("ACCESO DE PROMOTOR (Pin):");
-            if (p === "1234") document.getElementById('admin-panel').style.display = 'block';
-            else alert("PIN INCORRECTO");
-        };
-
-        window.closeAdmin = () => document.getElementById('admin-panel').style.display = 'none';
-        window.toggleCart = () => {
-            const d = document.getElementById('cart-drawer');
-            const i = d.firstElementChild;
-            if (d.classList.contains('pointer-events-none')) {
-                d.classList.remove('opacity-0', 'pointer-events-none');
-                i.classList.remove('translate-x-full');
-            } else {
-                d.classList.add('opacity-0', 'pointer-events-none');
-                i.classList.add('translate-x-full');
-            }
-        };
-        window.goToCheckout = () => {
-            window.toggleCart();
-            document.getElementById('domicilio').classList.remove('hidden');
-            document.getElementById('domicilio').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translate(-50%, 20px)'; setTimeout(() => t.remove(), 500); }, 3000);
         };
 
         initAuth();
