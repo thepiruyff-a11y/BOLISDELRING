@@ -109,7 +109,8 @@
       "price": 10000,
       "oldPrice": 12000,
       "color": "from-red-600 to-red-800",
-      "icon": "fa-fist-raised"
+      "icon": "fa-fist-raised",
+      "expiry": "2026-05-07T12:59"
     }
   ]
 }
