@@ -36,7 +36,7 @@
             background: rgba(0, 0, 0, 0.4);
             z-index: 1;
         }
-        /* Admin Classes */
+        /* Clases de Administración */
         .admin-controls {
             display: none !important;
         }
@@ -46,7 +46,7 @@
         body.is-promotor #admin-form-section {
             display: block !important;
         }
-        /* Modal Style */
+        /* Estilos del Modal */
         #auth-modal {
             display: none;
             z-index: 9999;
@@ -54,7 +54,7 @@
         #auth-modal.active {
             display: flex;
         }
-        /* Hidden Trigger */
+        /* Disparador Secreto */
         .secret-trigger {
             cursor: pointer;
             transition: all 0.3s ease;
@@ -66,7 +66,7 @@
         }
     </style>
     <script>
-        // Funciones de apertura de modal fuera del módulo para asegurar disponibilidad global
+        // Funciones globales para control del modal
         window.openAuthModal = function(e) {
             if(e) e.stopPropagation();
             const modal = document.getElementById('auth-modal');
@@ -86,13 +86,35 @@
                 document.getElementById('admin-pass').value = '';
             }
         };
+
+        // Función de validación global
+        window.verifyPromotor = function() {
+            const pass = document.getElementById('admin-pass').value;
+            if(pass === '1.2.3') {
+                // Emitimos un evento personalizado que el módulo de Firebase escuchará
+                const event = new CustomEvent('authSuccess');
+                window.dispatchEvent(event);
+                window.closeAuthModal();
+            } else {
+                if(window.showToast) window.showToast("❌ CLAVE INCORRECTA");
+                document.getElementById('admin-pass').value = '';
+            }
+        };
+
+        window.showToast = function(msg) {
+            const t = document.createElement('div');
+            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-[10px] z-[10000] shadow-2xl animate-bounce";
+            t.innerText = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        };
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 transition-colors duration-300">
 
     <!-- Navegación -->
     <nav class="sticky top-0 z-50 bg-glass border-b border-slate-200 px-4 py-3 flex justify-between items-center shadow-sm">
-        <!-- Logo Secreto -->
+        <!-- Logo Secreto (Botón de Administración) -->
         <div onclick="window.openAuthModal(event)" class="secret-trigger flex items-center gap-2 group">
             <div class="bg-red-600 p-2 rounded-lg text-white shadow-lg rotate-3 group-hover:rotate-0 transition-transform">
                 <i class="fas fa-mask fa-lg"></i>
@@ -146,11 +168,11 @@
         <section id="catalogo" class="mb-20">
             <h3 class="text-4xl font-luck text-slate-800 uppercase mb-8 border-b-4 border-red-600 inline-block">Cartelera Oficial</h3>
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- JS render -->
+                <!-- Se renderiza mediante JS -->
             </div>
         </section>
 
-        <!-- Pedido Form -->
+        <!-- Formulario de Pedido -->
         <section id="domicilio" class="hidden max-w-xl mx-auto bg-white p-8 rounded-3xl shadow-2xl border-2 border-slate-900 mb-20">
             <h3 class="text-3xl font-luck text-center mb-6 uppercase">Confirmar Envío</h3>
             <form onsubmit="window.sendOrder(event)" class="space-y-4">
@@ -177,8 +199,8 @@
             <p class="text-slate-500 text-xs font-bold uppercase mb-6">Solo Promotores Autorizados</p>
             <input type="password" id="admin-pass" placeholder="Clave del Ring" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 outline-none focus:border-red-500 text-center text-2xl tracking-[1em] mb-6">
             <div class="flex gap-3">
-                <button onclick="window.closeAuthModal()" class="flex-1 py-3 font-black uppercase text-xs text-slate-400">Cancelar</button>
-                <button onclick="window.verifyPromotor()" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black uppercase text-xs">Entrar</button>
+                <button type="button" onclick="window.closeAuthModal()" class="flex-1 py-3 font-black uppercase text-xs text-slate-400">Cancelar</button>
+                <button type="button" onclick="window.verifyPromotor()" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black uppercase text-xs">Entrar</button>
             </div>
         </div>
     </div>
@@ -215,7 +237,7 @@
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Firebase Config
+        // Configuración de Firebase
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -227,7 +249,7 @@
         let isPromotor = false;
         let currentUser = null;
 
-        // --- AUTH ---
+        // --- AUTENTICACIÓN ---
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -243,6 +265,18 @@
             if (user) listenToInventory();
         });
 
+        // Escuchar éxito de autenticación global
+        window.addEventListener('authSuccess', () => {
+            isPromotor = true;
+            document.body.classList.add('is-promotor');
+            document.getElementById('promotor-badge').classList.remove('hidden');
+            renderProducts();
+            window.showToast("🔓 ACCESO CONCEDIDO");
+            setTimeout(() => {
+                document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
+            }, 300);
+        });
+
         function listenToInventory() {
             const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'inventory');
             onSnapshot(colRef, (snap) => {
@@ -252,34 +286,16 @@
             }, (err) => console.error("Error Firestore:", err));
         }
 
-        // --- EXPORTAR FUNCIONES AL WINDOW ---
-        window.verifyPromotor = () => {
-            const pass = document.getElementById('admin-pass').value;
-            if(pass === '1.2.3') {
-                isPromotor = true;
-                document.body.classList.add('is-promotor');
-                document.getElementById('promotor-badge').classList.remove('hidden');
-                renderProducts();
-                window.closeAuthModal();
-                showToast("🔓 ACCESO CONCEDIDO");
-                setTimeout(() => {
-                    document.getElementById('admin-form-section').scrollIntoView({behavior: 'smooth'});
-                }, 300);
-            } else {
-                showToast("❌ CLAVE INCORRECTA");
-                document.getElementById('admin-pass').value = '';
-            }
-        };
-
+        // --- CERRAR SESIÓN ---
         window.logoutPromotor = () => {
             isPromotor = false;
             document.body.classList.remove('is-promotor');
             document.getElementById('promotor-badge').classList.add('hidden');
             renderProducts();
-            showToast("SESIÓN CERRADA");
+            window.showToast("SESIÓN CERRADA");
         };
 
-        // --- CRUD ---
+        // --- OPERACIONES CRUD ---
         window.addNewProduct = async (e) => {
             e.preventDefault();
             if (!currentUser) return;
@@ -294,8 +310,8 @@
             try {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id), newP);
                 e.target.reset();
-                showToast("SABOR REGISTRADO ✅");
-            } catch (err) { showToast("ERROR AL GUARDAR"); }
+                window.showToast("SABOR REGISTRADO ✅");
+            } catch (err) { window.showToast("ERROR AL GUARDAR"); }
         };
 
         window.updateStock = async (id, delta) => {
@@ -311,15 +327,15 @@
             if (!currentUser || !confirm("¿Retirar sabor?")) return;
             try {
                 await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inventory', id));
-                showToast("SABOR RETIRADO");
+                window.showToast("SABOR RETIRADO");
             } catch (err) { console.error(err); }
         };
 
-        // --- UI RENDER ---
+        // --- RENDERIZADO ---
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             if(products.length === 0) {
-                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-10 font-bold">Cargando...</p>';
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-10 font-bold uppercase tracking-widest">Esperando Cartelera...</p>';
                 return;
             }
             grid.innerHTML = products.map(p => `
@@ -354,18 +370,18 @@
             `).join('');
         }
 
-        // --- CARRITO ---
+        // --- GESTIÓN DE CARRITO ---
         window.addToCart = (id) => {
             const p = products.find(x => x.id === id);
             const item = cart.find(x => x.id === id);
             if(item) {
                 if(item.quantity < p.stock) item.quantity++;
-                else return showToast("LIMITE DE STOCK");
+                else return window.showToast("LIMITE DE STOCK");
             } else {
                 cart.push({...p, quantity: 1});
             }
             updateCartUI();
-            showToast(`¡${p.name} listo!`);
+            window.showToast(`¡${p.name} en el ring!`);
         };
 
         function updateCartUI() {
@@ -401,7 +417,7 @@
         };
 
         window.showOrderForm = () => {
-            if(cart.length === 0) return showToast("AÑADE PRODUCTOS");
+            if(cart.length === 0) return window.showToast("TU BOLSA ESTÁ VACÍA");
             window.toggleCart();
             document.getElementById('domicilio').classList.remove('hidden');
             document.getElementById('domicilio').scrollIntoView({behavior: 'smooth'});
@@ -420,16 +436,8 @@
             updateCartUI();
             e.target.reset();
             document.getElementById('domicilio').classList.add('hidden');
-            showToast("PEDIDO ENVIADO 🏆");
+            window.showToast("PEDIDO ENVIADO 🏆");
         };
-
-        function showToast(msg) {
-            const t = document.createElement('div');
-            t.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-black text-[10px] z-[9999] shadow-2xl animate-bounce";
-            t.innerText = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        }
 
         window.onload = initAuth;
     </script>
