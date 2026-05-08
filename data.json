@@ -103,7 +103,13 @@
   ],
   "promos": [],
   "orders": [],
-  "workers": [],
+  "workers": [
+    {
+      "id": "1778259504565",
+      "name": "jan",
+      "phone": "3025239510"
+    }
+  ],
   "admins": [
     {
       "id": 1,
