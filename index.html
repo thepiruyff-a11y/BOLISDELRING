@@ -102,12 +102,20 @@
             </section>
 
             <section id="catalogo" class="mb-16 scroll-mt-24">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4 border-b-4 border-red-600 pb-4">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-6 gap-4 border-b-4 border-red-600 pb-4">
                     <div>
                         <h3 class="text-4xl font-luck text-slate-800 uppercase">Cartelera de Sabores</h3>
                         <p class="text-slate-500 font-bold text-sm italic">Bolis 100% naturales, sin conservantes ni colorantes</p>
                     </div>
                 </div>
+                
+                <!-- Filtros de Categoría -->
+                <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start">
+                    <button onclick="setFilter('Todos')" data-category="Todos" class="filter-btn bg-red-600 text-white px-6 py-2 rounded-full font-black uppercase text-xs shadow-md transition-all">Todos</button>
+                    <button onclick="setFilter('Técnico')" data-category="Técnico" class="filter-btn bg-slate-200 text-slate-600 hover:bg-slate-300 px-6 py-2 rounded-full font-black uppercase text-xs transition-all">Técnicos (Leche)</button>
+                    <button onclick="setFilter('Rudo')" data-category="Rudo" class="filter-btn bg-slate-200 text-slate-600 hover:bg-slate-300 px-6 py-2 rounded-full font-black uppercase text-xs transition-all">Rudos (Agua)</button>
+                </div>
+
                 <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]"></div>
             </section>
         </main>
@@ -414,9 +422,12 @@
                 <option value="diario">📅 Informe Diario (Hoy)</option>
                 <option value="semanal">🗓️ Informe Semanal (Últ. 7 días)</option>
             </select>
-            <select id="report-admin" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-green-500 mb-6 bg-slate-50 cursor-pointer">
+            <div class="text-left mb-2 mt-2">
+                <p class="text-[10px] font-black uppercase text-slate-400">Destinatarios:</p>
+            </div>
+            <div id="report-admin-list" class="w-full p-3 rounded-xl border-2 border-slate-200 mb-6 bg-slate-50 max-h-32 overflow-y-auto space-y-2 text-left">
                 <!-- Se llena con JS -->
-            </select>
+            </div>
             <div class="flex gap-3">
                 <button onclick="closeReportSender()" class="flex-1 bg-slate-100 text-slate-500 py-3 rounded-xl font-black uppercase text-sm">Cancelar</button>
                 <button onclick="sendReport()" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-black uppercase text-sm shadow-lg hover:bg-green-600 transition-colors">Enviar <i class="fab fa-whatsapp"></i></button>
@@ -469,6 +480,7 @@
         let workers = JSON.parse(localStorage.getItem('bolis_ring_workers')) || [];
         let admins = JSON.parse(localStorage.getItem('bolis_ring_admins')) || defaultAdmins;
         let cart = [];
+        let currentFilter = 'Todos'; // Estado inicial del filtro
 
         function getGHConfig() {
             return {
@@ -648,34 +660,61 @@
             }
         }
 
+        function setFilter(category) {
+            currentFilter = category;
+            
+            // Actualizar el estilo visual de los botones
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.dataset.category === category) {
+                    btn.classList.remove('bg-slate-200', 'text-slate-600');
+                    btn.classList.add('bg-red-600', 'text-white', 'shadow-md');
+                } else {
+                    btn.classList.remove('bg-red-600', 'text-white', 'shadow-md');
+                    btn.classList.add('bg-slate-200', 'text-slate-600');
+                }
+            });
+            
+            renderProducts(); // Volver a pintar la cartelera
+        }
+
         function renderProducts() {
             const publicGrid = document.getElementById('product-grid');
             const adminGrid = document.getElementById('admin-product-grid');
 
             // Renderizado Vista Pública
             if (publicGrid) {
-                // Ordenar para que los agotados queden automáticamente al final
-                const sortedPublic = [...products].sort((a, b) => (a.stock > 0 ? -1 : 1) - (b.stock > 0 ? -1 : 1));
+                // 1. Filtrar los productos según la selección actual
+                let filteredProducts = products;
+                if (currentFilter !== 'Todos') {
+                    filteredProducts = products.filter(p => p.category === currentFilter);
+                }
+
+                // 2. Ordenar para que los agotados queden automáticamente al final
+                const sortedPublic = [...filteredProducts].sort((a, b) => (a.stock > 0 ? -1 : 1) - (b.stock > 0 ? -1 : 1));
                 
-                publicGrid.innerHTML = sortedPublic.map(p => `
-                    <div class="product-card bg-white rounded-[2rem] overflow-hidden shadow-xl border-2 border-slate-100 flex flex-col h-full ${p.stock <= 0 ? 'opacity-70' : ''}">
-                        <div class="${p.color || 'bg-slate-50'} h-56 flex items-center justify-center relative overflow-hidden">
-                            <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
-                            <div class="absolute top-4 left-4 ${p.category === 'Rudo' ? 'bg-red-600' : 'bg-blue-600'} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10">${p.category}</div>
-                        </div>
-                        <div class="p-6 flex-1 flex flex-col">
-                            <h4 class="text-2xl font-luck text-slate-800 mb-1 leading-tight uppercase">${p.name}</h4>
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="text-3xl font-black text-red-600">$${p.price.toLocaleString()}</div>
-                                <div class="px-3 py-1 rounded-full text-[10px] font-black uppercase ${p.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
-                                    ${p.stock > 0 ? `Stock: ${p.stock}` : 'No disponible'}
-                                </div>
+                if (sortedPublic.length === 0) {
+                    publicGrid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-bold uppercase text-sm border-2 border-dashed border-slate-200 rounded-2xl">No hay luchadores en esta categoría actualmente.</div>`;
+                } else {
+                    publicGrid.innerHTML = sortedPublic.map(p => `
+                        <div class="product-card bg-white rounded-[2rem] overflow-hidden shadow-xl border-2 border-slate-100 flex flex-col h-full ${p.stock <= 0 ? 'opacity-70' : ''}">
+                            <div class="${p.color || 'bg-slate-50'} h-56 flex items-center justify-center relative overflow-hidden">
+                                <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
+                                <div class="absolute top-4 left-4 ${p.category === 'Rudo' ? 'bg-red-600' : 'bg-blue-600'} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10">${p.category}</div>
                             </div>
-                            <button onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm shadow-lg active:scale-95">
-                                ${p.stock > 0 ? '¡Al Carrito! 🥊' : 'Agotado ❌'}
-                            </button>
-                        </div>
-                    </div>`).join('');
+                            <div class="p-6 flex-1 flex flex-col">
+                                <h4 class="text-2xl font-luck text-slate-800 mb-1 leading-tight uppercase">${p.name}</h4>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="text-3xl font-black text-red-600">$${p.price.toLocaleString()}</div>
+                                    <div class="px-3 py-1 rounded-full text-[10px] font-black uppercase ${p.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                        ${p.stock > 0 ? `Stock: ${p.stock}` : 'No disponible'}
+                                    </div>
+                                </div>
+                                <button onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm shadow-lg active:scale-95">
+                                    ${p.stock > 0 ? '¡Al Carrito! 🥊' : 'Agotado ❌'}
+                                </button>
+                            </div>
+                        </div>`).join('');
+                }
             }
 
             // Renderizado Vista Promotor
@@ -945,9 +984,14 @@
 
         // --- ENVIAR INFORMES POR WHATSAPP --- //
         function openReportSender() {
-            const selectAdmin = document.getElementById('report-admin');
-            // Llenar el select de destinatarios automáticamente con los administradores
-            selectAdmin.innerHTML = admins.map(a => `<option value="${a.phone}">${a.name} (${a.phone})</option>`).join('');
+            const listAdmin = document.getElementById('report-admin-list');
+            // Llenar la lista de destinatarios con checkboxes (marcados por defecto)
+            listAdmin.innerHTML = admins.map(a => `
+                <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-slate-200 rounded-lg transition-colors">
+                    <input type="checkbox" value="${a.phone}" class="admin-checkbox w-4 h-4 text-green-600 rounded focus:ring-green-500 cursor-pointer" checked>
+                    <span class="text-xs font-bold text-slate-700">${a.name}</span>
+                </label>
+            `).join('');
             document.getElementById('report-modal').style.display = 'flex';
         }
 
@@ -957,10 +1001,13 @@
 
         function sendReport() {
             const type = document.getElementById('report-type').value;
-            const phone = document.getElementById('report-admin').value.replace(/\D/g, ''); // Limpiar símbolos del número
             
-            if(!phone) {
-                showNotice("Error con el número de Admin", false);
+            // Obtener todos los checkboxes seleccionados
+            const checkboxes = document.querySelectorAll('.admin-checkbox:checked');
+            const phones = Array.from(checkboxes).map(cb => cb.value.replace(/\D/g, ''));
+            
+            if(phones.length === 0) {
+                showNotice("Selecciona al menos un destinatario", false);
                 return;
             }
 
@@ -1006,10 +1053,19 @@
             msg += `*📈 Ganancias Netas:* $${gananciasNetas.toLocaleString()}\n\n`;
             msg += `_Generado desde Bolis del Ring App_`;
 
-            // Enviar a WhatsApp y cerrar modal
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+            // Guardar la fecha en la que se envió el reporte diario para el recordatorio automático
+            if (type === 'diario') {
+                const todayStr = new Date().toISOString().split('T')[0];
+                localStorage.setItem('bolis_ring_last_report', todayStr);
+            }
+
+            // Enviar a WhatsApp a todos los seleccionados al mismo tiempo
+            phones.forEach((phone, index) => {
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, `_blank_${index}`);
+            });
+            
             closeReportSender();
-            showNotice("Enviando Informe...", true);
+            showNotice(`Enviando a ${phones.length} contacto(s)...`, true);
         }
         // --- FIN ENVIAR INFORMES --- //
 
@@ -1104,13 +1160,26 @@
                 window.scrollTo(0,0);
                 showNotice("¡Modo Promotor Activado! 🛠️", true);
 
-                // Anuncio sutil para inventario (Se muestra 3 segundos después del login, modificado para durar 10 segundos)
+                // Anuncio sutil para inventario (Se muestra 3 segundos después del login)
                 const agotados = products.filter(p => p.stock <= 0).length;
                 if (agotados > 0) {
                     setTimeout(() => {
                         showNotice(`⚠️ Atención: Tienes ${agotados} luchador(es) agotado(s)`, false, 10000);
                     }, 3000);
                 }
+
+                // Asistente Automático: Revisar si ya se envió el reporte de hoy (Se muestra a los 6 segundos)
+                setTimeout(() => {
+                    const lastReport = localStorage.getItem('bolis_ring_last_report');
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    
+                    if (lastReport !== todayStr) {
+                        if(confirm("📊 Asistente: Aún no has enviado el Informe Diario de hoy a los Administradores.\n\n¿Deseas enviarlo ahora?")) {
+                            switchAdminTab('admin-sec-reports');
+                            openReportSender();
+                        }
+                    }
+                }, 6000);
 
             } else {
                 showNotice("De vuelta al Ring 🥊", true);
