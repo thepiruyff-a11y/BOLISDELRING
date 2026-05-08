@@ -119,6 +119,23 @@
       "total": 2000,
       "status": "Completado",
       "date": "8/5/2026, 12:20:34 p. m."
+    },
+    {
+      "id": 1778260966183,
+      "name": "Lu",
+      "phone": "3188243686",
+      "address": "Buenaventura ",
+      "items": [
+        {
+          "name": "Maracumango El Rayo",
+          "qty": 2,
+          "price": 2000,
+          "cost": 848
+        }
+      ],
+      "total": 4000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 12:22:46 p. m."
     }
   ],
   "workers": [
