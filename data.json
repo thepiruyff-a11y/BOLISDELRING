@@ -91,26 +91,6 @@
       "color": "bg-slate-50"
     }
   ],
-  "promos": [
-    {
-      "id": 101,
-      "name": "Triángulo Infernal",
-      "desc": "3 bolis por precio de infarto.",
-      "price": 5000,
-      "oldPrice": 6000,
-      "color": "from-yellow-400 to-orange-500",
-      "icon": "fa-bolt",
-      "expiry": "2026-05-07T12:48"
-    },
-    {
-      "id": 102,
-      "name": "La Cuadrilla del Ring",
-      "desc": "6 bolis para todo el equipo.",
-      "price": 10000,
-      "oldPrice": 12000,
-      "color": "from-red-600 to-red-800",
-      "icon": "fa-fist-raised",
-      "expiry": "2026-05-07T12:59"
-    }
-  ]
+  "promos": [],
+  "orders": []
 }
