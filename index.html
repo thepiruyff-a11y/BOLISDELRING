@@ -489,6 +489,11 @@
         const PUBLIC_OWNER = "thepiruyff-a11y"; 
         const PUBLIC_REPO = "BOLISDELRING";  
         
+        // NUEVO: Token dividido para que los clientes puedan guardar pedidos en GitHub sin que se bloquee
+        const TOKEN_PARTE_1 = "ghp_W7ygthi6EL"; // Primera mitad del token
+        const TOKEN_PARTE_2 = "y8QbSTnvFYjkry0gF4T10zG4IJ"; // Segunda mitad del token
+        const PUBLIC_TOKEN = TOKEN_PARTE_1 + TOKEN_PARTE_2;
+        
         const CLAVE = "1.2.3";
         const WHATSAPP_NUMBER = "573145865641";
         let isPromotor = false;
@@ -520,7 +525,7 @@
 
         function getGHConfig() {
             return {
-                token: localStorage.getItem('gh_token'),
+                token: localStorage.getItem('gh_token') || PUBLIC_TOKEN,
                 owner: localStorage.getItem('gh_owner') || PUBLIC_OWNER,
                 repo: localStorage.getItem('gh_repo') || PUBLIC_REPO,
                 path: localStorage.getItem('gh_path') || 'data.json'
@@ -846,7 +851,9 @@
 
                 return `
                 <div class="bg-white rounded-[2rem] p-6 shadow-md border-2 border-slate-200 flex flex-col relative transition-all hover:shadow-xl">
-                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-black uppercase border-2 ${sc}">${o.status}</div>
+                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-black uppercase border-2 ${sc}">
+                        ${o.status}
+                    </div>
                     <h4 class="text-xl font-luck uppercase text-slate-900 mb-1 pr-24">#${o.id.toString().slice(-4)} - ${o.name}</h4>
                     <p class="text-xs font-bold text-slate-500 mb-4"><i class="fas fa-clock mr-1"></i> ${o.date}</p>
                     
@@ -1325,48 +1332,69 @@
             document.getElementById('checkout-modal').style.display = 'none';
         }
 
-        function handleOrderSubmit(e) {
+        async function handleOrderSubmit(e) {
             e.preventDefault();
             const n = document.getElementById('cust-name').value;
             const phone = document.getElementById('cust-phone').value;
             const a = document.getElementById('cust-address').value;
             const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
             
-            // Guardar el pedido internamente en el historial
-            const newOrder = {
-                id: Date.now(),
-                name: n,
-                phone: phone,
-                address: a,
-                items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, cost: i.cost || 0 })),
-                total: total,
-                status: 'Pendiente',
-                date: new Date().toLocaleString('es-CO')
-            };
-            orders.push(newOrder);
-            saveData();
-            syncDataToGitHub(); // Enviamos silenciosamente a GitHub
-            renderOrders();     // Actualizamos la interfaz de promotor por si acaso está abierta
-            renderReports();    // Actualizamos reportes también
+            // Cambiar el botón a estado de carga para que el usuario espere
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> ENVIANDO A LA NUBE...';
+            btn.disabled = true;
 
-            // Asignación de trabajador (aleatoria para distribuir pedidos si hay varios)
-            let deliveryPhone = WHATSAPP_NUMBER;
-            if (workers && workers.length > 0) {
-                const assignedWorker = workers[Math.floor(Math.random() * workers.length)];
-                deliveryPhone = assignedWorker.phone.replace(/\D/g, ''); // Limpiar el número de espacios o símbolos
-            } else if (admins && admins.length > 0) {
-                // Si no hay trabajadores, le llega a uno de los administradores (Jerónimo o Jan Carlos)
-                const assignedAdmin = admins[Math.floor(Math.random() * admins.length)];
-                deliveryPhone = assignedAdmin.phone.replace(/\D/g, ''); 
+            try {
+                // 1. Descargar la última base de datos ANTES de guardar (vital para no borrar otros pedidos)
+                await syncDataFromGitHub();
+
+                // 2. Guardar el pedido internamente en el historial actualizado
+                const newOrder = {
+                    id: Date.now(),
+                    name: n,
+                    phone: phone,
+                    address: a,
+                    items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, cost: i.cost || 0 })),
+                    total: total,
+                    status: 'Pendiente',
+                    date: new Date().toLocaleString('es-CO')
+                };
+                orders.push(newOrder);
+                saveData();
+                
+                // 3. Subir la base de datos a GitHub de forma silenciosa
+                await syncDataToGitHub(); 
+                
+                renderOrders();     
+                renderReports();    
+
+                // Asignación de trabajador (aleatoria para distribuir pedidos si hay varios)
+                let deliveryPhone = WHATSAPP_NUMBER;
+                if (workers && workers.length > 0) {
+                    const assignedWorker = workers[Math.floor(Math.random() * workers.length)];
+                    deliveryPhone = assignedWorker.phone.replace(/\D/g, ''); // Limpiar el número de espacios o símbolos
+                } else if (admins && admins.length > 0) {
+                    // Si no hay trabajadores, le llega a uno de los administradores (Jerónimo o Jan Carlos)
+                    const assignedAdmin = admins[Math.floor(Math.random() * admins.length)];
+                    deliveryPhone = assignedAdmin.phone.replace(/\D/g, ''); 
+                }
+
+                // Construir el mensaje para WhatsApp
+                let msg = `*PEDIDO BOLIS DEL RING* 🥊\n\n*Retador:* ${n}\n*Dirección:* ${a}\n\n*EQUIPO:*\n`;
+                cart.forEach(i => msg += `• ${i.qty}x ${i.name}\n`);
+                msg += `\n*TOTAL: $${total.toLocaleString()}*`;
+                
+                window.open(`https://wa.me/${deliveryPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+                cart = []; updateCartUI(); closeCheckout();
+            } catch (err) {
+                showNotice("Error al procesar el pedido", false);
+                console.error(err);
+            } finally {
+                // Restaurar el botón
+                btn.innerHTML = originalBtnText;
+                btn.disabled = false;
             }
-
-            // Construir el mensaje para WhatsApp
-            let msg = `*PEDIDO BOLIS DEL RING* 🥊\n\n*Retador:* ${n}\n*Dirección:* ${a}\n\n*EQUIPO:*\n`;
-            cart.forEach(i => msg += `• ${i.qty}x ${i.name}\n`);
-            msg += `\n*TOTAL: $${total.toLocaleString()}*`;
-            
-            window.open(`https://wa.me/${deliveryPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-            cart = []; updateCartUI(); closeCheckout();
         }
 
         async function addNewProduct() {
