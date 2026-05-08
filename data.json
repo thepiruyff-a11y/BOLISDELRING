@@ -102,7 +102,26 @@
     }
   ],
   "promos": [],
-  "orders": [],
+  "orders": [
+    {
+      "id": 1778278436415,
+      "name": "Jan",
+      "phone": "3205814355",
+      "address": "Calle 7",
+      "items": [
+        {
+          "name": "Coco El Enmascarado",
+          "qty": 3,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        }
+      ],
+      "total": 6000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 5:13:56 p. m."
+    }
+  ],
   "workers": [
     {
       "id": "1778259504565",
