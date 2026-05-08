@@ -241,22 +241,31 @@
                 </div>
                 
                 <!-- Filtros de Pedidos -->
-                <div class="flex flex-wrap gap-2 mb-6 border-b-2 border-slate-300 pb-4">
-                    <button onclick="setOrderFilter('Todos')" data-order-status="Todos" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
-                        Todos <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
-                    </button>
-                    <button onclick="setOrderFilter('Pendiente')" data-order-status="Pendiente" class="order-filter-btn bg-yellow-400 text-yellow-900 shadow-md px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-yellow-300">
-                        Pendientes <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
-                    </button>
-                    <button onclick="setOrderFilter('Completado')" data-order-status="Completado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
-                        Completados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
-                    </button>
-                    <button onclick="setOrderFilter('Cancelado')" data-order-status="Cancelado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
-                        Cancelados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
-                    </button>
-                    <button onclick="setOrderFilter('Reembolsado')" data-order-status="Reembolsado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
-                        Reembolsados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
-                    </button>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b-2 border-slate-300 pb-4 gap-4">
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="setOrderFilter('Todos')" data-order-status="Todos" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
+                            Todos <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                        </button>
+                        <button onclick="setOrderFilter('Pendiente')" data-order-status="Pendiente" class="order-filter-btn bg-yellow-400 text-yellow-900 shadow-md px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-yellow-300">
+                            Pendientes <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                        </button>
+                        <button onclick="setOrderFilter('Completado')" data-order-status="Completado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
+                            Completados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                        </button>
+                        <button onclick="setOrderFilter('Cancelado')" data-order-status="Cancelado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
+                            Cancelados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                        </button>
+                        <button onclick="setOrderFilter('Reembolsado')" data-order-status="Reembolsado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
+                            Reembolsados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Selector de Fecha -->
+                    <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200 w-full md:w-auto">
+                        <label for="order-date-filter" class="text-[10px] font-black uppercase text-slate-500 flex-shrink-0"><i class="fas fa-calendar-alt mr-1"></i> Buscar Día:</label>
+                        <input type="date" id="order-date-filter" onchange="renderOrders()" class="text-xs font-bold text-slate-800 outline-none cursor-pointer bg-transparent w-full md:w-auto">
+                        <button onclick="document.getElementById('order-date-filter').value=''; renderOrders()" class="text-slate-400 hover:text-red-500 ml-2" title="Ver todo el historial"><i class="fas fa-times"></i></button>
+                    </div>
                 </div>
 
                 <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -264,34 +273,44 @@
 
             <!-- Informes Admin -->
             <section id="admin-sec-reports" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
-                <div class="flex justify-between items-end mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b-2 border-slate-300 pb-4">
                     <h3 class="text-3xl font-luck text-slate-800 uppercase"><i class="fas fa-chart-bar mr-2"></i> Reporte Financiero</h3>
-                    <div class="flex items-center gap-2">
-                        <button onclick="openReportSender()" class="bg-green-100 text-green-700 p-2 rounded-lg shadow hover:bg-green-600 hover:text-white transition-colors flex items-center gap-2 font-bold text-xs uppercase" title="Enviar Informe por WhatsApp"><i class="fab fa-whatsapp text-lg"></i> Enviar</button>
-                        <button onclick="renderReports()" class="bg-white text-slate-600 p-2 rounded-lg shadow hover:text-blue-600 transition-colors" title="Actualizar Informes"><i class="fas fa-sync-alt"></i></button>
+                    
+                    <div class="flex items-center gap-4 w-full md:w-auto flex-wrap">
+                        <!-- Selector de Fecha para Informes -->
+                        <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200 flex-1 md:flex-none">
+                            <label for="report-date-filter" class="text-[10px] font-black uppercase text-slate-500 flex-shrink-0"><i class="fas fa-calendar-alt mr-1"></i> Día:</label>
+                            <input type="date" id="report-date-filter" onchange="renderReports()" class="text-xs font-bold text-slate-800 outline-none cursor-pointer bg-transparent w-full">
+                            <button onclick="document.getElementById('report-date-filter').value=''; renderReports()" class="text-slate-400 hover:text-red-500 ml-2" title="Volver a Hoy"><i class="fas fa-undo"></i></button>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button onclick="openReportSender()" class="bg-green-100 text-green-700 p-2 rounded-lg shadow hover:bg-green-600 hover:text-white transition-colors flex items-center gap-2 font-bold text-xs uppercase" title="Enviar Informe por WhatsApp"><i class="fab fa-whatsapp text-lg"></i> Enviar</button>
+                            <button onclick="renderReports()" class="bg-white text-slate-600 p-2 rounded-lg shadow hover:text-blue-600 transition-colors" title="Actualizar Informes"><i class="fas fa-sync-alt"></i></button>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Tarjetas de Resumen (Hoy) -->
+                <!-- Tarjetas de Resumen -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-[2rem] shadow-md border-2 border-slate-200 relative overflow-hidden">
                         <i class="fas fa-money-bill-wave absolute -right-4 -bottom-4 text-[6rem] text-slate-100"></i>
-                        <h4 class="text-[10px] font-black uppercase text-slate-500 mb-2 relative z-10">Ingresos Brutos (Hoy)</h4>
+                        <h4 class="text-[10px] font-black uppercase text-slate-500 mb-2 relative z-10">Ingresos Brutos <span class="report-date-label">(Hoy)</span></h4>
                         <div id="report-brutos" class="text-4xl font-black text-slate-900 relative z-10">$0</div>
                     </div>
                     <div class="bg-teal-50 p-6 rounded-[2rem] shadow-md border-2 border-teal-200 relative overflow-hidden">
                         <i class="fas fa-truck-loading absolute -right-4 -bottom-4 text-[6rem] text-teal-100"></i>
-                        <h4 class="text-[10px] font-black uppercase text-teal-600 mb-2 relative z-10">Inversión Proveedor (Hoy)</h4>
+                        <h4 class="text-[10px] font-black uppercase text-teal-600 mb-2 relative z-10">Inversión Proveedor <span class="report-date-label">(Hoy)</span></h4>
                         <div id="report-proveedor" class="text-4xl font-black text-teal-700 relative z-10">$0</div>
                     </div>
                     <div class="bg-green-50 p-6 rounded-[2rem] shadow-md border-2 border-green-200 relative overflow-hidden">
                         <i class="fas fa-coins absolute -right-4 -bottom-4 text-[6rem] text-green-100"></i>
-                        <h4 class="text-[10px] font-black uppercase text-green-600 mb-2 relative z-10">Ganancias Netas (Hoy)</h4>
+                        <h4 class="text-[10px] font-black uppercase text-green-600 mb-2 relative z-10">Ganancias Netas <span class="report-date-label">(Hoy)</span></h4>
                         <div id="report-ganancias" class="text-4xl font-black text-green-700 relative z-10">$0</div>
                     </div>
                     <div class="bg-blue-50 p-6 rounded-[2rem] shadow-md border-2 border-blue-200 relative overflow-hidden">
                         <i class="fas fa-check-circle absolute -right-4 -bottom-4 text-[6rem] text-blue-100"></i>
-                        <h4 class="text-[10px] font-black uppercase text-blue-600 mb-2 relative z-10">Pedidos Completados (Hoy)</h4>
+                        <h4 class="text-[10px] font-black uppercase text-blue-600 mb-2 relative z-10">Pedidos Completados <span class="report-date-label">(Hoy)</span></h4>
                         <div id="report-completados" class="text-4xl font-black text-blue-700 relative z-10">0</div>
                     </div>
                 </div>
@@ -326,8 +345,14 @@
                         </div>
                     </div>
                     <div class="lg:w-2/3">
-                        <div class="flex justify-between items-end mb-4">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4 border-b-2 border-slate-300 pb-4">
                             <h3 class="text-3xl font-luck text-slate-800 uppercase">Historial de Surtido</h3>
+                            <!-- Selector de Fecha Proveedor -->
+                            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200 w-full md:w-auto">
+                                <label for="provider-date-filter" class="text-[10px] font-black uppercase text-slate-500 flex-shrink-0"><i class="fas fa-calendar-alt mr-1"></i> Buscar Día:</label>
+                                <input type="date" id="provider-date-filter" onchange="renderProvider()" class="text-xs font-bold text-slate-800 outline-none cursor-pointer bg-transparent w-full md:w-auto">
+                                <button onclick="document.getElementById('provider-date-filter').value=''; renderProvider()" class="text-slate-400 hover:text-red-500 ml-2" title="Ver todo el historial"><i class="fas fa-times"></i></button>
+                            </div>
                         </div>
                         <div id="admin-purchases-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
                     </div>
@@ -493,7 +518,7 @@
             <h4 class="font-luck text-3xl mb-1 text-slate-900 uppercase">Enviar Informe</h4>
             <p class="text-xs font-bold text-slate-500 mb-4">Selecciona las opciones</p>
             <select id="report-type" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-green-500 mb-3 bg-slate-50 cursor-pointer">
-                <option value="diario">📅 Informe Diario (Hoy)</option>
+                <option value="dia">📅 Informe del Día</option>
                 <option value="semanal">🗓️ Informe Semanal (Últ. 7 días)</option>
             </select>
             <div class="text-left mb-2 mt-2">
@@ -630,6 +655,7 @@
                     localStorage.setItem('bolis_ring_workers', JSON.stringify(workers));
                     localStorage.setItem('bolis_ring_admins', JSON.stringify(admins));
                     localStorage.setItem('bolis_ring_purchases', JSON.stringify(purchases));
+                    cleanOldData(); // Limpiar automáticamente registros de +30 días al cargar la nube
                     renderProducts();
                     renderPromos();
                     renderOrders();
@@ -650,6 +676,26 @@
             const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
             const minutes = Math.floor((total / 1000 / 60) % 60);
             return { total, days, hours, minutes };
+        }
+
+        // ====== LIMPIEZA AUTOMÁTICA DE DATOS (30 DÍAS) ====== //
+        function cleanOldData() {
+            const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+            let changed = false;
+
+            const originalOrdersLen = orders.length;
+            orders = orders.filter(o => (now - Number(o.id)) <= thirtyDaysInMs);
+            if (orders.length !== originalOrdersLen) changed = true;
+
+            const originalPurchasesLen = purchases.length;
+            purchases = purchases.filter(p => (now - Number(p.id)) <= thirtyDaysInMs);
+            if (purchases.length !== originalPurchasesLen) changed = true;
+
+            if (changed) {
+                saveData();
+                console.log("Sistema de limpieza: Se eliminaron registros antiguos (pedidos o surtidos de más de 30 días).");
+            }
         }
 
         function renderPromos() {
@@ -880,12 +926,28 @@
         // ====== GESTIÓN DE PEDIDOS Y FILTROS ====== //
 
         function updateOrderFilterCounts() {
+            const dateFilterEl = document.getElementById('order-date-filter');
+            const selectedDateStr = dateFilterEl ? dateFilterEl.value : '';
+
+            let baseOrders = orders;
+            
+            // Si hay una fecha seleccionada, filtramos la base para los contadores
+            if (selectedDateStr) {
+                 baseOrders = orders.filter(o => {
+                    const orderDateObj = new Date(Number(o.id));
+                    const year = orderDateObj.getFullYear();
+                    const month = String(orderDateObj.getMonth() + 1).padStart(2, '0');
+                    const day = String(orderDateObj.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}` === selectedDateStr;
+                });
+            }
+
             const counts = {
-                'Todos': orders.length,
-                'Pendiente': orders.filter(o => o.status === 'Pendiente').length,
-                'Completado': orders.filter(o => o.status === 'Completado').length,
-                'Cancelado': orders.filter(o => o.status === 'Cancelado').length,
-                'Reembolsado': orders.filter(o => o.status === 'Reembolsado').length
+                'Todos': baseOrders.length,
+                'Pendiente': baseOrders.filter(o => o.status === 'Pendiente').length,
+                'Completado': baseOrders.filter(o => o.status === 'Completado').length,
+                'Cancelado': baseOrders.filter(o => o.status === 'Cancelado').length,
+                'Reembolsado': baseOrders.filter(o => o.status === 'Reembolsado').length
             };
             
             document.querySelectorAll('.order-filter-btn').forEach(btn => {
@@ -925,13 +987,29 @@
 
             updateOrderFilterCounts(); // Actualiza los números en las pestañas
 
+            const dateFilterEl = document.getElementById('order-date-filter');
+            const selectedDateStr = dateFilterEl ? dateFilterEl.value : '';
+
             let filteredOrders = orders;
+            
+            // 1. Filtrar por Fecha
+            if (selectedDateStr) {
+                filteredOrders = filteredOrders.filter(o => {
+                    const orderDateObj = new Date(Number(o.id));
+                    const year = orderDateObj.getFullYear();
+                    const month = String(orderDateObj.getMonth() + 1).padStart(2, '0');
+                    const day = String(orderDateObj.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}` === selectedDateStr;
+                });
+            }
+
+            // 2. Filtrar por Estado
             if (currentOrderFilter !== 'Todos') {
-                filteredOrders = orders.filter(o => o.status === currentOrderFilter);
+                filteredOrders = filteredOrders.filter(o => o.status === currentOrderFilter);
             }
 
             if (filteredOrders.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center text-slate-500 font-bold py-10 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay pedidos en la categoría: <span class="uppercase">${currentOrderFilter}</span>.</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center text-slate-500 font-bold py-10 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay pedidos para mostrar con estos filtros.</div>`;
                 return;
             }
 
@@ -1008,7 +1086,6 @@
                     // Descontar stock del inventario
                     order.items.forEach(item => {
                         if (item.flavors && item.flavors.length > 0) {
-                            // Si es un combo con sabores elegidos
                             item.flavors.forEach(f => {
                                 const prod = products.find(p => p.name === f.name);
                                 if (prod && typeof prod.stock !== 'undefined') {
@@ -1016,7 +1093,6 @@
                                 }
                             });
                         } else {
-                            // Producto normal
                             const prod = products.find(p => p.name === item.name);
                             if (prod && typeof prod.stock !== 'undefined') {
                                 prod.stock = Math.max(0, prod.stock - item.qty);
@@ -1043,8 +1119,8 @@
                 }
 
                 saveData();
-                renderOrders(); // Se filtrará automáticamente a su nueva pestaña si no estás en "Todos"
-                renderProducts(); // Actualizamos la vista de la cartelera para reflejar el nuevo stock
+                renderOrders(); 
+                renderProducts(); 
                 renderReports();
                 await syncDataToGitHub();
                 showNotice(`Estado de pedido actualizado`, true);
@@ -1084,8 +1160,24 @@
         }
 
         function renderReports() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const dateFilterEl = document.getElementById('report-date-filter');
+            let targetDate = new Date();
+            let dateLabel = "(Hoy)";
+
+            if (dateFilterEl && dateFilterEl.value) {
+                const [y, m, d] = dateFilterEl.value.split('-');
+                targetDate = new Date(y, m - 1, d);
+                
+                const todayCheck = new Date();
+                if (!(todayCheck.getFullYear() === targetDate.getFullYear() && todayCheck.getMonth() === targetDate.getMonth() && todayCheck.getDate() === targetDate.getDate())) {
+                    dateLabel = `(${targetDate.toLocaleDateString('es-CO')})`;
+                }
+            }
+            
+            targetDate.setHours(0, 0, 0, 0);
+            
+            // Actualizar etiquetas en la UI
+            document.querySelectorAll('.report-date-label').forEach(el => el.innerText = dateLabel);
 
             let ingresosBrutos = 0;
             let costoTotal = 0;
@@ -1093,15 +1185,17 @@
             let gastosProveedor = 0;
             
             const chartData = [0, 0, 0, 0, 0, 0, 0]; 
+            const todayForChart = new Date();
+            todayForChart.setHours(0, 0, 0, 0);
 
             orders.forEach(o => {
                 if (o.status !== 'Completado') return; 
 
-                const orderDate = new Date(Number(o.id)); 
-                const diffTime = today.getTime() - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()).getTime();
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+                const orderDateObj = new Date(Number(o.id)); 
+                const orderDateMidnight = new Date(orderDateObj.getFullYear(), orderDateObj.getMonth(), orderDateObj.getDate());
 
-                if (diffDays === 0) {
+                // Tarjetas resumen: Filtrar por la fecha seleccionada
+                if (orderDateMidnight.getTime() === targetDate.getTime()) {
                     ingresosBrutos += o.total;
                     pedidosCompletados++;
                     
@@ -1127,7 +1221,10 @@
                     });
                 }
 
-                const dayIndex = 6 - diffDays;
+                // Para el gráfico: usar siempre últimos 7 días desde hoy para ver productividad general
+                const diffTimeChart = todayForChart.getTime() - orderDateMidnight.getTime();
+                const diffDaysChart = Math.round(diffTimeChart / (1000 * 60 * 60 * 24)); 
+                const dayIndex = 6 - diffDaysChart;
                 if (dayIndex >= 0 && dayIndex <= 6) {
                     chartData[dayIndex] += o.total;
                 }
@@ -1135,10 +1232,9 @@
 
             purchases.forEach(p => {
                 const pDate = new Date(Number(p.id)); 
-                const diffTime = today.getTime() - new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate()).getTime();
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+                const purchaseDateMidnight = new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate());
                 
-                if (diffDays === 0) {
+                if (purchaseDateMidnight.getTime() === targetDate.getTime()) {
                     gastosProveedor += p.total;
                 }
             });
@@ -1163,7 +1259,7 @@
                 
                 chartContainer.innerHTML = chartData.map((val, idx) => {
                     const height = (val / maxVal) * 100;
-                    const d = new Date(today);
+                    const d = new Date(todayForChart);
                     d.setDate(d.getDate() - (6 - idx));
                     const dayName = d.toLocaleDateString('es-CO', { weekday: 'short' });
                     const isToday = idx === 6;
@@ -1182,6 +1278,22 @@
         }
 
         function openReportSender() {
+            // Actualizar título del select de reporte diario con la fecha seleccionada
+            const dateFilterEl = document.getElementById('report-date-filter');
+            let dateStr = "Hoy";
+            if (dateFilterEl && dateFilterEl.value) {
+                const [y, m, d] = dateFilterEl.value.split('-');
+                const td = new Date(y, m - 1, d);
+                const today = new Date();
+                if (!(today.getFullYear() === td.getFullYear() && today.getMonth() === td.getMonth() && today.getDate() === td.getDate())) {
+                    dateStr = td.toLocaleDateString('es-CO');
+                }
+            }
+            const typeSelect = document.getElementById('report-type');
+            if(typeSelect && typeSelect.options[0]) {
+                typeSelect.options[0].text = `📅 Informe del Día (${dateStr})`;
+            }
+
             const listAdmin = document.getElementById('report-admin-list');
             listAdmin.innerHTML = admins.map(a => `
                 <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-slate-200 rounded-lg transition-colors">
@@ -1206,6 +1318,19 @@
                 return;
             }
 
+            let targetDate = new Date();
+            const dateFilterEl = document.getElementById('report-date-filter');
+            let isSpecificDay = false;
+            let displayDateStr = targetDate.toLocaleDateString('es-CO');
+
+            if (type === 'dia' && dateFilterEl && dateFilterEl.value) {
+                 const [y, m, d] = dateFilterEl.value.split('-');
+                 targetDate = new Date(y, m - 1, d);
+                 displayDateStr = targetDate.toLocaleDateString('es-CO');
+                 isSpecificDay = true;
+            }
+            targetDate.setHours(0,0,0,0);
+            
             const today = new Date();
             today.setHours(0,0,0,0);
             
@@ -1213,16 +1338,27 @@
             let costoTotal = 0;
             let pedidosCompletados = 0;
             let gastosProveedor = 0;
-            let diasLimite = type === 'diario' ? 0 : 6; 
 
             orders.forEach(o => {
                 if (o.status !== 'Completado') return; 
 
-                const orderDate = new Date(Number(o.id)); 
-                const diffTime = today.getTime() - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()).getTime();
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+                const orderDateObj = new Date(Number(o.id)); 
+                const orderMidnight = new Date(orderDateObj.getFullYear(), orderDateObj.getMonth(), orderDateObj.getDate());
+                
+                let includeInReport = false;
+                if (type === 'dia') {
+                    if (isSpecificDay) {
+                        includeInReport = (orderMidnight.getTime() === targetDate.getTime());
+                    } else {
+                        includeInReport = (orderMidnight.getTime() === today.getTime());
+                    }
+                } else {
+                    const diffTime = today.getTime() - orderMidnight.getTime();
+                    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+                    includeInReport = (diffDays >= 0 && diffDays <= 6);
+                }
 
-                if (diffDays >= 0 && diffDays <= diasLimite) {
+                if (includeInReport) {
                     ingresosBrutos += o.total;
                     pedidosCompletados++;
                     
@@ -1249,25 +1385,39 @@
 
             purchases.forEach(p => {
                 const pDate = new Date(Number(p.id)); 
-                const diffTime = today.getTime() - new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate()).getTime();
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+                const purchaseMidnight = new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate());
                 
-                if (diffDays >= 0 && diffDays <= diasLimite) {
+                let includeInReport = false;
+                if (type === 'dia') {
+                    if (isSpecificDay) {
+                        includeInReport = (purchaseMidnight.getTime() === targetDate.getTime());
+                    } else {
+                        includeInReport = (purchaseMidnight.getTime() === today.getTime());
+                    }
+                } else {
+                    const diffTime = today.getTime() - purchaseMidnight.getTime();
+                    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+                    includeInReport = (diffDays >= 0 && diffDays <= 6);
+                }
+                
+                if (includeInReport) {
                     gastosProveedor += p.total;
                 }
             });
 
             const gananciasNetas = ingresosBrutos - costoTotal;
-            const titulo = type === 'diario' ? 'DIARIO (Hoy)' : 'SEMANAL (Últ. 7 días)';
+            const titulo = type === 'dia' ? 'DIARIO' : 'SEMANAL';
+            const strFecha = type === 'dia' ? displayDateStr : `Últimos 7 días (${new Date().toLocaleDateString('es-CO')})`;
 
             let msg = `*📊 REPORTE FINANCIERO ${titulo}* 🥊\n\n`;
+            msg += `*🗓️ Fecha:* ${strFecha}\n`;
             msg += `*📦 Pedidos Completados:* ${pedidosCompletados}\n`;
             msg += `*💵 Ingresos Brutos:* $${ingresosBrutos.toLocaleString()}\n`;
             msg += `*🛒 Inversión Proveedor:* $${gastosProveedor.toLocaleString()}\n`;
             msg += `*📈 Ganancias Netas:* $${gananciasNetas.toLocaleString()}\n\n`;
             msg += `_Generado desde Bolis del Ring App_`;
 
-            if (type === 'diario') {
+            if (type === 'dia' && !isSpecificDay) {
                 const todayStr = new Date().toISOString().split('T')[0];
                 localStorage.setItem('bolis_ring_last_report', todayStr);
             }
@@ -1850,12 +2000,27 @@
             const grid = document.getElementById('admin-purchases-grid');
             if (!grid) return;
             
-            if (purchases.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center text-slate-500 font-bold py-8 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay historial de compras al proveedor.</div>';
+            const dateFilterEl = document.getElementById('provider-date-filter');
+            const selectedDateStr = dateFilterEl ? dateFilterEl.value : '';
+
+            let filteredPurchases = purchases;
+
+            if (selectedDateStr) {
+                filteredPurchases = filteredPurchases.filter(p => {
+                    const pDateObj = new Date(Number(p.id));
+                    const year = pDateObj.getFullYear();
+                    const month = String(pDateObj.getMonth() + 1).padStart(2, '0');
+                    const day = String(pDateObj.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}` === selectedDateStr;
+                });
+            }
+
+            if (filteredPurchases.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-slate-500 font-bold py-8 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay historial de compras para mostrar con este filtro.</div>';
                 return;
             }
 
-            grid.innerHTML = [...purchases].reverse().map(p => `
+            grid.innerHTML = [...filteredPurchases].reverse().map(p => `
                 <div class="bg-white rounded-[2rem] p-6 shadow-md border-2 border-slate-200 flex flex-col transition-all hover:shadow-lg">
                     <div class="flex justify-between items-start mb-2">
                         <h4 class="text-[10px] font-black uppercase text-slate-500"><i class="fas fa-box text-teal-500 mr-1"></i> ${p.date}</h4>
@@ -1965,7 +2130,12 @@
                 btn.classList.remove('bg-red-600', 'text-white', 'shadow-lg');
                 btn.classList.add('bg-slate-100', 'text-slate-500');
             });
-            document.getElementById(tabId).classList.remove('hidden');
+            const tabEl = document.getElementById(tabId);
+            if(tabEl) {
+                tabEl.classList.remove('hidden');
+            } else {
+                console.warn("Panel no encontrado: " + tabId);
+            }
             const activeBtn = document.getElementById(tabId.replace('admin-sec-', 'tab-btn-'));
             if(activeBtn) {
                 activeBtn.classList.remove('bg-slate-100', 'text-slate-500');
@@ -1983,6 +2153,7 @@
         }
 
         window.onload = async () => {
+            cleanOldData(); // Limpieza inicial antes de renderizar
             renderProducts(); renderPromos(); renderOrders(); renderReports(); renderWorkers(); renderAdmins(); renderProvider();
             await syncDataFromGitHub();
             setInterval(renderPromos, 60000);
