@@ -158,6 +158,8 @@
                 <button onclick="switchAdminTab('admin-sec-promos')" id="tab-btn-promos" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-star mr-2"></i> Eventos</button>
                 <button onclick="switchAdminTab('admin-sec-orders')" id="tab-btn-orders" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-clipboard-list mr-2"></i> Pedidos</button>
                 <button onclick="switchAdminTab('admin-sec-reports')" id="tab-btn-reports" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-chart-bar mr-2"></i> Informes</button>
+                <button onclick="switchAdminTab('admin-sec-workers')" id="tab-btn-workers" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-users mr-2"></i> Trabajadores</button>
+                <button onclick="switchAdminTab('admin-sec-admins')" id="tab-btn-admins" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-crown mr-2"></i> Admon</button>
                 <button onclick="switchAdminTab('admin-sec-github')" id="tab-btn-github" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fab fa-github mr-2"></i> Nube</button>
             </div>
 
@@ -265,6 +267,56 @@
                 </div>
             </section>
 
+            <!-- Trabajadores Admin (NUEVA SECCIÓN) -->
+            <section id="admin-sec-workers" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Formulario Nuevo Trabajador -->
+                    <div class="lg:w-1/3">
+                        <div class="bg-indigo-600 rounded-[2rem] p-6 shadow-xl text-white border-b-8 border-indigo-800 sticky top-24">
+                            <h3 class="text-2xl font-luck mb-4 uppercase"><i class="fas fa-user-plus mr-2"></i> Nuevo Trabajador</h3>
+                            <form id="add-worker-form" class="space-y-3" onsubmit="event.preventDefault(); addWorker();">
+                                <input type="text" id="new-worker-name" placeholder="Nombre del trabajador" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                <input type="tel" id="new-worker-phone" placeholder="WhatsApp (Ej: 57314...)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                <button type="submit" class="w-full bg-yellow-400 text-slate-900 py-3 rounded-xl font-black hover:bg-white transition-all uppercase tracking-widest shadow-lg mt-2">
+                                    Registrar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Lista de Trabajadores -->
+                    <div class="lg:w-2/3">
+                        <div class="flex justify-between items-end mb-4">
+                            <h3 class="text-3xl font-luck text-slate-800 uppercase">Equipo de Reparto</h3>
+                        </div>
+                        <div id="admin-workers-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admon Admin (NUEVA SECCIÓN) -->
+            <section id="admin-sec-admins" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/3">
+                        <div class="bg-amber-500 rounded-[2rem] p-6 shadow-xl text-slate-900 border-b-8 border-amber-600 sticky top-24">
+                            <h3 class="text-2xl font-luck mb-4 uppercase"><i class="fas fa-crown mr-2"></i> Nuevo Admin</h3>
+                            <form id="add-admin-form" class="space-y-3" onsubmit="event.preventDefault(); addNewAdmin();">
+                                <input type="text" id="new-admin-name" placeholder="Nombre (Ej: Carlos)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm border-2 border-transparent focus:border-white">
+                                <input type="tel" id="new-admin-phone" placeholder="WhatsApp" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm border-2 border-transparent focus:border-white">
+                                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-black hover:bg-slate-800 transition-all uppercase tracking-widest shadow-lg mt-2">
+                                    Registrar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="lg:w-2/3">
+                        <div class="flex justify-between items-end mb-4">
+                            <h3 class="text-3xl font-luck text-slate-800 uppercase">Administradores</h3>
+                        </div>
+                        <div id="admin-admins-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Productos Admin -->
             <section id="admin-sec-products" class="admin-section bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
                 <div class="flex flex-col lg:flex-row gap-8">
@@ -337,6 +389,19 @@
         </div>
     </div>
 
+    <!-- Modal de Seguridad Admon -->
+    <div id="admin-security-modal" style="display: none;" class="fixed inset-0 z-[200] bg-black/85 backdrop-blur-sm p-4 items-center justify-center">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl border-4 border-amber-500 max-w-xs w-full text-center">
+            <h4 class="font-luck text-3xl mb-1 text-slate-900 uppercase">Seguridad Admon</h4>
+            <p class="text-xs font-bold text-slate-500 mb-2">Clave de promotor requerida</p>
+            <input type="password" id="admin-pass-input" class="w-full p-4 text-center text-3xl font-black border-2 border-slate-100 rounded-2xl my-4 focus:border-amber-500 outline-none" placeholder="***">
+            <div class="flex gap-3">
+                <button onclick="closeAdminSecurity()" class="flex-1 bg-slate-100 text-slate-500 py-3 rounded-xl font-black uppercase text-sm">Cancelar</button>
+                <button onclick="submitAdminSecurity()" class="flex-1 bg-amber-500 text-slate-900 py-3 rounded-xl font-black uppercase text-sm shadow-lg">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
     <div id="cart-drawer" class="fixed inset-0 z-[60] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl translate-x-full transition-transform duration-300 ease-out flex flex-col border-l-4 border-red-600">
             <div class="p-6 border-b flex justify-between items-center bg-slate-50">
@@ -371,9 +436,16 @@
             { id: 102, name: 'La Cuadrilla del Ring', desc: '6 bolis para todo el equipo.', price: 10000, oldPrice: 12000, color: 'from-red-600 to-red-800', icon: 'fa-fist-raised', expiry: '' }
         ];
 
+        const defaultAdmins = [
+            { id: 1, name: 'JERONIMO', phone: '573145865641', permanent: true },
+            { id: 2, name: 'JAN CARLOS', phone: '573025239510', permanent: true }
+        ];
+
         let products = JSON.parse(localStorage.getItem('bolis_ring_db')) || defaultProducts;
         let promos = JSON.parse(localStorage.getItem('bolis_ring_promos')) || defaultPromos;
         let orders = JSON.parse(localStorage.getItem('bolis_ring_orders')) || [];
+        let workers = JSON.parse(localStorage.getItem('bolis_ring_workers')) || [];
+        let admins = JSON.parse(localStorage.getItem('bolis_ring_admins')) || defaultAdmins;
         let cart = [];
 
         function getGHConfig() {
@@ -401,7 +473,7 @@
                     sha = data.sha;
                 }
 
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos, orders }, null, 2))));
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos, orders, workers, admins }, null, 2))));
                 const putRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${cfg.token}`, 'Content-Type': 'application/json' },
@@ -429,13 +501,19 @@
                     products = decoded.products || products;
                     promos = decoded.promos || promos;
                     orders = decoded.orders || orders;
+                    workers = decoded.workers || workers;
+                    admins = decoded.admins || admins;
                     localStorage.setItem('bolis_ring_db', JSON.stringify(products));
                     localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
                     localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
+                    localStorage.setItem('bolis_ring_workers', JSON.stringify(workers));
+                    localStorage.setItem('bolis_ring_admins', JSON.stringify(admins));
                     renderProducts();
                     renderPromos();
                     renderOrders();
                     renderReports();
+                    renderWorkers();
+                    renderAdmins();
                 }
             } catch (err) { console.warn("Modo offline o repo no configurado."); }
             finally { if(icon) icon.classList.remove('sync-spinner'); }
@@ -490,7 +568,7 @@
                     if (!p.expiry) return ''; // Ocultar sin fecha al público
 
                     return `
-                    <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white hover:scale-[1.02] cursor-pointer" onclick="addPromoToCart(${index})">
+                    <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white hover:scale-[1.02] cursor-pointer" onclick="addPromoToCart('${index}')">
                         <div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform">
                             <i class="fas ${p.icon || 'fa-star'} text-[15rem]"></i>
                         </div>
@@ -524,23 +602,23 @@
                         <div class="relative z-10 space-y-3 bg-white/20 p-4 rounded-2xl border border-white/30 backdrop-blur-sm">
                             <div class="flex justify-between items-center text-white">
                                 <span class="text-[10px] font-black uppercase"><i class="fas fa-edit"></i> Edición Rápida</span>
-                                <button onclick="deletePromo(${index})" class="hover:text-red-400 transition-colors bg-red-600/50 p-2 rounded-lg" title="Eliminar"><i class="fas fa-trash"></i></button>
+                                <button onclick="deletePromo('${index}')" class="hover:text-red-400 transition-colors bg-red-600/50 p-2 rounded-lg" title="Eliminar"><i class="fas fa-trash"></i></button>
                             </div>
-                            <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre del Evento">
-                            <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-12" placeholder="Descripción">${p.desc}</textarea>
+                            <input type="text" value="${p.name}" onchange="updatePromoProperty('${index}', 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre del Evento">
+                            <textarea onchange="updatePromoProperty('${index}', 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-12" placeholder="Descripción">${p.desc}</textarea>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="text-white text-[9px] font-black uppercase block mb-1">Precio</label>
-                                    <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                                    <input type="number" value="${p.price}" onchange="updatePromoProperty('${index}', 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
                                 </div>
                                 <div>
                                     <label class="text-white text-[9px] font-black uppercase block mb-1">Normal</label>
-                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty('${index}', 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
                                 </div>
                             </div>
                             <div>
                                 <label class="text-white text-[9px] font-black uppercase block mb-1">Finaliza el:</label>
-                                <input type="datetime-local" value="${p.expiry || ''}" onchange="updatePromoProperty(${index}, 'expiry', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                                <input type="datetime-local" value="${p.expiry || ''}" onchange="updatePromoProperty('${index}', 'expiry', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
                             </div>
                         </div>
                     </div>`;
@@ -554,8 +632,11 @@
 
             // Renderizado Vista Pública
             if (publicGrid) {
-                publicGrid.innerHTML = products.map(p => `
-                    <div class="product-card bg-white rounded-[2rem] overflow-hidden shadow-xl border-2 border-slate-100 flex flex-col h-full">
+                // Ordenar para que los agotados queden automáticamente al final
+                const sortedPublic = [...products].sort((a, b) => (a.stock > 0 ? -1 : 1) - (b.stock > 0 ? -1 : 1));
+                
+                publicGrid.innerHTML = sortedPublic.map(p => `
+                    <div class="product-card bg-white rounded-[2rem] overflow-hidden shadow-xl border-2 border-slate-100 flex flex-col h-full ${p.stock <= 0 ? 'opacity-70' : ''}">
                         <div class="${p.color || 'bg-slate-50'} h-56 flex items-center justify-center relative overflow-hidden">
                             <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
                             <div class="absolute top-4 left-4 ${p.category === 'Rudo' ? 'bg-red-600' : 'bg-blue-600'} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10">${p.category}</div>
@@ -568,7 +649,7 @@
                                     ${p.stock > 0 ? `Stock: ${p.stock}` : 'No disponible'}
                                 </div>
                             </div>
-                            <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm shadow-lg active:scale-95">
+                            <button onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm shadow-lg active:scale-95">
                                 ${p.stock > 0 ? '¡Al Carrito! 🥊' : 'Agotado ❌'}
                             </button>
                         </div>
@@ -577,39 +658,60 @@
 
             // Renderizado Vista Promotor
             if (adminGrid) {
-                adminGrid.innerHTML = products.map(p => `
-                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-md border-2 border-slate-200 flex flex-col h-full relative group">
+                // Separar inventario
+                const inStock = products.filter(p => p.stock > 0);
+                const outOfStock = products.filter(p => p.stock <= 0);
+                
+                let adminHTML = '';
+
+                // Plantilla de tarjeta de administración
+                const renderCard = (p) => `
+                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-md border-2 border-slate-200 flex flex-col h-full relative group ${p.stock <= 0 ? 'grayscale-[0.3]' : ''}">
                         <div class="absolute top-2 right-2 z-10">
-                            <button onclick="deleteProduct(${p.id})" class="bg-red-500 text-white w-8 h-8 rounded-full shadow hover:bg-red-700 transition"><i class="fas fa-times"></i></button>
+                            <button onclick="deleteProduct('${p.id}')" class="bg-red-500 text-white w-8 h-8 rounded-full shadow hover:bg-red-700 transition"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="${p.color || 'bg-slate-50'} h-32 flex items-center justify-center relative overflow-hidden opacity-80">
                             <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
                         </div>
                         <div class="p-4 flex-1 flex flex-col bg-yellow-50">
                             <label class="text-[9px] font-black uppercase text-slate-500 mb-1">Nombre</label>
-                            <input type="text" value='${p.name.replace(/'/g, "&#39;")}' onchange="updateProperty(${p.id}, 'name', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm mb-2">
+                            <input type="text" value='${p.name.replace(/'/g, "&#39;")}' onchange="updateProperty('${p.id}', 'name', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm mb-2">
                             
                             <div class="grid grid-cols-3 gap-2 mt-auto">
                                 <div>
                                     <label class="text-[8px] font-black uppercase text-slate-500 mb-1 block">Costo ($)</label>
-                                    <input type="number" value="${p.cost || 0}" onchange="updateProperty(${p.id}, 'cost', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm">
+                                    <input type="number" value="${p.cost || 0}" onchange="updateProperty('${p.id}', 'cost', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm">
                                 </div>
                                 <div>
                                     <label class="text-[8px] font-black uppercase text-slate-500 mb-1 block">Precio ($)</label>
-                                    <input type="number" value="${p.price}" onchange="updateProperty(${p.id}, 'price', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm">
+                                    <input type="number" value="${p.price}" onchange="updateProperty('${p.id}', 'price', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm">
                                 </div>
                                 <div>
-                                    <label class="text-[8px] font-black uppercase text-slate-500 mb-1 block">Stock</label>
-                                    <input type="number" value="${p.stock}" onchange="updateProperty(${p.id}, 'stock', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm">
+                                    <label class="text-[8px] font-black uppercase ${p.stock <= 0 ? 'text-red-600' : 'text-slate-500'} mb-1 block">Stock</label>
+                                    <input type="number" value="${p.stock}" onchange="updateProperty('${p.id}', 'stock', this.value)" class="w-full bg-white border-2 ${p.stock <= 0 ? 'border-red-400 bg-red-50 text-red-700' : 'border-yellow-200'} rounded-xl px-3 py-2 font-bold text-sm">
                                 </div>
                             </div>
                         </div>
-                    </div>`).join('');
+                    </div>`;
+
+                // Agregar disponibles
+                if (inStock.length > 0) {
+                    adminHTML += `<div class="col-span-full border-b-2 border-slate-300 pb-2 mb-2"><h4 class="text-xl font-luck text-slate-700 uppercase"><i class="fas fa-check-circle text-green-500 mr-2"></i> En el Cuadrilátero (Disponibles)</h4></div>`;
+                    adminHTML += inStock.map(renderCard).join('');
+                }
+                
+                // Agregar agotados
+                if (outOfStock.length > 0) {
+                    adminHTML += `<div class="col-span-full border-b-2 border-slate-300 pb-2 mb-2 ${inStock.length > 0 ? 'mt-6' : ''}"><h4 class="text-xl font-luck text-slate-700 uppercase"><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> K.O. (Agotados)</h4></div>`;
+                    adminHTML += outOfStock.map(renderCard).join('');
+                }
+
+                adminGrid.innerHTML = adminHTML;
             }
         }
 
         async function updateProperty(id, property, value) {
-            const p = products.find(i => i.id === id);
+            const p = products.find(i => i.id.toString() === id.toString());
             if (p) {
                 p[property] = (property === 'price' || property === 'stock' || property === 'cost') ? parseInt(value) : value;
                 saveData(); renderProducts(); await syncDataToGitHub();
@@ -666,13 +768,13 @@
                     </div>
                     
                     <div class="flex gap-2">
-                        <select onchange="updateOrderStatus(${o.id}, this.value)" class="flex-1 p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-red-500 cursor-pointer bg-slate-50">
+                        <select onchange="updateOrderStatus('${o.id}', this.value)" class="flex-1 p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-red-500 cursor-pointer bg-slate-50">
                             <option value="Pendiente" ${o.status === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
                             <option value="Completado" ${o.status === 'Completado' ? 'selected' : ''}>✅ Completado</option>
                             <option value="Cancelado" ${o.status === 'Cancelado' ? 'selected' : ''}>❌ Cancelado</option>
                             <option value="Reembolsado" ${o.status === 'Reembolsado' ? 'selected' : ''}>💸 Reembolsado</option>
                         </select>
-                        <button onclick="deleteOrder(${o.id})" class="bg-red-100 text-red-600 px-4 rounded-xl hover:bg-red-600 hover:text-white transition-colors" title="Eliminar Pedido">
+                        <button onclick="deleteOrder('${o.id}')" class="bg-red-100 text-red-600 px-4 rounded-xl hover:bg-red-600 hover:text-white transition-colors" title="Eliminar Pedido">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -681,11 +783,33 @@
         }
 
         async function updateOrderStatus(id, newStatus) {
-            const order = orders.find(o => o.id === id);
+            const order = orders.find(o => o.id.toString() === id.toString());
             if (order) {
+                const oldStatus = order.status;
                 order.status = newStatus;
+
+                // Lógica de descuento/devolución de stock
+                if (oldStatus !== 'Completado' && newStatus === 'Completado') {
+                    // Descontar stock del inventario
+                    order.items.forEach(item => {
+                        const prod = products.find(p => p.name === item.name);
+                        if (prod && typeof prod.stock !== 'undefined') {
+                            prod.stock = Math.max(0, prod.stock - item.qty);
+                        }
+                    });
+                } else if (oldStatus === 'Completado' && newStatus !== 'Completado') {
+                    // Devolver stock al inventario
+                    order.items.forEach(item => {
+                        const prod = products.find(p => p.name === item.name);
+                        if (prod && typeof prod.stock !== 'undefined') {
+                            prod.stock += item.qty;
+                        }
+                    });
+                }
+
                 saveData();
                 renderOrders();
+                renderProducts(); // Actualizamos la vista de la cartelera para reflejar el nuevo stock
                 renderReports();
                 await syncDataToGitHub();
                 showNotice(`Estado de pedido actualizado`, true);
@@ -694,12 +818,29 @@
 
         async function deleteOrder(id) {
             if(!confirm("¿Estás seguro de que deseas eliminar este pedido del historial?")) return;
-            orders = orders.filter(o => o.id !== id);
-            saveData();
-            renderOrders();
-            renderReports();
-            await syncDataToGitHub();
-            showNotice("Pedido Eliminado", true);
+            
+            const orderIndex = orders.findIndex(o => o.id.toString() === id.toString());
+            if (orderIndex > -1) {
+                const order = orders[orderIndex];
+                
+                // Si se elimina un pedido que estaba completado, devolvemos el stock
+                if (order.status === 'Completado') {
+                    order.items.forEach(item => {
+                        const prod = products.find(p => p.name === item.name);
+                        if (prod && typeof prod.stock !== 'undefined') {
+                            prod.stock += item.qty;
+                        }
+                    });
+                }
+                
+                orders.splice(orderIndex, 1);
+                saveData();
+                renderOrders();
+                renderProducts(); // Actualizamos la vista de la cartelera
+                renderReports();
+                await syncDataToGitHub();
+                showNotice("Pedido Eliminado", true);
+            }
         }
 
         function renderReports() {
@@ -784,6 +925,8 @@
             localStorage.setItem('bolis_ring_db', JSON.stringify(products));
             localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
             localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
+            localStorage.setItem('bolis_ring_workers', JSON.stringify(workers));
+            localStorage.setItem('bolis_ring_admins', JSON.stringify(admins));
         }
 
         async function saveGitHubConfig() {
@@ -815,6 +958,38 @@
             if (e.key === 'Enter') verifySecurity();
         });
 
+        // Lógica del Modal de Seguridad Admon
+        let pendingAdminAction = null;
+
+        function openAdminSecurity(callback) {
+            pendingAdminAction = callback;
+            document.getElementById('admin-pass-input').value = "";
+            document.getElementById('admin-security-modal').style.display = 'flex';
+            document.getElementById('admin-pass-input').focus();
+        }
+
+        function closeAdminSecurity() {
+            document.getElementById('admin-security-modal').style.display = 'none';
+            pendingAdminAction = null;
+        }
+
+        function submitAdminSecurity() {
+            if (document.getElementById('admin-pass-input').value === CLAVE) {
+                // Guardamos la acción antes de que closeAdminSecurity la borre
+                const accionAConfirmar = pendingAdminAction; 
+                closeAdminSecurity();
+                
+                // Ejecutamos la acción (abrir la pestaña o guardar el admin)
+                if (accionAConfirmar) accionAConfirmar();
+            } else {
+                showNotice("Clave Incorrecta ❌");
+            }
+        }
+
+        document.getElementById('admin-pass-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') submitAdminSecurity();
+        });
+
         function toggleAdminMode(activate) {
             isPromotor = activate;
             
@@ -836,16 +1011,25 @@
                 switchAdminTab('admin-sec-reports'); // Ahora abre Reportes por defecto para ver ganancias al entrar
                 window.scrollTo(0,0);
                 showNotice("¡Modo Promotor Activado! 🛠️", true);
+
+                // Anuncio sutil para inventario (Se muestra 3 segundos después del login, modificado para durar 10 segundos)
+                const agotados = products.filter(p => p.stock <= 0).length;
+                if (agotados > 0) {
+                    setTimeout(() => {
+                        showNotice(`⚠️ Atención: Tienes ${agotados} luchador(es) agotado(s)`, false, 10000);
+                    }, 3000);
+                }
+
             } else {
                 showNotice("De vuelta al Ring 🥊", true);
                 window.scrollTo(0,0);
             }
             
-            renderProducts(); renderPromos(); renderOrders();
+            renderProducts(); renderPromos(); renderOrders(); renderWorkers(); renderAdmins();
         }
 
         function addToCart(id) {
-            const p = products.find(i => i.id === id);
+            const p = products.find(i => i.id.toString() === id.toString());
             if (!p || p.stock <= 0) return;
             const item = cart.find(i => i.id === id);
             if (item) item.qty++; else cart.push({ ...p, qty: 1 });
@@ -937,12 +1121,23 @@
             renderOrders();     // Actualizamos la interfaz de promotor por si acaso está abierta
             renderReports();    // Actualizamos reportes también
 
+            // Asignación de trabajador (aleatoria para distribuir pedidos si hay varios)
+            let deliveryPhone = WHATSAPP_NUMBER;
+            if (workers && workers.length > 0) {
+                const assignedWorker = workers[Math.floor(Math.random() * workers.length)];
+                deliveryPhone = assignedWorker.phone.replace(/\D/g, ''); // Limpiar el número de espacios o símbolos
+            } else if (admins && admins.length > 0) {
+                // Si no hay trabajadores, le llega a uno de los administradores (Jerónimo o Jan Carlos)
+                const assignedAdmin = admins[Math.floor(Math.random() * admins.length)];
+                deliveryPhone = assignedAdmin.phone.replace(/\D/g, ''); 
+            }
+
             // Construir el mensaje para WhatsApp
             let msg = `*PEDIDO BOLIS DEL RING* 🥊\n\n*Retador:* ${n}\n*Dirección:* ${a}\n\n*EQUIPO:*\n`;
             cart.forEach(i => msg += `• ${i.qty}x ${i.name}\n`);
             msg += `\n*TOTAL: $${total.toLocaleString()}*`;
             
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/${deliveryPhone}?text=${encodeURIComponent(msg)}`, '_blank');
             cart = []; updateCartUI(); closeCheckout();
         }
 
@@ -953,14 +1148,14 @@
             const stock = parseInt(document.getElementById('new-stock').value);
             const category = document.getElementById('new-category').value;
             const image = document.getElementById('new-image').value;
-            products.push({ id: Date.now(), name, cost, price, stock, category, image, color: 'bg-slate-50' });
+            products.push({ id: Date.now().toString(), name, cost, price, stock, category, image, color: 'bg-slate-50' });
             saveData(); renderProducts(); document.getElementById('add-product-form').reset();
             await syncDataToGitHub();
             showNotice("¡Nuevo Luchador al Cuadrilátero! 🥊", true);
         }
 
         async function deleteProduct(id) {
-            products = products.filter(p => p.id !== id);
+            products = products.filter(p => p.id.toString() !== id.toString());
             saveData(); renderProducts(); await syncDataToGitHub();
             showNotice("Luchador Retirado", true);
         }
@@ -973,7 +1168,7 @@
             const expiry = document.getElementById('new-promo-expiry').value;
             
             promos.push({
-                id: Date.now(),
+                id: Date.now().toString(),
                 name, desc, price, oldPrice, expiry,
                 color: 'from-slate-700 to-slate-900',
                 icon: 'fa-star'
@@ -990,7 +1185,137 @@
             showNotice("Evento Eliminado", true);
         }
 
+        function renderWorkers() {
+            const grid = document.getElementById('admin-workers-grid');
+            if (!grid) return;
+            
+            if (workers.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-slate-500 font-bold py-8 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay trabajadores registrados. Se usará el número por defecto.</div>';
+                return;
+            }
+
+            grid.innerHTML = workers.map(w => `
+                <div class="bg-white rounded-[2rem] p-6 shadow-md border-2 border-slate-200 flex items-center justify-between transition-all hover:shadow-lg">
+                    <div>
+                        <h4 class="text-xl font-luck uppercase text-slate-800 mb-1"><i class="fas fa-user-circle text-indigo-500 mr-2"></i>${w.name}</h4>
+                        <p class="text-xs font-bold text-slate-500"><i class="fab fa-whatsapp text-green-500 mr-1"></i> ${w.phone}</p>
+                    </div>
+                    <button onclick="deleteWorker('${w.id}')" class="w-10 h-10 bg-red-100 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors flex items-center justify-center shadow-sm" title="Despedir Trabajador">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function addWorker() {
+            const name = document.getElementById('new-worker-name').value;
+            const phone = document.getElementById('new-worker-phone').value;
+            workers.push({ id: Date.now().toString(), name, phone });
+            saveData();
+            renderWorkers();
+            document.getElementById('add-worker-form').reset();
+            await syncDataToGitHub();
+            showNotice("¡Trabajador Registrado!", true);
+        }
+
+        async function deleteWorker(id) {
+            if(!confirm("¿Deseas eliminar a este trabajador del sistema? Ya no recibirá pedidos.")) return;
+            workers = workers.filter(w => w.id.toString() !== id.toString());
+            saveData();
+            renderWorkers();
+            await syncDataToGitHub();
+            showNotice("Trabajador Eliminado", true);
+        }
+
+        // --- FUNCIONES DE ADMINISTRADORES (NUEVO) --- //
+
+        function verifyAction(callback) {
+            openAdminSecurity(callback);
+        }
+
+        function renderAdmins() {
+            const grid = document.getElementById('admin-admins-grid');
+            if (!grid) return;
+            
+            grid.innerHTML = admins.map(a => `
+                <div class="bg-white rounded-[2rem] p-6 shadow-md border-2 border-slate-200 flex flex-col transition-all hover:shadow-lg">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="text-xl font-luck uppercase text-slate-800"><i class="fas ${a.permanent ? 'fa-crown text-amber-500' : 'fa-user-shield text-slate-600'} mr-2"></i>${a.name}</h4>
+                        ${!a.permanent ? `
+                        <button onclick="deleteAdmin('${a.id}')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors flex items-center justify-center shadow-sm" title="Eliminar Admin">
+                            <i class="fas fa-trash text-xs"></i>
+                        </button>
+                        ` : '<span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-black uppercase">Fundador</span>'}
+                    </div>
+                    <div class="flex items-center justify-between mt-auto pt-2 border-t border-slate-100">
+                        <p class="text-sm font-bold text-slate-600"><i class="fab fa-whatsapp text-green-500 mr-1"></i> ${a.phone}</p>
+                        <button onclick="editAdminPhone('${a.id}')" class="text-blue-500 hover:text-blue-700 font-black text-xs uppercase bg-blue-50 px-3 py-1 rounded-lg transition-colors">
+                            Editar ✏️
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function addNewAdmin() {
+            const name = document.getElementById('new-admin-name').value;
+            const phone = document.getElementById('new-admin-phone').value;
+            if(!name || !phone) return;
+
+            admins.push({ id: Date.now().toString(), name, phone, permanent: false });
+            saveData();
+            renderAdmins();
+            document.getElementById('add-admin-form').reset();
+            await syncDataToGitHub();
+            showNotice("¡Administrador Registrado!", true);
+        }
+
+        async function editAdminPhone(id) {
+            const admin = admins.find(a => a.id.toString() === id.toString());
+            if (!admin) return; // Prevención de errores si no lo encuentra
+            
+            const newPhone = prompt(`Ingresa el nuevo número de WhatsApp para ${admin.name}:`, admin.phone);
+            if(newPhone && newPhone.trim() !== '') {
+                admin.phone = newPhone.trim();
+                saveData(); 
+                renderAdmins(); 
+                await syncDataToGitHub();
+                showNotice("Número actualizado correctamente", true);
+            }
+        }
+
+        function deleteAdmin(id) {
+            // Buscamos el admin convirtiendo a string por seguridad
+            const admin = admins.find(a => a.id.toString() === id.toString());
+            if (!admin || admin.permanent) return; 
+            
+            if(!confirm(`¿Seguro que deseas eliminar a ${admin.name} de los administradores?`)) return;
+            
+            // Requerimos la clave para completar la eliminación usando la ventana Modal
+            verifyAction(async () => {
+                admins = admins.filter(a => a.id.toString() !== id.toString());
+                saveData();
+                renderAdmins();
+                await syncDataToGitHub();
+                showNotice("Administrador Eliminado", true);
+            });
+        }
+
+        // --- FIN FUNCIONES DE ADMINISTRADORES --- //
+
         function switchAdminTab(tabId) {
+            // Validación de seguridad extra para entrar a la pestaña Admon
+            if (tabId === 'admin-sec-admins') {
+                openAdminSecurity(() => {
+                    performTabSwitch(tabId);
+                });
+                return; // Pausar cambio de pestaña hasta que se confirme la clave
+            }
+            
+            performTabSwitch(tabId);
+        }
+
+        function performTabSwitch(tabId) {
             document.querySelectorAll('.admin-section').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.admin-tab-btn').forEach(btn => {
                 btn.classList.remove('bg-red-600', 'text-white', 'shadow-lg');
@@ -1004,17 +1329,17 @@
             }
         }
 
-        function showNotice(msg, isSuccess = false) {
+        function showNotice(msg, isSuccess = false, duration = 2500) {
             const t = document.createElement('div');
             t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl text-white font-black shadow-xl transition-all duration-300 uppercase text-[10px] flex items-center gap-2 transform translate-y-10 opacity-0`;
             t.style.backgroundColor = isSuccess ? '#16a34a' : '#0f172a';
             t.innerHTML = msg; document.body.appendChild(t);
             setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1'; }, 10);
-            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 2500);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, duration);
         }
 
         window.onload = async () => {
-            renderProducts(); renderPromos(); renderOrders(); renderReports();
+            renderProducts(); renderPromos(); renderOrders(); renderReports(); renderWorkers(); renderAdmins();
             await syncDataFromGitHub();
             setInterval(renderPromos, 60000);
         };
