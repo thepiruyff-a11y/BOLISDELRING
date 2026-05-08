@@ -101,19 +101,7 @@
       "cost": 848
     }
   ],
-  "promos": [
-    {
-      "id": "1778263486905",
-      "name": "COMBO 3X1",
-      "desc": "3 BOLIS POR EL PRECIO DE 1",
-      "price": 2000,
-      "oldPrice": 6000,
-      "qty": 3,
-      "expiry": "2026-05-08T13:10",
-      "color": "from-slate-700 to-slate-900",
-      "icon": "fa-star"
-    }
-  ],
+  "promos": [],
   "orders": [
     {
       "id": 1778260834069,
@@ -192,45 +180,6 @@
       "total": 2000,
       "status": "Pendiente",
       "date": "8/5/2026, 1:05:24 p. m."
-    },
-    {
-      "id": 1778263638866,
-      "name": "Lu",
-      "phone": "3188243686",
-      "address": "Buenaventura ",
-      "items": [
-        {
-          "name": "UVA",
-          "qty": 2,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        },
-        {
-          "name": "MARACUYA",
-          "qty": 3,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        },
-        {
-          "name": "PIÑA",
-          "qty": 1,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        },
-        {
-          "name": "NARANJA",
-          "qty": 1,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        }
-      ],
-      "total": 14000,
-      "status": "Pendiente",
-      "date": "8/5/2026, 1:07:18 p. m."
     }
   ],
   "workers": [
