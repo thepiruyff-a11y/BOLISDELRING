@@ -21,9 +21,6 @@
         }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%); z-index: 1; }
         
-        #admin-panel { display: none; }
-        .admin-active #admin-panel { display: block; }
-        
         #security-modal {
             display: none;
             position: fixed;
@@ -47,9 +44,11 @@
                 <i class="fas fa-mask fa-lg"></i>
             </div>
             <h1 class="text-2xl font-luck text-slate-900 tracking-wider uppercase">BOLIS <span class="text-red-600">DEL RING</span></h1>
+            <div id="promotor-tag" class="hidden ml-2 bg-yellow-400 text-slate-900 px-3 py-0.5 rounded-lg text-[10px] font-black border border-slate-900 animate-pulse uppercase">Modo Promotor</div>
         </div>
         
-        <div class="flex items-center gap-4">
+        <!-- Controles Públicos -->
+        <div id="nav-public-items" class="flex items-center gap-4">
             <div class="hidden lg:flex gap-6 mr-4">
                 <a href="#promociones" class="text-xs font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-widest">Promociones</a>
                 <a href="#catalogo" class="text-xs font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-widest">Cartelera</a>
@@ -58,55 +57,112 @@
             <button onclick="openSecurity()" class="p-2 text-slate-400 hover:text-red-600 transition-colors" title="Acceso Promotor">
                 <i class="fas fa-shield-alt text-xl"></i>
             </button>
-            <button id="sync-btn" onclick="syncDataFromGitHub()" class="p-2 text-blue-500 hover:text-blue-700 transition-colors hidden" title="Sincronizar con GitHub">
-                <i class="fas fa-sync-alt text-xl"></i>
-            </button>
             <button onclick="toggleCart()" class="relative p-2 text-slate-600 hover:text-red-500 transition-colors">
                 <i class="fas fa-shopping-basket text-xl"></i>
                 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
             </button>
         </div>
+
+        <!-- Controles Administrador -->
+        <div id="nav-admin-items" class="hidden flex items-center gap-4">
+            <button id="sync-btn" onclick="syncDataFromGitHub()" class="p-2 text-blue-600 hover:text-blue-800 transition-colors bg-blue-100 rounded-lg px-4 font-bold text-sm flex items-center gap-2" title="Sincronizar con GitHub">
+                <i class="fas fa-sync-alt"></i> Recargar Nube
+            </button>
+            <button onclick="toggleAdminMode(false)" class="p-2 bg-red-600 text-white hover:bg-slate-900 transition-colors rounded-lg px-4 font-bold text-sm uppercase flex items-center gap-2">
+                <i class="fas fa-sign-out-alt"></i> Salir al Ring
+            </button>
+        </div>
     </nav>
 
-    <header class="relative hero-bg py-24 px-6 overflow-hidden text-white">
-        <div class="hero-overlay"></div>
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2 uppercase">
-                ¡El peso pesado de la frescura!
-            </span>
-            <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg uppercase italic">¡Un golpe de sabor 100% natural! 🥊</h2>
-            <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto">
-                Bolis artesanales <span class="text-yellow-400">sin conservantes ni colorantes</span>. ¡La lucha definitiva contra el calor!
-            </p>
-            <a href="#catalogo" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 uppercase">
-                Ver la cartelera
-            </a>
-        </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto p-6">
-        <section id="promociones" class="mb-20 scroll-mt-24">
-            <div class="text-center mb-10">
-                <span class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-2 inline-block shadow-lg">Eventos Especiales</span>
-                <h3 class="text-4xl md:text-5xl font-luck text-slate-900 uppercase">¡COMBOS DE CAMPEONATO! 🏆</h3>
+    <!-- ================= VISTA PÚBLICA (CLIENTE) ================= -->
+    <div id="view-public">
+        <header class="relative hero-bg py-24 px-6 overflow-hidden text-white">
+            <div class="hero-overlay"></div>
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2 uppercase">
+                    ¡El peso pesado de la frescura!
+                </span>
+                <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg uppercase italic">¡Un golpe de sabor 100% natural! 🥊</h2>
+                <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto">
+                    Bolis artesanales <span class="text-yellow-400">sin conservantes ni colorantes</span>. ¡La lucha definitiva contra el calor!
+                </p>
+                <a href="#catalogo" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 uppercase">
+                    Ver la cartelera
+                </a>
             </div>
-            <div id="promo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-        </section>
+        </header>
 
-        <section id="catalogo" class="mb-16 scroll-mt-24">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4 border-b-4 border-red-600 pb-4">
-                <div>
-                    <h3 class="text-4xl font-luck text-slate-800 uppercase">Cartelera de Sabores</h3>
-                    <p class="text-slate-500 font-bold text-sm italic">Bolis 100% naturales, sin conservantes ni colorantes</p>
+        <main class="max-w-6xl mx-auto p-6">
+            <section id="promociones" class="mb-20 scroll-mt-24">
+                <div class="text-center mb-10">
+                    <span class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-2 inline-block shadow-lg">Eventos Especiales</span>
+                    <h3 class="text-4xl md:text-5xl font-luck text-slate-900 uppercase">¡COMBOS DE CAMPEONATO! 🏆</h3>
                 </div>
-                <div id="promotor-tag" class="hidden bg-yellow-400 text-slate-900 px-4 py-1 rounded-lg text-xs font-black border-2 border-slate-900 animate-pulse uppercase">Modo Promotor Activo</div>
-            </div>
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]"></div>
-        </section>
+                <div id="promo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </section>
 
-        <section id="admin-panel" class="space-y-8 mb-20">
+            <section id="catalogo" class="mb-16 scroll-mt-24">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4 border-b-4 border-red-600 pb-4">
+                    <div>
+                        <h3 class="text-4xl font-luck text-slate-800 uppercase">Cartelera de Sabores</h3>
+                        <p class="text-slate-500 font-bold text-sm italic">Bolis 100% naturales, sin conservantes ni colorantes</p>
+                    </div>
+                </div>
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]"></div>
+            </section>
+        </main>
+
+        <footer id="contacto" class="bg-slate-950 text-white pt-20 pb-8 px-6 rounded-t-[3rem] border-t-8 border-red-600 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+                <i class="fas fa-mask text-[20rem] absolute -bottom-20 -right-20 rotate-12"></i>
+            </div>
+            <div class="max-w-6xl mx-auto relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
+                    <div class="space-y-6">
+                        <h4 class="text-4xl font-luck tracking-wider uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
+                        <p class="text-slate-400 font-medium italic">Bolis <span class="text-white font-bold">100% naturales</span>, sin conservantes ni colorantes.</p>
+                    </div>
+                    <div class="space-y-6">
+                        <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Contacto Directo</h5>
+                        <ul class="space-y-4 text-slate-300 font-bold">
+                            <li><i class="fas fa-phone-alt text-red-600 mr-2"></i> +57 314 586 5641</li>
+                            <li><i class="fab fa-whatsapp text-green-500 mr-2"></i> 314 586 5641</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-6">
+                        <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Combate Diario</h5>
+                        <p class="text-slate-400 font-bold">Lunes a Sábado <br> 10:00 AM - 7:00 PM</p>
+                    </div>
+                </div>
+                <div class="pt-8 border-t border-slate-900 text-center text-xs text-slate-500">
+                    <p>&copy; 2024 Bolis Del Ring. ¡El peso pesado de la frescura!</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ================= VISTA PRIVADA (ADMINISTRADOR) ================= -->
+    <div id="view-admin" class="hidden">
+        <div class="bg-slate-900 text-white py-12 px-6">
+            <div class="max-w-6xl mx-auto text-center">
+                <h2 class="text-4xl md:text-6xl font-luck text-yellow-400 uppercase">Panel del Promotor</h2>
+                <p class="font-bold text-slate-400 mt-2">Gestiona el inventario, los eventos y la conexión a la nube.</p>
+            </div>
+        </div>
+        
+        <main class="max-w-6xl mx-auto p-6 mb-20 -mt-6">
+            
+            <!-- Menú de Pestañas -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-lg border-2 border-slate-100">
+                <button onclick="switchAdminTab('admin-sec-products')" id="tab-btn-products" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-red-600 text-white shadow-lg transition-all"><i class="fas fa-box-open mr-2"></i> Cartelera</button>
+                <button onclick="switchAdminTab('admin-sec-promos')" id="tab-btn-promos" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-star mr-2"></i> Eventos</button>
+                <button onclick="switchAdminTab('admin-sec-orders')" id="tab-btn-orders" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-clipboard-list mr-2"></i> Pedidos</button>
+                <button onclick="switchAdminTab('admin-sec-reports')" id="tab-btn-reports" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-chart-bar mr-2"></i> Informes</button>
+                <button onclick="switchAdminTab('admin-sec-github')" id="tab-btn-github" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fab fa-github mr-2"></i> Nube</button>
+            </div>
+
             <!-- GitHub Config -->
-            <div class="bg-blue-600 rounded-[2.5rem] p-8 shadow-2xl text-white border-b-8 border-blue-800">
+            <section id="admin-sec-github" class="admin-section hidden bg-blue-600 rounded-[2.5rem] p-8 shadow-2xl text-white border-b-8 border-blue-800">
                 <h3 class="text-3xl font-luck mb-6 uppercase flex items-center gap-3">
                     <i class="fab fa-github"></i> Esquina Técnica (Nube)
                 </h3>
@@ -131,50 +187,124 @@
                 <button onclick="saveGitHubConfig()" class="mt-6 bg-white text-blue-600 px-8 py-3 rounded-xl font-black uppercase text-sm shadow-xl hover:scale-105 transition-transform">
                     Vincular Cuadrilátero
                 </button>
-            </div>
+            </section>
 
-            <!-- Add Event Form -->
-            <div class="bg-red-600 rounded-[2.5rem] p-8 shadow-2xl text-white border-b-8 border-red-800">
-                <h3 class="text-3xl font-luck mb-6 uppercase flex items-center gap-3">
-                    <i class="fas fa-calendar-plus"></i> Organizar Nuevo Evento
-                </h3>
-                <form id="add-promo-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); addNewPromo();">
-                    <input type="text" id="new-promo-name" placeholder="Nombre del Combo (Ej: Combo Mortal)" required class="p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
-                    <input type="text" id="new-promo-desc" placeholder="Descripción breve" required class="p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
-                    <input type="number" id="new-promo-price" placeholder="Precio Especial ($)" required class="p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
-                    <input type="number" id="new-promo-old" placeholder="Precio Normal ($)" required class="p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
-                    <div class="md:col-span-2">
-                        <label class="text-[10px] font-black uppercase mb-1 block">Finalización del Evento (Tiempo Limitado):</label>
-                        <input type="datetime-local" id="new-promo-expiry" required class="w-full p-4 rounded-xl text-slate-900 font-bold outline-none border-2 border-transparent focus:border-yellow-400">
+            <!-- Promociones Admin -->
+            <section id="admin-sec-promos" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Formulario Nuevo Evento -->
+                    <div class="lg:w-1/3">
+                        <div class="bg-red-600 rounded-[2rem] p-6 shadow-xl text-white border-b-8 border-red-800 sticky top-24">
+                            <h3 class="text-2xl font-luck mb-4 uppercase"><i class="fas fa-calendar-plus mr-2"></i> Nuevo Evento</h3>
+                            <form id="add-promo-form" class="space-y-3" onsubmit="event.preventDefault(); addNewPromo();">
+                                <input type="text" id="new-promo-name" placeholder="Nombre (Ej: Combo Mortal)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                <input type="text" id="new-promo-desc" placeholder="Descripción breve" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                <div class="flex gap-2">
+                                    <input type="number" id="new-promo-price" placeholder="Precio ($)" required class="w-1/2 p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                    <input type="number" id="new-promo-old" placeholder="Normal ($)" required class="w-1/2 p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black uppercase mb-1 block">Finalización:</label>
+                                    <input type="datetime-local" id="new-promo-expiry" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                </div>
+                                <button type="submit" class="w-full bg-yellow-400 text-slate-900 py-3 rounded-xl font-black hover:bg-white transition-all uppercase tracking-widest shadow-lg mt-2">
+                                    ¡Lanzar!
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <button type="submit" class="md:col-span-2 bg-yellow-400 text-slate-900 py-5 rounded-xl font-black text-xl hover:bg-white transition-all uppercase tracking-widest shadow-xl">
-                        ¡LANZAR PROMOCIÓN!
-                    </button>
-                </form>
-            </div>
-
-            <!-- Add Product Form -->
-            <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl border-4 border-slate-900">
-                <div class="text-center mb-8">
-                    <h3 class="text-3xl font-luck text-slate-900 uppercase">Fichar Nuevo Luchador</h3>
+                    <!-- Lista de Eventos Editables -->
+                    <div class="lg:w-2/3">
+                        <h3 class="text-3xl font-luck text-slate-800 uppercase mb-4">Eventos Activos</h3>
+                        <div id="admin-promo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                    </div>
                 </div>
-                <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); addNewProduct();">
-                    <input type="text" id="new-name" placeholder="Nombre (Ej: Mango 'El Terrible')" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                    <input type="number" id="new-price" placeholder="Precio ($)" value="2000" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                    <input type="number" id="new-stock" placeholder="Stock Inicial" value="10" required class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                    <select id="new-category" class="p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                        <option value="Rudo">Rudo (Agua)</option>
-                        <option value="Técnico">Técnico (Cremoso)</option>
-                    </select>
-                    <input type="url" id="new-image" placeholder="URL de la imagen" required class="md:col-span-2 p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold">
-                    <button type="submit" class="md:col-span-2 bg-slate-900 text-white py-5 rounded-xl font-black text-xl hover:bg-red-600 transition-colors uppercase tracking-widest shadow-xl">
-                        ¡SUBIR AL CUADRILÁTERO!
-                    </button>
-                </form>
-            </div>
-        </section>
+            </section>
 
-        <section id="domicilio" class="bg-white rounded-[2rem] p-8 shadow-2xl border-4 border-slate-900 max-w-2xl mx-auto mb-20 hidden scroll-mt-24">
+            <!-- Pedidos Admin (NUEVA SECCIÓN) -->
+            <section id="admin-sec-orders" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
+                <div class="flex justify-between items-end mb-6">
+                    <h3 class="text-3xl font-luck text-slate-800 uppercase"><i class="fas fa-clipboard-list mr-2"></i> Control de Pedidos</h3>
+                    <button onclick="renderOrders()" class="bg-white text-slate-600 p-2 rounded-lg shadow hover:text-blue-600 transition-colors" title="Actualizar Datos"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Informes Admin (NUEVA SECCIÓN) -->
+            <section id="admin-sec-reports" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
+                <div class="flex justify-between items-end mb-8">
+                    <h3 class="text-3xl font-luck text-slate-800 uppercase"><i class="fas fa-chart-bar mr-2"></i> Reporte Financiero</h3>
+                    <button onclick="renderReports()" class="bg-white text-slate-600 p-2 rounded-lg shadow hover:text-blue-600 transition-colors" title="Actualizar Informes"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                
+                <!-- Tarjetas de Resumen (Hoy) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-[2rem] shadow-md border-2 border-slate-200 relative overflow-hidden">
+                        <i class="fas fa-money-bill-wave absolute -right-4 -bottom-4 text-[6rem] text-slate-100"></i>
+                        <h4 class="text-[10px] font-black uppercase text-slate-500 mb-2 relative z-10">Ingresos Brutos (Hoy)</h4>
+                        <div id="report-brutos" class="text-4xl font-black text-slate-900 relative z-10">$0</div>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-[2rem] shadow-md border-2 border-green-200 relative overflow-hidden">
+                        <i class="fas fa-coins absolute -right-4 -bottom-4 text-[6rem] text-green-100"></i>
+                        <h4 class="text-[10px] font-black uppercase text-green-600 mb-2 relative z-10">Ganancias Netas (Hoy)</h4>
+                        <div id="report-ganancias" class="text-4xl font-black text-green-700 relative z-10">$0</div>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-[2rem] shadow-md border-2 border-blue-200 relative overflow-hidden">
+                        <i class="fas fa-check-circle absolute -right-4 -bottom-4 text-[6rem] text-blue-100"></i>
+                        <h4 class="text-[10px] font-black uppercase text-blue-600 mb-2 relative z-10">Pedidos Completados (Hoy)</h4>
+                        <div id="report-completados" class="text-4xl font-black text-blue-700 relative z-10">0</div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Barras -->
+                <div class="bg-white p-8 rounded-[2rem] shadow-md border-2 border-slate-200">
+                    <h4 class="text-xl font-luck uppercase text-slate-800 mb-8 text-center tracking-wide">Productividad de Ingresos (Últimos 7 Días)</h4>
+                    <div id="report-chart" class="flex justify-around items-end h-56 border-b-2 border-slate-100 pb-2">
+                        <!-- Las barras se generan por JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Productos Admin -->
+            <section id="admin-sec-products" class="admin-section bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Formulario Nuevo Producto -->
+                    <div class="lg:w-1/3">
+                        <div class="bg-white rounded-[2rem] p-6 shadow-xl border-4 border-slate-900 sticky top-24">
+                            <h3 class="text-2xl font-luck text-slate-900 uppercase mb-4"><i class="fas fa-plus-circle mr-2"></i> Nuevo Luchador</h3>
+                            <form id="add-product-form" class="space-y-3" onsubmit="event.preventDefault(); addNewProduct();">
+                                <input type="text" id="new-name" placeholder="Nombre" required class="w-full p-3 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold text-sm">
+                                <div class="flex gap-2">
+                                    <input type="number" id="new-cost" placeholder="Costo ($)" value="1000" required class="w-1/3 p-3 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold text-sm">
+                                    <input type="number" id="new-price" placeholder="Precio ($)" value="2000" required class="w-1/3 p-3 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold text-sm">
+                                    <input type="number" id="new-stock" placeholder="Stock" value="10" required class="w-1/3 p-3 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold text-sm">
+                                </div>
+                                <select id="new-category" class="w-full p-3 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold text-sm">
+                                    <option value="Rudo">Rudo (Agua)</option>
+                                    <option value="Técnico">Técnico (Cremoso)</option>
+                                </select>
+                                <input type="url" id="new-image" placeholder="URL de la imagen" required class="w-full p-3 rounded-xl border-2 border-slate-100 outline-none focus:border-red-500 font-bold text-sm">
+                                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-black hover:bg-red-600 transition-colors uppercase tracking-widest shadow-lg mt-2">
+                                    ¡Al Cuadrilátero!
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Lista de Productos Editables -->
+                    <div class="lg:w-2/3">
+                        <h3 class="text-3xl font-luck text-slate-800 uppercase mb-4">Cartelera Actual</h3>
+                        <div id="admin-product-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Modales y Componentes Globales -->
+    <div id="checkout-modal" style="display: none;" class="fixed inset-0 z-[150] bg-black/85 backdrop-blur-sm p-4 items-center justify-center">
+        <div class="bg-white rounded-[2rem] p-8 shadow-2xl border-4 border-slate-900 max-w-md w-full relative transform transition-all">
+            <button onclick="closeCheckout()" class="absolute top-4 right-4 text-slate-400 hover:text-red-600 transition-colors"><i class="fas fa-times text-2xl"></i></button>
             <div class="text-center mb-8">
                 <div class="inline-block bg-red-100 text-red-600 p-4 rounded-full mb-4">
                     <i class="fas fa-shipping-fast fa-2x"></i>
@@ -190,11 +320,11 @@
                     <span id="form-total" class="text-yellow-400 font-sans">$0</span>
                 </div>
                 <button type="submit" class="w-full bg-green-600 text-white font-black py-5 rounded-xl text-xl uppercase tracking-wider hover:bg-green-700 transition-all shadow-lg">
-                    <i class="fab fa-whatsapp mr-2"></i> ENVIAR PEDIDO POR WHATSAPP
+                    <i class="fab fa-whatsapp mr-2"></i> ENVIAR PEDIDO
                 </button>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
 
     <div id="security-modal">
         <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl border-4 border-red-600 max-w-xs w-full text-center">
@@ -221,34 +351,6 @@
         </div>
     </div>
 
-    <footer id="contacto" class="bg-slate-950 text-white pt-20 pb-8 px-6 rounded-t-[3rem] border-t-8 border-red-600 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
-            <i class="fas fa-mask text-[20rem] absolute -bottom-20 -right-20 rotate-12"></i>
-        </div>
-        <div class="max-w-6xl mx-auto relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
-                <div class="space-y-6">
-                    <h4 class="text-4xl font-luck tracking-wider uppercase">BOLIS <span class="text-red-600">DEL RING</span></h4>
-                    <p class="text-slate-400 font-medium italic">Bolis <span class="text-white font-bold">100% naturales</span>, sin conservantes ni colorantes.</p>
-                </div>
-                <div class="space-y-6">
-                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Contacto Directo</h5>
-                    <ul class="space-y-4 text-slate-300 font-bold">
-                        <li><i class="fas fa-phone-alt text-red-600 mr-2"></i> +57 314 586 5641</li>
-                        <li><i class="fab fa-whatsapp text-green-500 mr-2"></i> 314 586 5641</li>
-                    </ul>
-                </div>
-                <div class="space-y-6">
-                    <h5 class="text-xl font-luck text-yellow-400 uppercase tracking-widest">Combate Diario</h5>
-                    <p class="text-slate-400 font-bold">Lunes a Sábado <br> 10:00 AM - 7:00 PM</p>
-                </div>
-            </div>
-            <div class="pt-8 border-t border-slate-900 text-center text-xs text-slate-500">
-                <p>&copy; 2024 Bolis Del Ring. ¡El peso pesado de la frescura!</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
         /* CONFIGURACIÓN OFICIAL DE LA ARENA: */
         const PUBLIC_OWNER = "thepiruyff-a11y"; 
@@ -259,9 +361,9 @@
         let isPromotor = false;
         
         const defaultProducts = [
-            { id: 1, name: 'Maracumango "El Rayo"', price: 2000, stock: 15, category: 'Rudo', image: 'https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg', color: 'bg-orange-50' },
-            { id: 4, name: 'Coco "El Enmascarado"', price: 2000, stock: 18, category: 'Técnico', image: 'https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png', color: 'bg-slate-50' },
-            { id: 2, name: 'Mango "El Justiciero"', price: 2000, stock: 20, category: 'Rudo', image: 'https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg', color: 'bg-yellow-50' }
+            { id: 1, name: 'Maracumango "El Rayo"', cost: 1000, price: 2000, stock: 15, category: 'Rudo', image: 'https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg', color: 'bg-orange-50' },
+            { id: 4, name: 'Coco "El Enmascarado"', cost: 1000, price: 2000, stock: 18, category: 'Técnico', image: 'https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png', color: 'bg-slate-50' },
+            { id: 2, name: 'Mango "El Justiciero"', cost: 1000, price: 2000, stock: 20, category: 'Rudo', image: 'https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg', color: 'bg-yellow-50' }
         ];
 
         const defaultPromos = [
@@ -271,6 +373,7 @@
 
         let products = JSON.parse(localStorage.getItem('bolis_ring_db')) || defaultProducts;
         let promos = JSON.parse(localStorage.getItem('bolis_ring_promos')) || defaultPromos;
+        let orders = JSON.parse(localStorage.getItem('bolis_ring_orders')) || [];
         let cart = [];
 
         function getGHConfig() {
@@ -298,7 +401,7 @@
                     sha = data.sha;
                 }
 
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos }, null, 2))));
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos, orders }, null, 2))));
                 const putRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${cfg.token}`, 'Content-Type': 'application/json' },
@@ -323,12 +426,16 @@
                 if (res.ok) {
                     const data = await res.json();
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-                    products = decoded.products;
-                    promos = decoded.promos;
+                    products = decoded.products || products;
+                    promos = decoded.promos || promos;
+                    orders = decoded.orders || orders;
                     localStorage.setItem('bolis_ring_db', JSON.stringify(products));
                     localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
+                    localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
                     renderProducts();
                     renderPromos();
+                    renderOrders();
+                    renderReports();
                 }
             } catch (err) { console.warn("Modo offline o repo no configurado."); }
             finally { if(icon) icon.classList.remove('sync-spinner'); }
@@ -345,26 +452,49 @@
         }
 
         function renderPromos() {
-            const grid = document.getElementById('promo-grid');
-            if (!grid) return;
+            const publicGrid = document.getElementById('promo-grid');
+            const adminGrid = document.getElementById('admin-promo-grid');
+            const promoSection = document.getElementById('promociones');
             
-            grid.innerHTML = promos.map((p, index) => {
+            // 1. Eliminar automáticamente los eventos finalizados
+            let hasExpired = false;
+            promos = promos.filter(p => {
                 const timeLeft = getTimeRemaining(p.expiry);
-                const isExpired = p.expiry && !timeLeft;
-                
-                if (!isPromotor && (isExpired || !p.expiry)) return '';
+                if (p.expiry && !timeLeft) {
+                    hasExpired = true;
+                    return false; // Descartar evento
+                }
+                return true;
+            });
 
-                return `
-                <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white ${!isPromotor ? 'hover:scale-[1.02] cursor-pointer' : 'border-dashed border-slate-400'}">
+            if (hasExpired) {
+                saveData();
+                syncDataToGitHub(); // Sincronizar en segundo plano
+            }
+
+            // 2. Ocultar sección si no hay eventos activos
+            if (promoSection) {
+                const activePromos = promos.filter(p => p.expiry && getTimeRemaining(p.expiry));
+                if (activePromos.length === 0) {
+                    promoSection.classList.add('hidden');
+                } else {
+                    promoSection.classList.remove('hidden');
+                }
+            }
+            
+            // Renderizado Vista Pública
+            if (publicGrid) {
+                publicGrid.innerHTML = promos.map((p, index) => {
+                    const timeLeft = getTimeRemaining(p.expiry);
                     
-                    ${isExpired && isPromotor ? '<div class="absolute inset-0 bg-black/40 z-20 flex items-center justify-center font-luck text-2xl uppercase rotate-12">Evento Finalizado</div>' : ''}
-                    
-                    <div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform">
-                        <i class="fas ${p.icon || 'fa-star'} text-[15rem]"></i>
-                    </div>
-                    
-                    <div class="relative z-10" onclick="${!isPromotor ? `addPromoToCart(${index})` : ''}">
-                        ${!isPromotor ? `
+                    if (!p.expiry) return ''; // Ocultar sin fecha al público
+
+                    return `
+                    <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white hover:scale-[1.02] cursor-pointer" onclick="addPromoToCart(${index})">
+                        <div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform">
+                            <i class="fas ${p.icon || 'fa-star'} text-[15rem]"></i>
+                        </div>
+                        <div class="relative z-10">
                             <div class="flex justify-between items-start mb-4">
                                 <span class="bg-black/10 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black uppercase inline-block italic">Combo de Campeonato</span>
                                 ${timeLeft ? `
@@ -379,45 +509,58 @@
                                 <span class="text-5xl font-black">$${p.price.toLocaleString()}</span>
                                 <span class="text-xl line-through opacity-60 font-bold">$${p.oldPrice.toLocaleString()}</span>
                             </div>
-                        ` : `
-                            <div class="space-y-3 bg-white/20 p-4 rounded-2xl border border-white/30 backdrop-blur-sm">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-[10px] font-black uppercase">Editor de Evento</span>
-                                    <button onclick="deletePromo(${index})" class="text-white hover:text-red-400 transition-colors"><i class="fas fa-trash"></i></button>
-                                </div>
-                                <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre del Evento">
-                                <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-12" placeholder="Descripción">${p.desc}</textarea>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="text-[9px] font-black uppercase block mb-1">Precio</label>
-                                        <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
-                                    </div>
-                                    <div>
-                                        <label class="text-[9px] font-black uppercase block mb-1">Normal</label>
-                                        <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
-                                    </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            // Renderizado Vista Promotor
+            if (adminGrid) {
+                adminGrid.innerHTML = promos.map((p, index) => {
+                    const timeLeft = getTimeRemaining(p.expiry);
+
+                    return `
+                    <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2rem] p-6 shadow-lg border-2 border-dashed border-slate-400 overflow-hidden">
+                        <div class="relative z-10 space-y-3 bg-white/20 p-4 rounded-2xl border border-white/30 backdrop-blur-sm">
+                            <div class="flex justify-between items-center text-white">
+                                <span class="text-[10px] font-black uppercase"><i class="fas fa-edit"></i> Edición Rápida</span>
+                                <button onclick="deletePromo(${index})" class="hover:text-red-400 transition-colors bg-red-600/50 p-2 rounded-lg" title="Eliminar"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <input type="text" value="${p.name}" onchange="updatePromoProperty(${index}, 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre del Evento">
+                            <textarea onchange="updatePromoProperty(${index}, 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-12" placeholder="Descripción">${p.desc}</textarea>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-white text-[9px] font-black uppercase block mb-1">Precio</label>
+                                    <input type="number" value="${p.price}" onchange="updatePromoProperty(${index}, 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
                                 </div>
                                 <div>
-                                    <label class="text-[9px] font-black uppercase block mb-1">Finaliza el:</label>
-                                    <input type="datetime-local" value="${p.expiry || ''}" onchange="updatePromoProperty(${index}, 'expiry', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                                    <label class="text-white text-[9px] font-black uppercase block mb-1">Normal</label>
+                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty(${index}, 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
                                 </div>
                             </div>
-                        `}
-                    </div>
-                </div>`}).join('');
+                            <div>
+                                <label class="text-white text-[9px] font-black uppercase block mb-1">Finaliza el:</label>
+                                <input type="datetime-local" value="${p.expiry || ''}" onchange="updatePromoProperty(${index}, 'expiry', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
         }
 
         function renderProducts() {
-            const grid = document.getElementById('product-grid');
-            if (!grid) return;
-            grid.innerHTML = products.map(p => `
-                <div class="product-card bg-white rounded-[2rem] overflow-hidden shadow-xl border-2 border-slate-100 flex flex-col h-full">
-                    <div class="${p.color || 'bg-slate-50'} h-56 flex items-center justify-center relative overflow-hidden">
-                        <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
-                        <div class="absolute top-4 left-4 ${p.category === 'Rudo' ? 'bg-red-600' : 'bg-blue-600'} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10">${p.category}</div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        ${!isPromotor ? `
+            const publicGrid = document.getElementById('product-grid');
+            const adminGrid = document.getElementById('admin-product-grid');
+
+            // Renderizado Vista Pública
+            if (publicGrid) {
+                publicGrid.innerHTML = products.map(p => `
+                    <div class="product-card bg-white rounded-[2rem] overflow-hidden shadow-xl border-2 border-slate-100 flex flex-col h-full">
+                        <div class="${p.color || 'bg-slate-50'} h-56 flex items-center justify-center relative overflow-hidden">
+                            <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
+                            <div class="absolute top-4 left-4 ${p.category === 'Rudo' ? 'bg-red-600' : 'bg-blue-600'} text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase z-10">${p.category}</div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
                             <h4 class="text-2xl font-luck text-slate-800 mb-1 leading-tight uppercase">${p.name}</h4>
                             <div class="flex items-center justify-between mb-4">
                                 <div class="text-3xl font-black text-red-600">$${p.price.toLocaleString()}</div>
@@ -425,27 +568,50 @@
                                     ${p.stock > 0 ? `Stock: ${p.stock}` : 'No disponible'}
                                 </div>
                             </div>
-                        ` : `
-                            <div class="space-y-3 mb-4 bg-yellow-50 p-4 rounded-2xl border-2 border-yellow-200">
-                                <input type="text" value="${p.name}" onchange="updateProperty(${p.id}, 'name', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input type="number" value="${p.price}" onchange="updateProperty(${p.id}, 'price', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
-                                    <input type="number" value="${p.stock}" onchange="updateProperty(${p.id}, 'stock', this.value)" class="w-full bg-white border-2 border-yellow-400 rounded-xl px-3 py-2 font-bold text-sm">
+                            <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm shadow-lg active:scale-95">
+                                ${p.stock > 0 ? '¡Al Carrito! 🥊' : 'Agotado ❌'}
+                            </button>
+                        </div>
+                    </div>`).join('');
+            }
+
+            // Renderizado Vista Promotor
+            if (adminGrid) {
+                adminGrid.innerHTML = products.map(p => `
+                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-md border-2 border-slate-200 flex flex-col h-full relative group">
+                        <div class="absolute top-2 right-2 z-10">
+                            <button onclick="deleteProduct(${p.id})" class="bg-red-500 text-white w-8 h-8 rounded-full shadow hover:bg-red-700 transition"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="${p.color || 'bg-slate-50'} h-32 flex items-center justify-center relative overflow-hidden opacity-80">
+                            <img src="${p.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/eee/999?text=Boli'">
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col bg-yellow-50">
+                            <label class="text-[9px] font-black uppercase text-slate-500 mb-1">Nombre</label>
+                            <input type="text" value='${p.name.replace(/'/g, "&#39;")}' onchange="updateProperty(${p.id}, 'name', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm mb-2">
+                            
+                            <div class="grid grid-cols-3 gap-2 mt-auto">
+                                <div>
+                                    <label class="text-[8px] font-black uppercase text-slate-500 mb-1 block">Costo ($)</label>
+                                    <input type="number" value="${p.cost || 0}" onchange="updateProperty(${p.id}, 'cost', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm">
                                 </div>
-                                <button onclick="deleteProduct(${p.id})" class="w-full bg-red-100 text-red-600 py-2 rounded-xl text-xs font-black uppercase hover:bg-red-600 hover:text-white transition-colors">Eliminar</button>
+                                <div>
+                                    <label class="text-[8px] font-black uppercase text-slate-500 mb-1 block">Precio ($)</label>
+                                    <input type="number" value="${p.price}" onchange="updateProperty(${p.id}, 'price', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[8px] font-black uppercase text-slate-500 mb-1 block">Stock</label>
+                                    <input type="number" value="${p.stock}" onchange="updateProperty(${p.id}, 'stock', this.value)" class="w-full bg-white border-2 border-yellow-200 rounded-xl px-3 py-2 font-bold text-sm">
+                                </div>
                             </div>
-                        `}
-                        <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''} class="w-full mt-auto ${p.stock > 0 ? 'bg-slate-900 hover:bg-red-600' : 'bg-slate-300'} text-white font-black py-4 rounded-2xl transition-all uppercase text-sm shadow-lg active:scale-95">
-                            ${p.stock > 0 ? '¡Al Carrito! 🥊' : 'Agotado ❌'}
-                        </button>
-                    </div>
-                </div>`).join('');
+                        </div>
+                    </div>`).join('');
+            }
         }
 
         async function updateProperty(id, property, value) {
             const p = products.find(i => i.id === id);
             if (p) {
-                p[property] = (property === 'price' || property === 'stock') ? parseInt(value) : value;
+                p[property] = (property === 'price' || property === 'stock' || property === 'cost') ? parseInt(value) : value;
                 saveData(); renderProducts(); await syncDataToGitHub();
             }
         }
@@ -457,9 +623,167 @@
             }
         }
 
+        function renderOrders() {
+            const grid = document.getElementById('admin-orders-grid');
+            if (!grid) return;
+
+            if (orders.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-slate-500 font-bold py-10 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay pedidos registrados en la arena todavía.</div>';
+                return;
+            }
+
+            // Invertimos la lista para mostrar los más recientes arriba
+            grid.innerHTML = [...orders].reverse().map(o => {
+                const statusColors = {
+                    'Pendiente': 'bg-yellow-100 text-yellow-800 border-yellow-300',
+                    'Completado': 'bg-green-100 text-green-800 border-green-300',
+                    'Cancelado': 'bg-red-100 text-red-800 border-red-300',
+                    'Reembolsado': 'bg-purple-100 text-purple-800 border-purple-300'
+                };
+                const sc = statusColors[o.status] || statusColors['Pendiente'];
+
+                return `
+                <div class="bg-white rounded-[2rem] p-6 shadow-md border-2 border-slate-200 flex flex-col relative transition-all hover:shadow-xl">
+                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-black uppercase border-2 ${sc}">${o.status}</div>
+                    <h4 class="text-xl font-luck uppercase text-slate-900 mb-1 pr-24">#${o.id.toString().slice(-4)} - ${o.name}</h4>
+                    <p class="text-xs font-bold text-slate-500 mb-4"><i class="fas fa-clock mr-1"></i> ${o.date}</p>
+                    
+                    <div class="space-y-1 mb-4 text-xs font-bold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <p><i class="fas fa-phone-alt mr-2 text-slate-400"></i> ${o.phone}</p>
+                        <p><i class="fas fa-map-marker-alt mr-2 text-slate-400"></i> ${o.address}</p>
+                    </div>
+                    
+                    <div class="mb-4 flex-1">
+                        <h5 class="text-[10px] font-black uppercase text-slate-500 mb-2 border-b pb-1">Artículos:</h5>
+                        <ul class="space-y-1 text-xs font-bold text-slate-800">
+                            ${o.items.map(i => `<li><span class="text-red-600 mr-1">${i.qty}x</span> ${i.name}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 mb-4">
+                        <span class="text-[10px] font-black uppercase text-slate-500">Cobrado</span>
+                        <span class="text-2xl font-black text-red-600">$${o.total.toLocaleString()}</span>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <select onchange="updateOrderStatus(${o.id}, this.value)" class="flex-1 p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-red-500 cursor-pointer bg-slate-50">
+                            <option value="Pendiente" ${o.status === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+                            <option value="Completado" ${o.status === 'Completado' ? 'selected' : ''}>✅ Completado</option>
+                            <option value="Cancelado" ${o.status === 'Cancelado' ? 'selected' : ''}>❌ Cancelado</option>
+                            <option value="Reembolsado" ${o.status === 'Reembolsado' ? 'selected' : ''}>💸 Reembolsado</option>
+                        </select>
+                        <button onclick="deleteOrder(${o.id})" class="bg-red-100 text-red-600 px-4 rounded-xl hover:bg-red-600 hover:text-white transition-colors" title="Eliminar Pedido">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        async function updateOrderStatus(id, newStatus) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                order.status = newStatus;
+                saveData();
+                renderOrders();
+                renderReports();
+                await syncDataToGitHub();
+                showNotice(`Estado de pedido actualizado`, true);
+            }
+        }
+
+        async function deleteOrder(id) {
+            if(!confirm("¿Estás seguro de que deseas eliminar este pedido del historial?")) return;
+            orders = orders.filter(o => o.id !== id);
+            saveData();
+            renderOrders();
+            renderReports();
+            await syncDataToGitHub();
+            showNotice("Pedido Eliminado", true);
+        }
+
+        function renderReports() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let ingresosBrutos = 0;
+            let costoTotal = 0;
+            let pedidosCompletados = 0;
+            
+            // Datos para el gráfico de 7 días
+            const chartData = [0, 0, 0, 0, 0, 0, 0]; 
+
+            orders.forEach(o => {
+                if (o.status !== 'Completado') return; // Solo contamos ventas reales
+
+                const orderDate = new Date(o.id); // Usamos el ID (Date.now) como fecha exacta
+                const diffTime = today - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate());
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                // Cálculos del día de hoy
+                if (diffDays <= 0 && orderDate >= today) {
+                    ingresosBrutos += o.total;
+                    pedidosCompletados++;
+                    
+                    o.items.forEach(item => {
+                        let itemCost = item.cost;
+                        // Si es un pedido viejo sin costo guardado, buscamos el costo actual del producto
+                        if (itemCost === undefined) {
+                            const prod = products.find(p => p.name === item.name);
+                            itemCost = prod ? (prod.cost || 0) : 0;
+                        }
+                        costoTotal += (itemCost * item.qty);
+                    });
+                }
+
+                // Cálculos para el diagrama (Últimos 7 días)
+                const dayIndex = 6 - (orderDate >= today ? 0 : diffDays);
+                if (dayIndex >= 0 && dayIndex <= 6) {
+                    chartData[dayIndex] += o.total;
+                }
+            });
+
+            const gananciasNetas = ingresosBrutos - costoTotal;
+
+            // Actualizar Tarjetas DOM
+            const elBrutos = document.getElementById('report-brutos');
+            if(elBrutos) elBrutos.innerText = `$${ingresosBrutos.toLocaleString()}`;
+            
+            const elGanancias = document.getElementById('report-ganancias');
+            if(elGanancias) elGanancias.innerText = `$${gananciasNetas.toLocaleString()}`;
+            
+            const elCompletados = document.getElementById('report-completados');
+            if(elCompletados) elCompletados.innerText = pedidosCompletados;
+
+            // Dibujar Gráfico DOM
+            const chartContainer = document.getElementById('report-chart');
+            if(chartContainer) {
+                const maxVal = Math.max(...chartData, 1); // Evitar división por 0
+                
+                chartContainer.innerHTML = chartData.map((val, idx) => {
+                    const height = (val / maxVal) * 100;
+                    const d = new Date(today);
+                    d.setDate(d.getDate() - (6 - idx));
+                    const dayName = d.toLocaleDateString('es-CO', { weekday: 'short' });
+                    const isToday = idx === 6;
+                    
+                    return `
+                    <div class="flex flex-col items-center justify-end h-full w-10 sm:w-16">
+                        <div class="w-full ${isToday ? 'bg-red-500 hover:bg-red-400' : 'bg-slate-300 hover:bg-slate-400'} rounded-t-lg relative group transition-all duration-500 ease-out" style="height: ${Math.max(height, 2)}%">
+                            <div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] sm:text-xs font-bold px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none shadow-lg">
+                                $${val.toLocaleString()}
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-black uppercase mt-3 text-slate-500 ${isToday ? 'text-red-500' : ''}">${dayName}</span>
+                    </div>`;
+                }).join('');
+            }
+        }
+
         function saveData() {
             localStorage.setItem('bolis_ring_db', JSON.stringify(products));
             localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
+            localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
         }
 
         async function saveGitHubConfig() {
@@ -473,7 +797,9 @@
 
         function openSecurity() {
             if (isPromotor) return toggleAdminMode(false);
+            document.getElementById('pass-input').value = ""; // Limpiar campo
             document.getElementById('security-modal').style.display = 'flex';
+            document.getElementById('pass-input').focus();
         }
 
         function closeSecurity() { document.getElementById('security-modal').style.display = 'none'; }
@@ -484,19 +810,38 @@
             } else { showNotice("Clave Incorrecta ❌"); }
         }
 
+        // Permitir Enter en el modal
+        document.getElementById('pass-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') verifySecurity();
+        });
+
         function toggleAdminMode(activate) {
             isPromotor = activate;
-            document.body.classList.toggle('admin-active', isPromotor);
+            
+            // Alternar Vistas
+            document.getElementById('view-public').classList.toggle('hidden', isPromotor);
+            document.getElementById('view-admin').classList.toggle('hidden', !isPromotor);
+            
+            // Alternar Navbar y Tags
+            document.getElementById('nav-public-items').classList.toggle('hidden', isPromotor);
+            document.getElementById('nav-admin-items').classList.toggle('hidden', !isPromotor);
             document.getElementById('promotor-tag').classList.toggle('hidden', !isPromotor);
-            document.getElementById('sync-btn').classList.toggle('hidden', !isPromotor);
+            
             if (isPromotor) {
                 const cfg = getGHConfig();
                 document.getElementById('gh-token').value = cfg.token || '';
                 document.getElementById('gh-owner').value = cfg.owner || '';
                 document.getElementById('gh-repo').value = cfg.repo || '';
                 document.getElementById('gh-path').value = cfg.path;
+                switchAdminTab('admin-sec-reports'); // Ahora abre Reportes por defecto para ver ganancias al entrar
+                window.scrollTo(0,0);
+                showNotice("¡Modo Promotor Activado! 🛠️", true);
+            } else {
+                showNotice("De vuelta al Ring 🥊", true);
+                window.scrollTo(0,0);
             }
-            renderProducts(); renderPromos();
+            
+            renderProducts(); renderPromos(); renderOrders();
         }
 
         function addToCart(id) {
@@ -560,36 +905,64 @@
         }
 
         function goToCheckout() {
-            toggleCart(); document.getElementById('domicilio').classList.remove('hidden');
-            document.getElementById('domicilio').scrollIntoView({ behavior: 'smooth' });
+            toggleCart(); 
+            document.getElementById('checkout-modal').style.display = 'flex';
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').style.display = 'none';
         }
 
         function handleOrderSubmit(e) {
             e.preventDefault();
             const n = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
             const a = document.getElementById('cust-address').value;
             const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            
+            // Guardar el pedido internamente en el historial
+            const newOrder = {
+                id: Date.now(),
+                name: n,
+                phone: phone,
+                address: a,
+                items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, cost: i.cost || 0 })),
+                total: total,
+                status: 'Pendiente',
+                date: new Date().toLocaleString('es-CO')
+            };
+            orders.push(newOrder);
+            saveData();
+            syncDataToGitHub(); // Enviamos silenciosamente a GitHub
+            renderOrders();     // Actualizamos la interfaz de promotor por si acaso está abierta
+            renderReports();    // Actualizamos reportes también
+
+            // Construir el mensaje para WhatsApp
             let msg = `*PEDIDO BOLIS DEL RING* 🥊\n\n*Retador:* ${n}\n*Dirección:* ${a}\n\n*EQUIPO:*\n`;
             cart.forEach(i => msg += `• ${i.qty}x ${i.name}\n`);
             msg += `\n*TOTAL: $${total.toLocaleString()}*`;
+            
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-            cart = []; updateCartUI(); document.getElementById('domicilio').classList.add('hidden');
+            cart = []; updateCartUI(); closeCheckout();
         }
 
         async function addNewProduct() {
             const name = document.getElementById('new-name').value;
+            const cost = parseInt(document.getElementById('new-cost').value);
             const price = parseInt(document.getElementById('new-price').value);
             const stock = parseInt(document.getElementById('new-stock').value);
             const category = document.getElementById('new-category').value;
             const image = document.getElementById('new-image').value;
-            products.push({ id: Date.now(), name, price, stock, category, image, color: 'bg-slate-50' });
+            products.push({ id: Date.now(), name, cost, price, stock, category, image, color: 'bg-slate-50' });
             saveData(); renderProducts(); document.getElementById('add-product-form').reset();
             await syncDataToGitHub();
+            showNotice("¡Nuevo Luchador al Cuadrilátero! 🥊", true);
         }
 
         async function deleteProduct(id) {
             products = products.filter(p => p.id !== id);
             saveData(); renderProducts(); await syncDataToGitHub();
+            showNotice("Luchador Retirado", true);
         }
 
         async function addNewPromo() {
@@ -614,6 +987,21 @@
         async function deletePromo(index) {
             promos.splice(index, 1);
             saveData(); renderPromos(); await syncDataToGitHub();
+            showNotice("Evento Eliminado", true);
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-red-600', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-slate-100', 'text-slate-500');
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById(tabId.replace('admin-sec-', 'tab-btn-'));
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-slate-100', 'text-slate-500');
+                activeBtn.classList.add('bg-red-600', 'text-white', 'shadow-lg');
+            }
         }
 
         function showNotice(msg, isSuccess = false) {
@@ -626,7 +1014,7 @@
         }
 
         window.onload = async () => {
-            renderProducts(); renderPromos();
+            renderProducts(); renderPromos(); renderOrders(); renderReports();
             await syncDataFromGitHub();
             setInterval(renderPromos, 60000);
         };
