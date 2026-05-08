@@ -102,7 +102,25 @@
     }
   ],
   "promos": [],
-  "orders": [],
+  "orders": [
+    {
+      "id": 1778260834069,
+      "name": "Lu",
+      "phone": "3188243686",
+      "address": "Buenaventura ",
+      "items": [
+        {
+          "name": "Coco El Enmascarado",
+          "qty": 1,
+          "price": 2000,
+          "cost": 848
+        }
+      ],
+      "total": 2000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 12:20:34 p. m."
+    }
+  ],
   "workers": [
     {
       "id": "1778259504565",
