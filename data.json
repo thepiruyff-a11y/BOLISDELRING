@@ -192,6 +192,45 @@
       "total": 2000,
       "status": "Pendiente",
       "date": "8/5/2026, 1:05:24 p. m."
+    },
+    {
+      "id": 1778263638866,
+      "name": "Lu",
+      "phone": "3188243686",
+      "address": "Buenaventura ",
+      "items": [
+        {
+          "name": "UVA",
+          "qty": 2,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        },
+        {
+          "name": "MARACUYA",
+          "qty": 3,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        },
+        {
+          "name": "PIÑA",
+          "qty": 1,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        },
+        {
+          "name": "NARANJA",
+          "qty": 1,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        }
+      ],
+      "total": 14000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 1:07:18 p. m."
     }
   ],
   "workers": [
