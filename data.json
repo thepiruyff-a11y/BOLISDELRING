@@ -14,7 +14,7 @@
       "id": 4,
       "name": "Coco El Enmascarado",
       "price": 2000,
-      "stock": 5,
+      "stock": 2,
       "category": "Técnico",
       "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
       "color": "bg-slate-50",
@@ -118,7 +118,7 @@
         }
       ],
       "total": 6000,
-      "status": "Pendiente",
+      "status": "Completado",
       "date": "8/5/2026, 5:13:56 p. m."
     }
   ],
