@@ -7,13 +7,14 @@
       "stock": 0,
       "category": "Rudo",
       "image": "https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg",
-      "color": "bg-orange-50"
+      "color": "bg-orange-50",
+      "cost": 848
     },
     {
       "id": 4,
       "name": "Coco El Enmascarado",
       "price": 2000,
-      "stock": 18,
+      "stock": 10,
       "category": "Técnico",
       "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
       "color": "bg-slate-50",
@@ -36,7 +37,8 @@
       "stock": 10,
       "category": "Técnico",
       "image": "https://i.postimg.cc/ZnwYLmtN/c1b49da1-d979-4f90-a3f1-7a65cedf748c.jpg",
-      "color": "bg-slate-50"
+      "color": "bg-slate-50",
+      "cost": 848
     },
     {
       "id": 1778169324158,
@@ -45,7 +47,8 @@
       "stock": 10,
       "category": "Rudo",
       "image": "https://i.postimg.cc/R01BRmKR/55917265-71c7-4857-9e9b-20a9af948c39.jpg",
-      "color": "bg-slate-50"
+      "color": "bg-slate-50",
+      "cost": 848
     },
     {
       "id": 1778169337665,
@@ -54,7 +57,8 @@
       "stock": 10,
       "category": "Rudo",
       "image": "https://i.postimg.cc/HxPP0vvW/306ec7d5-2e25-49dd-9e4d-01f19cce4ca0.jpg",
-      "color": "bg-slate-50"
+      "color": "bg-slate-50",
+      "cost": 848
     },
     {
       "id": 1778169351406,
@@ -63,7 +67,8 @@
       "stock": 10,
       "category": "Rudo",
       "image": "https://i.postimg.cc/MGfD2Z9k/c9897761-341b-4afc-8148-53fb0c1ab63b.jpg",
-      "color": "bg-slate-50"
+      "color": "bg-slate-50",
+      "cost": 848
     },
     {
       "id": 1778169361237,
@@ -72,7 +77,8 @@
       "stock": 10,
       "category": "Rudo",
       "image": "https://i.postimg.cc/RF9nsv8w/07931b69-3faa-40ea-ac84-4052aa03e81a.jpg",
-      "color": "bg-slate-50"
+      "color": "bg-slate-50",
+      "cost": 848
     },
     {
       "id": 1778169370699,
@@ -81,7 +87,8 @@
       "stock": 10,
       "category": "Rudo",
       "image": "https://i.postimg.cc/3w9Kh7NX/8972928b-46ed-4a56-bfa9-29e549ffc444.jpg",
-      "color": "bg-slate-50"
+      "color": "bg-slate-50",
+      "cost": 848
     },
     {
       "id": 1778169382661,
@@ -90,7 +97,8 @@
       "stock": 10,
       "category": "Rudo",
       "image": "https://i.postimg.cc/d1ktjpQ9/240009be-118d-4591-b3dd-f56c5caa9ef2.jpg",
-      "color": "bg-slate-50"
+      "color": "bg-slate-50",
+      "cost": 848
     }
   ],
   "promos": [],
