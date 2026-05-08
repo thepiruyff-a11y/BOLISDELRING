@@ -236,7 +236,10 @@
             <section id="admin-sec-reports" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
                 <div class="flex justify-between items-end mb-8">
                     <h3 class="text-3xl font-luck text-slate-800 uppercase"><i class="fas fa-chart-bar mr-2"></i> Reporte Financiero</h3>
-                    <button onclick="renderReports()" class="bg-white text-slate-600 p-2 rounded-lg shadow hover:text-blue-600 transition-colors" title="Actualizar Informes"><i class="fas fa-sync-alt"></i></button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openReportSender()" class="bg-green-100 text-green-700 p-2 rounded-lg shadow hover:bg-green-600 hover:text-white transition-colors flex items-center gap-2 font-bold text-xs uppercase" title="Enviar Informe por WhatsApp"><i class="fab fa-whatsapp text-lg"></i> Enviar</button>
+                        <button onclick="renderReports()" class="bg-white text-slate-600 p-2 rounded-lg shadow hover:text-blue-600 transition-colors" title="Actualizar Informes"><i class="fas fa-sync-alt"></i></button>
+                    </div>
                 </div>
                 
                 <!-- Tarjetas de Resumen (Hoy) -->
@@ -398,6 +401,25 @@
             <div class="flex gap-3">
                 <button onclick="closeAdminSecurity()" class="flex-1 bg-slate-100 text-slate-500 py-3 rounded-xl font-black uppercase text-sm">Cancelar</button>
                 <button onclick="submitAdminSecurity()" class="flex-1 bg-amber-500 text-slate-900 py-3 rounded-xl font-black uppercase text-sm shadow-lg">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Enviar Informe -->
+    <div id="report-modal" style="display: none;" class="fixed inset-0 z-[200] bg-black/85 backdrop-blur-sm p-4 items-center justify-center">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl border-4 border-green-500 max-w-xs w-full text-center">
+            <h4 class="font-luck text-3xl mb-1 text-slate-900 uppercase">Enviar Informe</h4>
+            <p class="text-xs font-bold text-slate-500 mb-4">Selecciona las opciones</p>
+            <select id="report-type" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-green-500 mb-3 bg-slate-50 cursor-pointer">
+                <option value="diario">📅 Informe Diario (Hoy)</option>
+                <option value="semanal">🗓️ Informe Semanal (Últ. 7 días)</option>
+            </select>
+            <select id="report-admin" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-green-500 mb-6 bg-slate-50 cursor-pointer">
+                <!-- Se llena con JS -->
+            </select>
+            <div class="flex gap-3">
+                <button onclick="closeReportSender()" class="flex-1 bg-slate-100 text-slate-500 py-3 rounded-xl font-black uppercase text-sm">Cancelar</button>
+                <button onclick="sendReport()" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-black uppercase text-sm shadow-lg hover:bg-green-600 transition-colors">Enviar <i class="fab fa-whatsapp"></i></button>
             </div>
         </div>
     </div>
@@ -920,6 +942,76 @@
                 }).join('');
             }
         }
+
+        // --- ENVIAR INFORMES POR WHATSAPP --- //
+        function openReportSender() {
+            const selectAdmin = document.getElementById('report-admin');
+            // Llenar el select de destinatarios automáticamente con los administradores
+            selectAdmin.innerHTML = admins.map(a => `<option value="${a.phone}">${a.name} (${a.phone})</option>`).join('');
+            document.getElementById('report-modal').style.display = 'flex';
+        }
+
+        function closeReportSender() {
+            document.getElementById('report-modal').style.display = 'none';
+        }
+
+        function sendReport() {
+            const type = document.getElementById('report-type').value;
+            const phone = document.getElementById('report-admin').value.replace(/\D/g, ''); // Limpiar símbolos del número
+            
+            if(!phone) {
+                showNotice("Error con el número de Admin", false);
+                return;
+            }
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            let ingresosBrutos = 0;
+            let costoTotal = 0;
+            let pedidosCompletados = 0;
+            let diasLimite = type === 'diario' ? 0 : 6; // 0 = solo hoy, 6 = hoy + últimos 6 días
+
+            orders.forEach(o => {
+                if (o.status !== 'Completado') return; // Excluimos pendientes o cancelados
+
+                const orderDate = new Date(o.id);
+                const diffTime = today - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate());
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                // Si entra en el rango de fechas que pedimos (hoy o ultimos 7 dias)
+                if (diffDays >= 0 && diffDays <= diasLimite) {
+                    ingresosBrutos += o.total;
+                    pedidosCompletados++;
+                    
+                    o.items.forEach(item => {
+                        let itemCost = item.cost;
+                        // Si es un pedido viejo sin costo guardado, lo buscamos en el producto actual
+                        if (itemCost === undefined) {
+                            const prod = products.find(p => p.name === item.name);
+                            itemCost = prod ? (prod.cost || 0) : 0;
+                        }
+                        costoTotal += (itemCost * item.qty);
+                    });
+                }
+            });
+
+            const gananciasNetas = ingresosBrutos - costoTotal;
+            const titulo = type === 'diario' ? 'DIARIO (Hoy)' : 'SEMANAL (Últ. 7 días)';
+
+            // Construir el mensaje de WhatsApp
+            let msg = `*📊 REPORTE FINANCIERO ${titulo}* 🥊\n\n`;
+            msg += `*📦 Pedidos Completados:* ${pedidosCompletados}\n`;
+            msg += `*💵 Ingresos Brutos:* $${ingresosBrutos.toLocaleString()}\n`;
+            msg += `*📈 Ganancias Netas:* $${gananciasNetas.toLocaleString()}\n\n`;
+            msg += `_Generado desde Bolis del Ring App_`;
+
+            // Enviar a WhatsApp y cerrar modal
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+            closeReportSender();
+            showNotice("Enviando Informe...", true);
+        }
+        // --- FIN ENVIAR INFORMES --- //
 
         function saveData() {
             localStorage.setItem('bolis_ring_db', JSON.stringify(products));
