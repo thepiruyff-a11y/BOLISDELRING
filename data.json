@@ -14,7 +14,7 @@
       "id": 4,
       "name": "Coco El Enmascarado",
       "price": 2000,
-      "stock": 4,
+      "stock": 5,
       "category": "Técnico",
       "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
       "color": "bg-slate-50",
@@ -103,23 +103,6 @@
   ],
   "promos": [],
   "orders": [
-    {
-      "id": 1778260834069,
-      "name": "Lu",
-      "phone": "3188243686",
-      "address": "Buenaventura ",
-      "items": [
-        {
-          "name": "Coco El Enmascarado",
-          "qty": 1,
-          "price": 2000,
-          "cost": 848
-        }
-      ],
-      "total": 2000,
-      "status": "Completado",
-      "date": "8/5/2026, 12:20:34 p. m."
-    },
     {
       "id": 1778260966183,
       "name": "Lu",
