@@ -235,10 +235,30 @@
 
             <!-- Pedidos Admin -->
             <section id="admin-sec-orders" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
-                <div class="flex justify-between items-end mb-6">
+                <div class="flex justify-between items-end mb-4">
                     <h3 class="text-3xl font-luck text-slate-800 uppercase"><i class="fas fa-clipboard-list mr-2"></i> Control de Pedidos</h3>
                     <button onclick="renderOrders()" class="bg-white text-slate-600 p-2 rounded-lg shadow hover:text-blue-600 transition-colors" title="Actualizar Datos"><i class="fas fa-sync-alt"></i></button>
                 </div>
+                
+                <!-- Filtros de Pedidos -->
+                <div class="flex flex-wrap gap-2 mb-6 border-b-2 border-slate-300 pb-4">
+                    <button onclick="setOrderFilter('Todos')" data-order-status="Todos" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
+                        Todos <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                    </button>
+                    <button onclick="setOrderFilter('Pendiente')" data-order-status="Pendiente" class="order-filter-btn bg-yellow-400 text-yellow-900 shadow-md px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-yellow-300">
+                        Pendientes <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                    </button>
+                    <button onclick="setOrderFilter('Completado')" data-order-status="Completado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
+                        Completados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                    </button>
+                    <button onclick="setOrderFilter('Cancelado')" data-order-status="Cancelado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
+                        Cancelados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                    </button>
+                    <button onclick="setOrderFilter('Reembolsado')" data-order-status="Reembolsado" class="order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300">
+                        Reembolsados <span class="count-badge bg-black/10 px-2 py-0.5 rounded-full text-[10px]">0</span>
+                    </button>
+                </div>
+
                 <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </section>
 
@@ -542,6 +562,7 @@
         let purchases = JSON.parse(localStorage.getItem('bolis_ring_purchases')) || [];
         let cart = [];
         let currentFilter = 'Todos'; 
+        let currentOrderFilter = 'Pendiente'; // Filtro por defecto en el panel de pedidos
 
         // Variables globales para la selección de combo en el cliente
         let activeComboIndex = null;
@@ -856,16 +877,65 @@
             }
         }
 
+        // ====== GESTIÓN DE PEDIDOS Y FILTROS ====== //
+
+        function updateOrderFilterCounts() {
+            const counts = {
+                'Todos': orders.length,
+                'Pendiente': orders.filter(o => o.status === 'Pendiente').length,
+                'Completado': orders.filter(o => o.status === 'Completado').length,
+                'Cancelado': orders.filter(o => o.status === 'Cancelado').length,
+                'Reembolsado': orders.filter(o => o.status === 'Reembolsado').length
+            };
+            
+            document.querySelectorAll('.order-filter-btn').forEach(btn => {
+                const st = btn.dataset.orderStatus;
+                const badge = btn.querySelector('.count-badge');
+                if(badge) badge.innerText = counts[st];
+            });
+        }
+
+        function setOrderFilter(status) {
+            currentOrderFilter = status;
+            
+            document.querySelectorAll('.order-filter-btn').forEach(btn => {
+                const btnStatus = btn.dataset.orderStatus;
+                
+                // Reiniciar estilos al básico
+                btn.className = `order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300`;
+                
+                // Estilos Activos por cada estado
+                if (btnStatus === status) {
+                    btn.classList.remove('bg-slate-200', 'text-slate-600', 'hover:bg-slate-300');
+                    btn.classList.add('shadow-md');
+                    if (status === 'Todos') btn.classList.add('bg-slate-800', 'text-white');
+                    if (status === 'Pendiente') btn.classList.add('bg-yellow-400', 'text-yellow-900');
+                    if (status === 'Completado') btn.classList.add('bg-green-500', 'text-white');
+                    if (status === 'Cancelado') btn.classList.add('bg-red-500', 'text-white');
+                    if (status === 'Reembolsado') btn.classList.add('bg-purple-500', 'text-white');
+                }
+            });
+            
+            renderOrders();
+        }
+
         function renderOrders() {
             const grid = document.getElementById('admin-orders-grid');
             if (!grid) return;
 
-            if (orders.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center text-slate-500 font-bold py-10 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay pedidos registrados en la arena todavía.</div>';
+            updateOrderFilterCounts(); // Actualiza los números en las pestañas
+
+            let filteredOrders = orders;
+            if (currentOrderFilter !== 'Todos') {
+                filteredOrders = orders.filter(o => o.status === currentOrderFilter);
+            }
+
+            if (filteredOrders.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center text-slate-500 font-bold py-10 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay pedidos en la categoría: <span class="uppercase">${currentOrderFilter}</span>.</div>`;
                 return;
             }
 
-            grid.innerHTML = [...orders].reverse().map(o => {
+            grid.innerHTML = [...filteredOrders].reverse().map(o => {
                 const statusColors = {
                     'Pendiente': 'bg-yellow-100 text-yellow-800 border-yellow-300',
                     'Completado': 'bg-green-100 text-green-800 border-green-300',
@@ -973,7 +1043,7 @@
                 }
 
                 saveData();
-                renderOrders();
+                renderOrders(); // Se filtrará automáticamente a su nueva pestaña si no estás en "Todos"
                 renderProducts(); // Actualizamos la vista de la cartelera para reflejar el nuevo stock
                 renderReports();
                 await syncDataToGitHub();
