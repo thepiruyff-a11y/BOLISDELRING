@@ -92,5 +92,41 @@
     }
   ],
   "promos": [],
-  "orders": []
+  "orders": [
+    {
+      "id": 1778215469901,
+      "name": "jan",
+      "phone": "3025239510",
+      "address": "pampalinda",
+      "items": [
+        {
+          "name": "Mango El Justiciero",
+          "qty": 4,
+          "price": 2000,
+          "cost": 0
+        },
+        {
+          "name": "UVA",
+          "qty": 3,
+          "price": 2000,
+          "cost": 0
+        },
+        {
+          "name": "GUANABANA",
+          "qty": 1,
+          "price": 2000,
+          "cost": 0
+        },
+        {
+          "name": "LULO",
+          "qty": 1,
+          "price": 2000,
+          "cost": 0
+        }
+      ],
+      "total": 18000,
+      "status": "Pendiente",
+      "date": "7/5/2026, 11:44:29 p. m."
+    }
+  ]
 }
