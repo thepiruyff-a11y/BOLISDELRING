@@ -16,7 +16,8 @@
       "stock": 18,
       "category": "Técnico",
       "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
-      "color": "bg-slate-50"
+      "color": "bg-slate-50",
+      "cost": 848
     },
     {
       "id": 2,
