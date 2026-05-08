@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Maracumango El Rayo",
       "price": 2000,
-      "stock": 0,
+      "stock": 20,
       "category": "Rudo",
       "image": "https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg",
       "color": "bg-orange-50",
@@ -24,7 +24,7 @@
       "id": 2,
       "name": "Mango El Justiciero",
       "price": 2000,
-      "stock": 20,
+      "stock": 18,
       "category": "Rudo",
       "image": "https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg",
       "color": "bg-yellow-50",
@@ -34,7 +34,7 @@
       "id": 1778169292395,
       "name": "LULO",
       "price": 2000,
-      "stock": 10,
+      "stock": 9,
       "category": "Técnico",
       "image": "https://i.postimg.cc/ZnwYLmtN/c1b49da1-d979-4f90-a3f1-7a65cedf748c.jpg",
       "color": "bg-slate-50",
@@ -178,8 +178,53 @@
         }
       ],
       "total": 2000,
-      "status": "Pendiente",
+      "status": "Completado",
       "date": "8/5/2026, 1:05:24 p. m."
+    },
+    {
+      "id": 1778264096983,
+      "name": "Jheicol ",
+      "phone": "3205814355",
+      "address": "Calle 7",
+      "items": [
+        {
+          "name": "🔥 COMBO 2X1 <br><span class=\"text-[9px] text-slate-400 font-bold block mt-1 leading-tight\">(1x UVA, 1x LULO)</span>",
+          "qty": 1,
+          "price": 2000,
+          "cost": 0,
+          "flavors": [
+            {
+              "name": "UVA",
+              "qty": 1
+            },
+            {
+              "name": "LULO",
+              "qty": 1
+            }
+          ]
+        }
+      ],
+      "total": 2000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 1:14:56 p. m."
+    },
+    {
+      "id": 1778264466284,
+      "name": "Jheicol ",
+      "phone": "3205814355",
+      "address": "Calle 7",
+      "items": [
+        {
+          "name": "Maracumango El Rayo",
+          "qty": 1,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        }
+      ],
+      "total": 2000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 1:21:06 p. m."
     }
   ],
   "workers": [
@@ -217,6 +262,14 @@
       "qty": 2,
       "total": 1696,
       "date": "8/5/2026, 1:43:07 a. m."
+    },
+    {
+      "id": "1778264251927",
+      "productId": "1",
+      "productName": "Maracumango El Rayo",
+      "qty": 20,
+      "total": 16960,
+      "date": "8/5/2026, 1:17:31 p. m."
     }
   ]
 }
