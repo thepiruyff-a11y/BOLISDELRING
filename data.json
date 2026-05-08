@@ -225,6 +225,24 @@
       "total": 2000,
       "status": "Pendiente",
       "date": "8/5/2026, 1:21:06 p. m."
+    },
+    {
+      "id": 1778264580613,
+      "name": "Jan",
+      "phone": "3205814355",
+      "address": "Calle 7",
+      "items": [
+        {
+          "name": "Maracumango El Rayo",
+          "qty": 4,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        }
+      ],
+      "total": 8000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 1:23:00 p. m."
     }
   ],
   "workers": [
