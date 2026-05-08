@@ -21,7 +21,7 @@
         }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%); z-index: 1; }
         
-        #security-modal {
+        #security-modal, #combo-modal {
             display: none;
             position: fixed;
             inset: 0;
@@ -210,9 +210,10 @@
                             <form id="add-promo-form" class="space-y-3" onsubmit="event.preventDefault(); addNewPromo();">
                                 <input type="text" id="new-promo-name" placeholder="Nombre (Ej: Combo Mortal)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
                                 <input type="text" id="new-promo-desc" placeholder="Descripción breve" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
-                                <div class="flex gap-2">
-                                    <input type="number" id="new-promo-price" placeholder="Precio ($)" required class="w-1/2 p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
-                                    <input type="number" id="new-promo-old" placeholder="Normal ($)" required class="w-1/2 p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <input type="number" id="new-promo-price" placeholder="Precio ($)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                    <input type="number" id="new-promo-old" placeholder="Normal ($)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                    <input type="number" id="new-promo-qty" placeholder="Cant. Bolis" required min="1" value="1" class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm" title="¿Cuántos bolis incluye?">
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black uppercase mb-1 block">Finalización:</label>
@@ -400,6 +401,24 @@
     </div>
 
     <!-- Modales y Componentes Globales -->
+    
+    <!-- Modal Elección Combo (NUEVO) -->
+    <div id="combo-modal">
+        <div class="bg-white rounded-[2rem] p-8 shadow-2xl border-4 border-slate-900 max-w-sm w-full relative transform transition-all flex flex-col max-h-[90vh]">
+            <button onclick="closeComboModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-600 transition-colors"><i class="fas fa-times text-2xl"></i></button>
+            <div class="text-center mb-4 mt-2">
+                <h3 id="combo-modal-title" class="text-3xl font-luck text-slate-900 uppercase leading-none">Elige Sabores</h3>
+                <p id="combo-modal-desc" class="text-xs font-bold text-slate-500 mt-2 bg-slate-100 inline-block px-3 py-1 rounded-full">Seleccionados: 0 de X</p>
+            </div>
+            <div id="combo-flavors-list" class="flex-1 overflow-y-auto space-y-2 mb-4 pr-2">
+                <!-- Los sabores se llenan con JS -->
+            </div>
+            <button id="combo-confirm-btn" onclick="confirmCombo()" disabled class="w-full bg-red-600 disabled:bg-slate-300 text-white font-black py-4 rounded-xl text-lg uppercase tracking-wider transition-all shadow-lg active:scale-95">
+                Añadir Combo 🥊
+            </button>
+        </div>
+    </div>
+
     <div id="checkout-modal" style="display: none;" class="fixed inset-0 z-[150] bg-black/85 backdrop-blur-sm p-4 items-center justify-center">
         <div class="bg-white rounded-[2rem] p-8 shadow-2xl border-4 border-slate-900 max-w-md w-full relative transform transition-all">
             <button onclick="closeCheckout()" class="absolute top-4 right-4 text-slate-400 hover:text-red-600 transition-colors"><i class="fas fa-times text-2xl"></i></button>
@@ -489,9 +508,9 @@
         const PUBLIC_OWNER = "thepiruyff-a11y"; 
         const PUBLIC_REPO = "BOLISDELRING";  
         
-        // NUEVO: Token dividido para que los clientes puedan guardar pedidos en GitHub sin que se bloquee
-        const TOKEN_PARTE_1 = "ghp_W7ygthi6EL"; // Primera mitad del token
-        const TOKEN_PARTE_2 = "y8QbSTnvFYjkry0gF4T10zG4IJ"; // Segunda mitad del token
+        // Token dividido para que los clientes puedan guardar pedidos en GitHub sin que se bloquee
+        const TOKEN_PARTE_1 = "ghp_W7ygthi6EL"; 
+        const TOKEN_PARTE_2 = "y8QbSTnvFYjkry0gF4T10zG4IJ"; 
         const PUBLIC_TOKEN = TOKEN_PARTE_1 + TOKEN_PARTE_2;
         
         const CLAVE = "1.2.3";
@@ -504,9 +523,10 @@
             { id: 2, name: 'Mango "El Justiciero"', cost: 1000, price: 2000, stock: 20, category: 'Rudo', image: 'https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg', color: 'bg-yellow-50' }
         ];
 
+        // Añadida la variable "qty" para determinar cuántos bolis permite el combo
         const defaultPromos = [
-            { id: 101, name: 'Triángulo Infernal', desc: '3 bolis por precio de infarto.', price: 5000, oldPrice: 6000, color: 'from-yellow-400 to-orange-500', icon: 'fa-bolt', expiry: '' },
-            { id: 102, name: 'La Cuadrilla del Ring', desc: '6 bolis para todo el equipo.', price: 10000, oldPrice: 12000, color: 'from-red-600 to-red-800', icon: 'fa-fist-raised', expiry: '' }
+            { id: 101, name: 'Triángulo Infernal', desc: '3 bolis por precio de infarto.', price: 5000, oldPrice: 6000, qty: 3, color: 'from-yellow-400 to-orange-500', icon: 'fa-bolt', expiry: '' },
+            { id: 102, name: 'La Cuadrilla del Ring', desc: '6 bolis para todo el equipo.', price: 10000, oldPrice: 12000, qty: 6, color: 'from-red-600 to-red-800', icon: 'fa-fist-raised', expiry: '' }
         ];
 
         const defaultAdmins = [
@@ -521,7 +541,11 @@
         let admins = JSON.parse(localStorage.getItem('bolis_ring_admins')) || defaultAdmins;
         let purchases = JSON.parse(localStorage.getItem('bolis_ring_purchases')) || [];
         let cart = [];
-        let currentFilter = 'Todos'; // Estado inicial del filtro
+        let currentFilter = 'Todos'; 
+
+        // Variables globales para la selección de combo en el cliente
+        let activeComboIndex = null;
+        let activeComboSelection = {}; // Formato: { "id_producto": cantidad_elegida }
 
         function getGHConfig() {
             return {
@@ -642,17 +666,16 @@
             if (publicGrid) {
                 publicGrid.innerHTML = promos.map((p, index) => {
                     const timeLeft = getTimeRemaining(p.expiry);
-                    
-                    if (!p.expiry) return ''; // Ocultar sin fecha al público
+                    if (!p.expiry) return ''; 
 
                     return `
-                    <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white hover:scale-[1.02] cursor-pointer" onclick="addPromoToCart('${index}')">
+                    <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white hover:scale-[1.02] cursor-pointer" onclick="openComboModal('${index}')">
                         <div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform">
                             <i class="fas ${p.icon || 'fa-star'} text-[15rem]"></i>
                         </div>
                         <div class="relative z-10">
-                            <div class="flex justify-between items-start mb-4">
-                                <span class="bg-black/10 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black uppercase inline-block italic">Combo de Campeonato</span>
+                            <div class="flex justify-between items-start mb-4 gap-2 flex-wrap">
+                                <span class="bg-black/10 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black uppercase inline-block italic">Combo Especial</span>
                                 ${timeLeft ? `
                                     <span class="bg-red-600 text-white px-2 py-1 rounded-lg text-[10px] font-black animate-pulse">
                                         <i class="fas fa-clock mr-1"></i> CIERRA EN: ${timeLeft.days}d ${timeLeft.hours}h
@@ -660,7 +683,14 @@
                                 ` : ''}
                             </div>
                             <h4 class="text-4xl font-luck leading-none mb-2 italic uppercase">${p.name}</h4>
-                            <p class="font-bold text-sm mb-6 opacity-90">${p.desc}</p>
+                            <p class="font-bold text-sm mb-4 opacity-90">${p.desc}</p>
+                            
+                            <div class="mb-6">
+                                <span class="bg-blue-600/30 border border-blue-200/50 text-white px-3 py-1.5 rounded-lg text-xs font-black uppercase inline-block shadow-sm">
+                                    <i class="fas fa-box-open mr-1"></i> Incluye ${p.qty || 1} bolis a elección
+                                </span>
+                            </div>
+
                             <div class="flex items-end gap-3">
                                 <span class="text-5xl font-black">$${p.price.toLocaleString()}</span>
                                 <span class="text-xl line-through opacity-60 font-bold">$${p.oldPrice.toLocaleString()}</span>
@@ -673,8 +703,6 @@
             // Renderizado Vista Promotor
             if (adminGrid) {
                 adminGrid.innerHTML = promos.map((p, index) => {
-                    const timeLeft = getTimeRemaining(p.expiry);
-
                     return `
                     <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2rem] p-6 shadow-lg border-2 border-dashed border-slate-400 overflow-hidden">
                         <div class="relative z-10 space-y-3 bg-white/20 p-4 rounded-2xl border border-white/30 backdrop-blur-sm">
@@ -684,14 +712,19 @@
                             </div>
                             <input type="text" value="${p.name}" onchange="updatePromoProperty('${index}', 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre del Evento">
                             <textarea onchange="updatePromoProperty('${index}', 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-12" placeholder="Descripción">${p.desc}</textarea>
-                            <div class="grid grid-cols-2 gap-2">
+                            
+                            <div class="grid grid-cols-3 gap-2">
                                 <div>
-                                    <label class="text-white text-[9px] font-black uppercase block mb-1">Precio</label>
-                                    <input type="number" value="${p.price}" onchange="updatePromoProperty('${index}', 'price', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                                    <label class="text-white text-[8px] font-black uppercase block mb-1">Precio</label>
+                                    <input type="number" value="${p.price}" onchange="updatePromoProperty('${index}', 'price', this.value)" class="w-full bg-white/90 rounded-xl px-2 py-2 font-black text-xs text-slate-900">
                                 </div>
                                 <div>
-                                    <label class="text-white text-[9px] font-black uppercase block mb-1">Normal</label>
-                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty('${index}', 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900">
+                                    <label class="text-white text-[8px] font-black uppercase block mb-1">Normal</label>
+                                    <input type="number" value="${p.oldPrice}" onchange="updatePromoProperty('${index}', 'oldPrice', this.value)" class="w-full bg-white/90 rounded-xl px-2 py-2 font-black text-xs text-slate-900">
+                                </div>
+                                <div>
+                                    <label class="text-white text-[8px] font-black uppercase block mb-1">Cant. Bolis</label>
+                                    <input type="number" value="${p.qty || 1}" onchange="updatePromoProperty('${index}', 'qty', this.value)" min="1" class="w-full bg-white/90 rounded-xl px-2 py-2 font-black text-xs text-slate-900">
                                 </div>
                             </div>
                             <div>
@@ -718,7 +751,7 @@
                 }
             });
             
-            renderProducts(); // Volver a pintar la cartelera
+            renderProducts(); 
         }
 
         function renderProducts() {
@@ -727,13 +760,11 @@
 
             // Renderizado Vista Pública
             if (publicGrid) {
-                // 1. Filtrar los productos según la selección actual
                 let filteredProducts = products;
                 if (currentFilter !== 'Todos') {
                     filteredProducts = products.filter(p => p.category === currentFilter);
                 }
 
-                // 2. Ordenar para que los agotados queden automáticamente al final
                 const sortedPublic = [...filteredProducts].sort((a, b) => (a.stock > 0 ? -1 : 1) - (b.stock > 0 ? -1 : 1));
                 
                 if (sortedPublic.length === 0) {
@@ -763,13 +794,10 @@
 
             // Renderizado Vista Promotor
             if (adminGrid) {
-                // Separar inventario
                 const inStock = products.filter(p => p.stock > 0);
                 const outOfStock = products.filter(p => p.stock <= 0);
-                
                 let adminHTML = '';
 
-                // Plantilla de tarjeta de administración
                 const renderCard = (p) => `
                     <div class="bg-white rounded-[2rem] overflow-hidden shadow-md border-2 border-slate-200 flex flex-col h-full relative group ${p.stock <= 0 ? 'grayscale-[0.3]' : ''}">
                         <div class="absolute top-2 right-2 z-10">
@@ -799,13 +827,11 @@
                         </div>
                     </div>`;
 
-                // Agregar disponibles
                 if (inStock.length > 0) {
                     adminHTML += `<div class="col-span-full border-b-2 border-slate-300 pb-2 mb-2"><h4 class="text-xl font-luck text-slate-700 uppercase"><i class="fas fa-check-circle text-green-500 mr-2"></i> En el Cuadrilátero (Disponibles)</h4></div>`;
                     adminHTML += inStock.map(renderCard).join('');
                 }
                 
-                // Agregar agotados
                 if (outOfStock.length > 0) {
                     adminHTML += `<div class="col-span-full border-b-2 border-slate-300 pb-2 mb-2 ${inStock.length > 0 ? 'mt-6' : ''}"><h4 class="text-xl font-luck text-slate-700 uppercase"><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> K.O. (Agotados)</h4></div>`;
                     adminHTML += outOfStock.map(renderCard).join('');
@@ -825,7 +851,7 @@
 
         async function updatePromoProperty(idx, property, value) {
             if (promos[idx]) {
-                promos[idx][property] = (property === 'price' || property === 'oldPrice') ? parseInt(value) : value;
+                promos[idx][property] = (property === 'price' || property === 'oldPrice' || property === 'qty') ? parseInt(value) : value;
                 saveData(); renderPromos(); await syncDataToGitHub();
             }
         }
@@ -839,7 +865,6 @@
                 return;
             }
 
-            // Invertimos la lista para mostrar los más recientes arriba
             grid.innerHTML = [...orders].reverse().map(o => {
                 const statusColors = {
                     'Pendiente': 'bg-yellow-100 text-yellow-800 border-yellow-300',
@@ -864,8 +889,21 @@
                     
                     <div class="mb-4 flex-1">
                         <h5 class="text-[10px] font-black uppercase text-slate-500 mb-2 border-b pb-1">Artículos:</h5>
-                        <ul class="space-y-1 text-xs font-bold text-slate-800">
-                            ${o.items.map(i => `<li><span class="text-red-600 mr-1">${i.qty}x</span> ${i.name}</li>`).join('')}
+                        <ul class="space-y-2 text-[11px] font-bold text-slate-800">
+                            ${o.items.map(i => {
+                                // Extraer el nombre principal sin el HTML extra de los sabores
+                                let displayName = i.name.split('<br>')[0];
+                                
+                                // Formatear los sub-sabores si existen
+                                let flavorsHtml = '';
+                                if (i.flavors && i.flavors.length > 0) {
+                                    flavorsHtml = `<ul class="pl-4 mt-1 space-y-0.5 text-[10px] text-slate-500 border-l-2 border-slate-200 ml-1">` + 
+                                        i.flavors.map(f => `<li>• ${f.qty * i.qty}x ${f.name}</li>`).join('') + 
+                                        `</ul>`;
+                                }
+                                
+                                return `<li class="mb-1"><span class="text-red-600 mr-1">${i.qty}x</span> ${displayName} ${flavorsHtml}</li>`;
+                            }).join('')}
                         </ul>
                     </div>
                     
@@ -895,21 +933,41 @@
                 const oldStatus = order.status;
                 order.status = newStatus;
 
-                // Lógica de descuento/devolución de stock
+                // Lógica avanzada de stock (Soporta Combos)
                 if (oldStatus !== 'Completado' && newStatus === 'Completado') {
                     // Descontar stock del inventario
                     order.items.forEach(item => {
-                        const prod = products.find(p => p.name === item.name);
-                        if (prod && typeof prod.stock !== 'undefined') {
-                            prod.stock = Math.max(0, prod.stock - item.qty);
+                        if (item.flavors && item.flavors.length > 0) {
+                            // Si es un combo con sabores elegidos
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                if (prod && typeof prod.stock !== 'undefined') {
+                                    prod.stock = Math.max(0, prod.stock - (f.qty * item.qty));
+                                }
+                            });
+                        } else {
+                            // Producto normal
+                            const prod = products.find(p => p.name === item.name);
+                            if (prod && typeof prod.stock !== 'undefined') {
+                                prod.stock = Math.max(0, prod.stock - item.qty);
+                            }
                         }
                     });
                 } else if (oldStatus === 'Completado' && newStatus !== 'Completado') {
                     // Devolver stock al inventario
                     order.items.forEach(item => {
-                        const prod = products.find(p => p.name === item.name);
-                        if (prod && typeof prod.stock !== 'undefined') {
-                            prod.stock += item.qty;
+                        if (item.flavors && item.flavors.length > 0) {
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                if (prod && typeof prod.stock !== 'undefined') {
+                                    prod.stock += (f.qty * item.qty);
+                                }
+                            });
+                        } else {
+                            const prod = products.find(p => p.name === item.name);
+                            if (prod && typeof prod.stock !== 'undefined') {
+                                prod.stock += item.qty;
+                            }
                         }
                     });
                 }
@@ -930,12 +988,17 @@
             if (orderIndex > -1) {
                 const order = orders[orderIndex];
                 
-                // Si se elimina un pedido que estaba completado, devolvemos el stock
+                // Si se elimina un pedido completado, devolvemos el stock (Soporta combos)
                 if (order.status === 'Completado') {
                     order.items.forEach(item => {
-                        const prod = products.find(p => p.name === item.name);
-                        if (prod && typeof prod.stock !== 'undefined') {
-                            prod.stock += item.qty;
+                        if (item.flavors && item.flavors.length > 0) {
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                if (prod && typeof prod.stock !== 'undefined') prod.stock += (f.qty * item.qty);
+                            });
+                        } else {
+                            const prod = products.find(p => p.name === item.name);
+                            if (prod && typeof prod.stock !== 'undefined') prod.stock += item.qty;
                         }
                     });
                 }
@@ -943,7 +1006,7 @@
                 orders.splice(orderIndex, 1);
                 saveData();
                 renderOrders();
-                renderProducts(); // Actualizamos la vista de la cartelera
+                renderProducts(); 
                 renderReports();
                 await syncDataToGitHub();
                 showNotice("Pedido Eliminado", true);
@@ -959,42 +1022,49 @@
             let pedidosCompletados = 0;
             let gastosProveedor = 0;
             
-            // Datos para el gráfico de 7 días
             const chartData = [0, 0, 0, 0, 0, 0, 0]; 
 
             orders.forEach(o => {
-                if (o.status !== 'Completado') return; // Solo contamos ventas reales
+                if (o.status !== 'Completado') return; 
 
-                const orderDate = new Date(Number(o.id)); // CORRECCIÓN: Aseguramos que lea el ID como Número
+                const orderDate = new Date(Number(o.id)); 
                 const diffTime = today.getTime() - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()).getTime();
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); // CORRECCIÓN: Math.round evita errores de zona horaria
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
 
-                // Cálculos del día de hoy
                 if (diffDays === 0) {
                     ingresosBrutos += o.total;
                     pedidosCompletados++;
                     
                     o.items.forEach(item => {
-                        let itemCost = item.cost;
-                        // Si es un pedido viejo sin costo guardado, buscamos el costo actual del producto
-                        if (itemCost === undefined) {
-                            const prod = products.find(p => p.name === item.name);
-                            itemCost = prod ? (prod.cost || 0) : 0;
+                        // REVISIÓN DEL CÁLCULO DE COSTO PARA INCLUIR SABORES DE COMBOS
+                        if (item.flavors && item.flavors.length > 0) {
+                            // Sumar el costo individual de cada sabor seleccionado dentro del combo
+                            let comboCost = 0;
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                comboCost += (prod ? (prod.cost || 0) : 0) * f.qty;
+                            });
+                            costoTotal += (comboCost * item.qty);
+                        } else {
+                            // Producto normal
+                            let itemCost = item.cost;
+                            if (itemCost === undefined || itemCost === 0) {
+                                const prod = products.find(p => p.name === item.name);
+                                itemCost = prod ? (prod.cost || 0) : 0;
+                            }
+                            costoTotal += (itemCost * item.qty);
                         }
-                        costoTotal += (itemCost * item.qty);
                     });
                 }
 
-                // Cálculos para el diagrama (Últimos 7 días)
                 const dayIndex = 6 - diffDays;
                 if (dayIndex >= 0 && dayIndex <= 6) {
                     chartData[dayIndex] += o.total;
                 }
             });
 
-            // Gastos de Proveedor de Hoy
             purchases.forEach(p => {
-                const pDate = new Date(Number(p.id)); // CORRECCIÓN: Aseguramos que lea el ID como Número
+                const pDate = new Date(Number(p.id)); 
                 const diffTime = today.getTime() - new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate()).getTime();
                 const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
                 
@@ -1005,7 +1075,6 @@
 
             const gananciasNetas = ingresosBrutos - costoTotal;
 
-            // Actualizar Tarjetas DOM
             const elBrutos = document.getElementById('report-brutos');
             if(elBrutos) elBrutos.innerText = `$${ingresosBrutos.toLocaleString()}`;
             
@@ -1018,10 +1087,9 @@
             const elCompletados = document.getElementById('report-completados');
             if(elCompletados) elCompletados.innerText = pedidosCompletados;
 
-            // Dibujar Gráfico DOM
             const chartContainer = document.getElementById('report-chart');
             if(chartContainer) {
-                const maxVal = Math.max(...chartData, 1); // Evitar división por 0
+                const maxVal = Math.max(...chartData, 1); 
                 
                 chartContainer.innerHTML = chartData.map((val, idx) => {
                     const height = (val / maxVal) * 100;
@@ -1043,10 +1111,8 @@
             }
         }
 
-        // --- ENVIAR INFORMES POR WHATSAPP --- //
         function openReportSender() {
             const listAdmin = document.getElementById('report-admin-list');
-            // Llenar la lista de destinatarios con checkboxes (marcados por defecto)
             listAdmin.innerHTML = admins.map(a => `
                 <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-slate-200 rounded-lg transition-colors">
                     <input type="checkbox" value="${a.phone}" class="admin-checkbox w-4 h-4 text-green-600 rounded focus:ring-green-500 cursor-pointer" checked>
@@ -1062,8 +1128,6 @@
 
         function sendReport() {
             const type = document.getElementById('report-type').value;
-            
-            // Obtener todos los checkboxes seleccionados
             const checkboxes = document.querySelectorAll('.admin-checkbox:checked');
             const phones = Array.from(checkboxes).map(cb => cb.value.replace(/\D/g, ''));
             
@@ -1079,36 +1143,44 @@
             let costoTotal = 0;
             let pedidosCompletados = 0;
             let gastosProveedor = 0;
-            let diasLimite = type === 'diario' ? 0 : 6; // 0 = solo hoy, 6 = hoy + últimos 6 días
+            let diasLimite = type === 'diario' ? 0 : 6; 
 
             orders.forEach(o => {
-                if (o.status !== 'Completado') return; // Excluimos pendientes o cancelados
+                if (o.status !== 'Completado') return; 
 
-                const orderDate = new Date(Number(o.id)); // CORRECCIÓN
+                const orderDate = new Date(Number(o.id)); 
                 const diffTime = today.getTime() - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()).getTime();
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); // CORRECCIÓN
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
 
-                // Si entra en el rango de fechas que pedimos (hoy o ultimos 7 dias)
                 if (diffDays >= 0 && diffDays <= diasLimite) {
                     ingresosBrutos += o.total;
                     pedidosCompletados++;
                     
                     o.items.forEach(item => {
-                        let itemCost = item.cost;
-                        // Si es un pedido viejo sin costo guardado, lo buscamos en el producto actual
-                        if (itemCost === undefined) {
-                            const prod = products.find(p => p.name === item.name);
-                            itemCost = prod ? (prod.cost || 0) : 0;
+                        // REVISIÓN DEL CÁLCULO DE COSTO DE COMBOS PARA WHATSAPP
+                        if (item.flavors && item.flavors.length > 0) {
+                            let comboCost = 0;
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                comboCost += (prod ? (prod.cost || 0) : 0) * f.qty;
+                            });
+                            costoTotal += (comboCost * item.qty);
+                        } else {
+                            let itemCost = item.cost;
+                            if (itemCost === undefined || itemCost === 0) {
+                                const prod = products.find(p => p.name === item.name);
+                                itemCost = prod ? (prod.cost || 0) : 0;
+                            }
+                            costoTotal += (itemCost * item.qty);
                         }
-                        costoTotal += (itemCost * item.qty);
                     });
                 }
             });
 
             purchases.forEach(p => {
-                const pDate = new Date(Number(p.id)); // CORRECCIÓN
+                const pDate = new Date(Number(p.id)); 
                 const diffTime = today.getTime() - new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate()).getTime();
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); // CORRECCIÓN
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
                 
                 if (diffDays >= 0 && diffDays <= diasLimite) {
                     gastosProveedor += p.total;
@@ -1118,7 +1190,6 @@
             const gananciasNetas = ingresosBrutos - costoTotal;
             const titulo = type === 'diario' ? 'DIARIO (Hoy)' : 'SEMANAL (Últ. 7 días)';
 
-            // Construir el mensaje de WhatsApp
             let msg = `*📊 REPORTE FINANCIERO ${titulo}* 🥊\n\n`;
             msg += `*📦 Pedidos Completados:* ${pedidosCompletados}\n`;
             msg += `*💵 Ingresos Brutos:* $${ingresosBrutos.toLocaleString()}\n`;
@@ -1126,13 +1197,11 @@
             msg += `*📈 Ganancias Netas:* $${gananciasNetas.toLocaleString()}\n\n`;
             msg += `_Generado desde Bolis del Ring App_`;
 
-            // Guardar la fecha en la que se envió el reporte diario para el recordatorio automático
             if (type === 'diario') {
                 const todayStr = new Date().toISOString().split('T')[0];
                 localStorage.setItem('bolis_ring_last_report', todayStr);
             }
 
-            // Enviar a WhatsApp a todos los seleccionados al mismo tiempo
             phones.forEach((phone, index) => {
                 window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, `_blank_${index}`);
             });
@@ -1140,7 +1209,6 @@
             closeReportSender();
             showNotice(`Enviando a ${phones.length} contacto(s)...`, true);
         }
-        // --- FIN ENVIAR INFORMES --- //
 
         function saveData() {
             localStorage.setItem('bolis_ring_db', JSON.stringify(products));
@@ -1162,7 +1230,7 @@
 
         function openSecurity() {
             if (isPromotor) return toggleAdminMode(false);
-            document.getElementById('pass-input').value = ""; // Limpiar campo
+            document.getElementById('pass-input').value = ""; 
             document.getElementById('security-modal').style.display = 'flex';
             document.getElementById('pass-input').focus();
         }
@@ -1175,12 +1243,10 @@
             } else { showNotice("Clave Incorrecta ❌"); }
         }
 
-        // Permitir Enter en el modal
         document.getElementById('pass-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') verifySecurity();
         });
 
-        // Lógica del Modal de Seguridad Admon
         let pendingAdminAction = null;
 
         function openAdminSecurity(callback) {
@@ -1197,11 +1263,8 @@
 
         function submitAdminSecurity() {
             if (document.getElementById('admin-pass-input').value === CLAVE) {
-                // Guardamos la acción antes de que closeAdminSecurity la borre
                 const accionAConfirmar = pendingAdminAction; 
                 closeAdminSecurity();
-                
-                // Ejecutamos la acción (abrir la pestaña o guardar el admin)
                 if (accionAConfirmar) accionAConfirmar();
             } else {
                 showNotice("Clave Incorrecta ❌");
@@ -1215,11 +1278,8 @@
         function toggleAdminMode(activate) {
             isPromotor = activate;
             
-            // Alternar Vistas
             document.getElementById('view-public').classList.toggle('hidden', isPromotor);
             document.getElementById('view-admin').classList.toggle('hidden', !isPromotor);
-            
-            // Alternar Navbar y Tags
             document.getElementById('nav-public-items').classList.toggle('hidden', isPromotor);
             document.getElementById('nav-admin-items').classList.toggle('hidden', !isPromotor);
             document.getElementById('promotor-tag').classList.toggle('hidden', !isPromotor);
@@ -1230,11 +1290,10 @@
                 document.getElementById('gh-owner').value = cfg.owner || '';
                 document.getElementById('gh-repo').value = cfg.repo || '';
                 document.getElementById('gh-path').value = cfg.path;
-                switchAdminTab('admin-sec-reports'); // Ahora abre Reportes por defecto para ver ganancias al entrar
+                switchAdminTab('admin-sec-reports'); 
                 window.scrollTo(0,0);
                 showNotice("¡Modo Promotor Activado! 🛠️", true);
 
-                // Anuncio sutil para inventario (Se muestra 3 segundos después del login)
                 const agotados = products.filter(p => p.stock <= 0).length;
                 if (agotados > 0) {
                     setTimeout(() => {
@@ -1242,7 +1301,6 @@
                     }, 3000);
                 }
 
-                // Asistente Automático: Revisar si ya se envió el reporte de hoy (Se muestra a los 6 segundos)
                 setTimeout(() => {
                     const lastReport = localStorage.getItem('bolis_ring_last_report');
                     const todayStr = new Date().toISOString().split('T')[0];
@@ -1263,18 +1321,146 @@
             renderProducts(); renderPromos(); renderOrders(); renderWorkers(); renderAdmins(); renderProvider();
         }
 
+        // ====== LÓGICA DE SELECCIÓN DE COMBOS ====== //
+        function openComboModal(idx) {
+            activeComboIndex = idx;
+            activeComboSelection = {};
+            const promo = promos[idx];
+            
+            document.getElementById('combo-modal-title').innerText = promo.name;
+            document.getElementById('combo-modal').style.display = 'flex';
+            
+            renderComboFlavors();
+        }
+
+        function closeComboModal() {
+            document.getElementById('combo-modal').style.display = 'none';
+        }
+
+        function renderComboFlavors() {
+            const promo = promos[activeComboIndex];
+            const maxQty = promo.qty || 1;
+            let currentTotal = Object.values(activeComboSelection).reduce((a, b) => a + b, 0);
+            
+            document.getElementById('combo-modal-desc').innerText = `Seleccionados: ${currentTotal} de ${maxQty} bolis`;
+            
+            const list = document.getElementById('combo-flavors-list');
+            const inStockProducts = products.filter(p => p.stock > 0);
+            
+            if(inStockProducts.length === 0) {
+                 list.innerHTML = `<p class="text-center text-red-500 font-bold py-6">No hay bolis en stock para armar este combo ❌</p>`;
+                 document.getElementById('combo-confirm-btn').disabled = true;
+                 return;
+            }
+
+            list.innerHTML = inStockProducts.map(p => {
+                const selQty = activeComboSelection[p.id] || 0;
+                const canAdd = (currentTotal < maxQty) && (selQty < p.stock);
+                
+                return `
+                <div class="flex items-center justify-between bg-slate-50 p-3 rounded-2xl border ${selQty > 0 ? 'border-red-400 bg-red-50' : 'border-slate-200'}">
+                    <div class="flex items-center gap-3">
+                        <img src="${p.image}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm" onerror="this.src='https://placehold.co/100x100/eee/999?text=Boli'">
+                        <div>
+                            <h5 class="text-xs font-black uppercase text-slate-800">${p.name}</h5>
+                            <span class="text-[9px] font-bold text-slate-500">Disponible: ${p.stock}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="updateComboFlavor('${p.id}', -1)" class="w-8 h-8 rounded-full bg-white text-slate-600 font-black shadow-sm flex items-center justify-center hover:bg-slate-200 ${selQty > 0 ? '' : 'opacity-30 pointer-events-none'}">-</button>
+                        <span class="font-black text-sm w-5 text-center">${selQty}</span>
+                        <button onclick="updateComboFlavor('${p.id}', 1)" class="w-8 h-8 rounded-full bg-white text-slate-600 font-black shadow-sm flex items-center justify-center hover:bg-slate-200 ${canAdd ? '' : 'opacity-30 pointer-events-none'}">+</button>
+                    </div>
+                </div>`;
+            }).join('');
+            
+            const btn = document.getElementById('combo-confirm-btn');
+            btn.disabled = currentTotal !== maxQty;
+            if (currentTotal === maxQty) {
+                btn.classList.add('animate-pulse');
+            } else {
+                btn.classList.remove('animate-pulse');
+            }
+        }
+
+        function updateComboFlavor(productId, delta) {
+            const promo = promos[activeComboIndex];
+            const maxQty = promo.qty || 1;
+            let currentTotal = Object.values(activeComboSelection).reduce((a, b) => a + b, 0);
+            
+            if (!activeComboSelection[productId]) activeComboSelection[productId] = 0;
+            
+            if (delta > 0) {
+                if (currentTotal < maxQty) {
+                    const prod = products.find(p => p.id.toString() === productId.toString());
+                    if (activeComboSelection[productId] < prod.stock) {
+                        activeComboSelection[productId]++;
+                    }
+                }
+            } else {
+                if (activeComboSelection[productId] > 0) {
+                    activeComboSelection[productId]--;
+                }
+            }
+            
+            if (activeComboSelection[productId] === 0) delete activeComboSelection[productId];
+            
+            renderComboFlavors();
+        }
+
+        function confirmCombo() {
+            const promo = promos[activeComboIndex];
+            
+            let flavorTexts = [];
+            let flavorData = []; 
+            
+            for (const [prodId, qty] of Object.entries(activeComboSelection)) {
+                const prod = products.find(p => p.id.toString() === prodId.toString());
+                flavorTexts.push(`${qty}x ${prod.name}`);
+                flavorData.push({ name: prod.name, qty: qty });
+            }
+            
+            const flavorStr = ` <br><span class="text-[9px] text-slate-400 font-bold block mt-1 leading-tight">(${flavorTexts.join(', ')})</span>`;
+            
+            const comboHash = Object.entries(activeComboSelection).sort().map(e => `${e[0]}-${e[1]}`).join('_');
+            const cartItemId = `p-${promo.id}-${comboHash}`;
+            
+            const item = cart.find(i => i.id === cartItemId);
+            if (item) {
+                item.qty++;
+            } else {
+                cart.push({ 
+                    id: cartItemId, 
+                    name: `🔥 ${promo.name}${flavorStr}`, 
+                    price: promo.price, 
+                    qty: 1,
+                    flavors: flavorData 
+                });
+            }
+            
+            updateCartUI();
+            closeComboModal();
+            showNotice(`${promo.name} preparado 🏆`, true);
+        }
+        // =========================================== //
+
         function addToCart(id) {
             const p = products.find(i => i.id.toString() === id.toString());
             if (!p || p.stock <= 0) return;
-            const item = cart.find(i => i.id === id);
-            if (item) item.qty++; else cart.push({ ...p, qty: 1 });
-            updateCartUI(); showNotice(`${p.name} al equipo 🥊`);
-        }
-
-        function addPromoToCart(idx) {
-            const promo = promos[idx];
-            cart.push({ id: `p-${Date.now()}`, name: `🔥 ${promo.name}`, price: promo.price, qty: 1 });
-            updateCartUI(); showNotice(`${promo.name} agregado! 🏆`, true);
+            
+            const item = cart.find(i => i.id.toString() === id.toString());
+            
+            if (item) {
+                if (item.qty >= p.stock) {
+                    showNotice(`¡Solo quedan ${p.stock} en el ring! 🛑`, false);
+                    return;
+                }
+                item.qty++; 
+            } else {
+                cart.push({ ...p, qty: 1 });
+            }
+            
+            updateCartUI(); showNotice(`${p.name} al equipo 🥊`, true);
         }
 
         function updateCartUI() {
@@ -1293,13 +1479,13 @@
                     total += item.price * item.qty;
                     return `<div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200">
                         <div class="flex-1">
-                            <h5 class="text-[10px] font-black uppercase text-slate-500">${item.name}</h5>
-                            <p class="text-xs font-bold text-red-600">$${(item.price * item.qty).toLocaleString()}</p>
+                            <h5 class="text-[10px] font-black uppercase text-slate-600 leading-tight">${item.name}</h5>
+                            <p class="text-xs font-bold text-red-600 mt-1">$${(item.price * item.qty).toLocaleString()}</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="updateCartQty(${idx}, -1)" class="w-6 h-6 text-slate-400 font-black">-</button>
-                            <span class="font-black text-xs text-center">${item.qty}</span>
-                            <button onclick="updateCartQty(${idx}, 1)" class="w-6 h-6 text-slate-400 font-black">+</button>
+                            <button onclick="updateCartQty(${idx}, -1)" class="w-6 h-6 bg-slate-200 rounded-full text-slate-600 font-black hover:bg-slate-300">-</button>
+                            <span class="font-black text-xs text-center w-3">${item.qty}</span>
+                            <button onclick="updateCartQty(${idx}, 1)" class="w-6 h-6 bg-slate-200 rounded-full text-slate-600 font-black hover:bg-slate-300">+</button>
                         </div>
                     </div>`;
                 }).join('');
@@ -1310,6 +1496,29 @@
         }
 
         function updateCartQty(idx, delta) {
+            const cartItem = cart[idx];
+            
+            if (delta > 0) {
+                if (cartItem.flavors) {
+                    let canAdd = true;
+                    for (const f of cartItem.flavors) {
+                        const p = products.find(prod => prod.name === f.name);
+                        if (p && (f.qty * (cartItem.qty + 1)) > p.stock) {
+                            showNotice(`¡Faltan ${f.name} en stock! 🛑`, false);
+                            canAdd = false;
+                            break;
+                        }
+                    }
+                    if (!canAdd) return;
+                } else if (!cartItem.id.toString().startsWith('p-')) {
+                    const p = products.find(i => i.id.toString() === cartItem.id.toString());
+                    if (p && cartItem.qty >= p.stock) {
+                        showNotice(`¡Stock máximo alcanzado! 🛑`, false);
+                        return;
+                    }
+                }
+            }
+
             cart[idx].qty += delta;
             if (cart[idx].qty <= 0) cart.splice(idx, 1);
             updateCartUI();
@@ -1339,23 +1548,26 @@
             const a = document.getElementById('cust-address').value;
             const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
             
-            // Cambiar el botón a estado de carga para que el usuario espere
             const btn = e.target.querySelector('button[type="submit"]');
             const originalBtnText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> ENVIANDO A LA NUBE...';
             btn.disabled = true;
 
             try {
-                // 1. Descargar la última base de datos ANTES de guardar (vital para no borrar otros pedidos)
                 await syncDataFromGitHub();
 
-                // 2. Guardar el pedido internamente en el historial actualizado
                 const newOrder = {
                     id: Date.now(),
                     name: n,
                     phone: phone,
                     address: a,
-                    items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, cost: i.cost || 0 })),
+                    items: cart.map(i => ({ 
+                        name: i.name, 
+                        qty: i.qty, 
+                        price: i.price, 
+                        cost: i.cost || 0,
+                        flavors: i.flavors || null 
+                    })),
                     total: total,
                     status: 'Pendiente',
                     date: new Date().toLocaleString('es-CO')
@@ -1363,26 +1575,31 @@
                 orders.push(newOrder);
                 saveData();
                 
-                // 3. Subir la base de datos a GitHub de forma silenciosa
                 await syncDataToGitHub(); 
                 
                 renderOrders();     
                 renderReports();    
 
-                // Asignación de trabajador (aleatoria para distribuir pedidos si hay varios)
                 let deliveryPhone = WHATSAPP_NUMBER;
                 if (workers && workers.length > 0) {
                     const assignedWorker = workers[Math.floor(Math.random() * workers.length)];
-                    deliveryPhone = assignedWorker.phone.replace(/\D/g, ''); // Limpiar el número de espacios o símbolos
+                    deliveryPhone = assignedWorker.phone.replace(/\D/g, ''); 
                 } else if (admins && admins.length > 0) {
-                    // Si no hay trabajadores, le llega a uno de los administradores (Jerónimo o Jan Carlos)
                     const assignedAdmin = admins[Math.floor(Math.random() * admins.length)];
                     deliveryPhone = assignedAdmin.phone.replace(/\D/g, ''); 
                 }
 
-                // Construir el mensaje para WhatsApp
+                // MEJORADO EL MENSAJE PARA WHATSAPP (MUESTRA LOS SABORES ORDENADOS)
                 let msg = `*PEDIDO BOLIS DEL RING* 🥊\n\n*Retador:* ${n}\n*Dirección:* ${a}\n\n*EQUIPO:*\n`;
-                cart.forEach(i => msg += `• ${i.qty}x ${i.name}\n`);
+                cart.forEach(i => {
+                    const cleanName = i.name.split('<br>')[0].trim();
+                    msg += `• ${i.qty}x ${cleanName}\n`;
+                    if (i.flavors && i.flavors.length > 0) {
+                        i.flavors.forEach(f => {
+                            msg += `   - ${f.qty * i.qty}x ${f.name}\n`;
+                        });
+                    }
+                });
                 msg += `\n*TOTAL: $${total.toLocaleString()}*`;
                 
                 window.open(`https://wa.me/${deliveryPhone}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -1391,7 +1608,6 @@
                 showNotice("Error al procesar el pedido", false);
                 console.error(err);
             } finally {
-                // Restaurar el botón
                 btn.innerHTML = originalBtnText;
                 btn.disabled = false;
             }
@@ -1421,11 +1637,12 @@
             const desc = document.getElementById('new-promo-desc').value;
             const price = parseInt(document.getElementById('new-promo-price').value);
             const oldPrice = parseInt(document.getElementById('new-promo-old').value);
+            const qty = parseInt(document.getElementById('new-promo-qty').value) || 1;
             const expiry = document.getElementById('new-promo-expiry').value;
             
             promos.push({
                 id: Date.now().toString(),
-                name, desc, price, oldPrice, expiry,
+                name, desc, price, oldPrice, qty, expiry,
                 color: 'from-slate-700 to-slate-900',
                 icon: 'fa-star'
             });
@@ -1483,8 +1700,6 @@
             showNotice("Trabajador Eliminado", true);
         }
 
-        // --- FUNCIONES DE ADMINISTRADORES (NUEVO) --- //
-
         function verifyAction(callback) {
             openAdminSecurity(callback);
         }
@@ -1528,7 +1743,7 @@
 
         async function editAdminPhone(id) {
             const admin = admins.find(a => a.id.toString() === id.toString());
-            if (!admin) return; // Prevención de errores si no lo encuentra
+            if (!admin) return; 
             
             const newPhone = prompt(`Ingresa el nuevo número de WhatsApp para ${admin.name}:`, admin.phone);
             if(newPhone && newPhone.trim() !== '') {
@@ -1541,13 +1756,11 @@
         }
 
         function deleteAdmin(id) {
-            // Buscamos el admin convirtiendo a string por seguridad
             const admin = admins.find(a => a.id.toString() === id.toString());
             if (!admin || admin.permanent) return; 
             
             if(!confirm(`¿Seguro que deseas eliminar a ${admin.name} de los administradores?`)) return;
             
-            // Requerimos la clave para completar la eliminación usando la ventana Modal
             verifyAction(async () => {
                 admins = admins.filter(a => a.id.toString() !== id.toString());
                 saveData();
@@ -1557,9 +1770,6 @@
             });
         }
 
-        // --- FIN FUNCIONES DE ADMINISTRADORES --- //
-
-        // --- FUNCIONES DE PROVEEDOR --- //
         function renderProvider() {
             const select = document.getElementById('purchase-product');
             if (select) {
@@ -1620,9 +1830,7 @@
                 const product = products.find(p => p.id.toString() === prodId);
                 
                 if (product) {
-                    // Actualizar stock
                     product.stock += qty;
-                    // Opcionalmente actualizar el costo unitario del producto si hubo un cambio
                     if(qty > 0 && total > 0) {
                         product.cost = Math.round(total / qty);
                     }
@@ -1670,17 +1878,14 @@
                 }
             });
         }
-        // --- FIN FUNCIONES DE PROVEEDOR --- //
 
         function switchAdminTab(tabId) {
-            // Validación de seguridad extra para entrar a la pestaña Admon
             if (tabId === 'admin-sec-admins') {
                 openAdminSecurity(() => {
                     performTabSwitch(tabId);
                 });
-                return; // Pausar cambio de pestaña hasta que se confirme la clave
+                return; 
             }
-            
             performTabSwitch(tabId);
         }
 
