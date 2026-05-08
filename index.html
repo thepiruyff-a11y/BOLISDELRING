@@ -166,6 +166,7 @@
                 <button onclick="switchAdminTab('admin-sec-promos')" id="tab-btn-promos" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-star mr-2"></i> Eventos</button>
                 <button onclick="switchAdminTab('admin-sec-orders')" id="tab-btn-orders" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-clipboard-list mr-2"></i> Pedidos</button>
                 <button onclick="switchAdminTab('admin-sec-reports')" id="tab-btn-reports" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-chart-bar mr-2"></i> Informes</button>
+                <button onclick="switchAdminTab('admin-sec-provider')" id="tab-btn-provider" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-truck-loading mr-2"></i> Proveedor</button>
                 <button onclick="switchAdminTab('admin-sec-workers')" id="tab-btn-workers" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-users mr-2"></i> Trabajadores</button>
                 <button onclick="switchAdminTab('admin-sec-admins')" id="tab-btn-admins" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-crown mr-2"></i> Admon</button>
                 <button onclick="switchAdminTab('admin-sec-github')" id="tab-btn-github" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fab fa-github mr-2"></i> Nube</button>
@@ -231,7 +232,7 @@
                 </div>
             </section>
 
-            <!-- Pedidos Admin (NUEVA SECCIÓN) -->
+            <!-- Pedidos Admin -->
             <section id="admin-sec-orders" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
                 <div class="flex justify-between items-end mb-6">
                     <h3 class="text-3xl font-luck text-slate-800 uppercase"><i class="fas fa-clipboard-list mr-2"></i> Control de Pedidos</h3>
@@ -240,7 +241,7 @@
                 <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </section>
 
-            <!-- Informes Admin (NUEVA SECCIÓN) -->
+            <!-- Informes Admin -->
             <section id="admin-sec-reports" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
                 <div class="flex justify-between items-end mb-8">
                     <h3 class="text-3xl font-luck text-slate-800 uppercase"><i class="fas fa-chart-bar mr-2"></i> Reporte Financiero</h3>
@@ -251,11 +252,16 @@
                 </div>
                 
                 <!-- Tarjetas de Resumen (Hoy) -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-[2rem] shadow-md border-2 border-slate-200 relative overflow-hidden">
                         <i class="fas fa-money-bill-wave absolute -right-4 -bottom-4 text-[6rem] text-slate-100"></i>
                         <h4 class="text-[10px] font-black uppercase text-slate-500 mb-2 relative z-10">Ingresos Brutos (Hoy)</h4>
                         <div id="report-brutos" class="text-4xl font-black text-slate-900 relative z-10">$0</div>
+                    </div>
+                    <div class="bg-teal-50 p-6 rounded-[2rem] shadow-md border-2 border-teal-200 relative overflow-hidden">
+                        <i class="fas fa-truck-loading absolute -right-4 -bottom-4 text-[6rem] text-teal-100"></i>
+                        <h4 class="text-[10px] font-black uppercase text-teal-600 mb-2 relative z-10">Inversión Proveedor (Hoy)</h4>
+                        <div id="report-proveedor" class="text-4xl font-black text-teal-700 relative z-10">$0</div>
                     </div>
                     <div class="bg-green-50 p-6 rounded-[2rem] shadow-md border-2 border-green-200 relative overflow-hidden">
                         <i class="fas fa-coins absolute -right-4 -bottom-4 text-[6rem] text-green-100"></i>
@@ -278,7 +284,36 @@
                 </div>
             </section>
 
-            <!-- Trabajadores Admin (NUEVA SECCIÓN) -->
+            <!-- Proveedor Admin -->
+            <section id="admin-sec-provider" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/3">
+                        <div class="bg-teal-600 rounded-[2rem] p-6 shadow-xl text-white border-b-8 border-teal-800 sticky top-24">
+                            <h3 class="text-2xl font-luck mb-4 uppercase"><i class="fas fa-truck-loading mr-2"></i> Nuevo Surtido</h3>
+                            <form id="add-purchase-form" class="space-y-3" onsubmit="event.preventDefault(); addPurchase();">
+                                <select id="purchase-product" required onchange="calcPurchaseTotal()" class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm cursor-pointer">
+                                    <!-- Se llena con JS -->
+                                </select>
+                                <div class="flex gap-2">
+                                    <input type="number" id="purchase-qty" placeholder="Cantidad" required min="1" oninput="calcPurchaseTotal()" class="w-1/2 p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                    <input type="number" id="purchase-total" placeholder="Costo Total ($)" required min="0" class="w-1/2 p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                </div>
+                                <button type="submit" class="w-full bg-yellow-400 text-slate-900 py-3 rounded-xl font-black hover:bg-white transition-all uppercase tracking-widest shadow-lg mt-2">
+                                    Registrar Compra
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="lg:w-2/3">
+                        <div class="flex justify-between items-end mb-4">
+                            <h3 class="text-3xl font-luck text-slate-800 uppercase">Historial de Surtido</h3>
+                        </div>
+                        <div id="admin-purchases-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trabajadores Admin -->
             <section id="admin-sec-workers" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
                 <div class="flex flex-col lg:flex-row gap-8">
                     <!-- Formulario Nuevo Trabajador -->
@@ -304,7 +339,7 @@
                 </div>
             </section>
 
-            <!-- Admon Admin (NUEVA SECCIÓN) -->
+            <!-- Admon Admin -->
             <section id="admin-sec-admins" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
                 <div class="flex flex-col lg:flex-row gap-8">
                     <div class="lg:w-1/3">
@@ -479,6 +514,7 @@
         let orders = JSON.parse(localStorage.getItem('bolis_ring_orders')) || [];
         let workers = JSON.parse(localStorage.getItem('bolis_ring_workers')) || [];
         let admins = JSON.parse(localStorage.getItem('bolis_ring_admins')) || defaultAdmins;
+        let purchases = JSON.parse(localStorage.getItem('bolis_ring_purchases')) || [];
         let cart = [];
         let currentFilter = 'Todos'; // Estado inicial del filtro
 
@@ -507,7 +543,7 @@
                     sha = data.sha;
                 }
 
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos, orders, workers, admins }, null, 2))));
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos, orders, workers, admins, purchases }, null, 2))));
                 const putRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${cfg.token}`, 'Content-Type': 'application/json' },
@@ -537,17 +573,20 @@
                     orders = decoded.orders || orders;
                     workers = decoded.workers || workers;
                     admins = decoded.admins || admins;
+                    purchases = decoded.purchases || purchases;
                     localStorage.setItem('bolis_ring_db', JSON.stringify(products));
                     localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
                     localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
                     localStorage.setItem('bolis_ring_workers', JSON.stringify(workers));
                     localStorage.setItem('bolis_ring_admins', JSON.stringify(admins));
+                    localStorage.setItem('bolis_ring_purchases', JSON.stringify(purchases));
                     renderProducts();
                     renderPromos();
                     renderOrders();
                     renderReports();
                     renderWorkers();
                     renderAdmins();
+                    renderProvider();
                 }
             } catch (err) { console.warn("Modo offline o repo no configurado."); }
             finally { if(icon) icon.classList.remove('sync-spinner'); }
@@ -911,6 +950,7 @@
             let ingresosBrutos = 0;
             let costoTotal = 0;
             let pedidosCompletados = 0;
+            let gastosProveedor = 0;
             
             // Datos para el gráfico de 7 días
             const chartData = [0, 0, 0, 0, 0, 0, 0]; 
@@ -918,12 +958,12 @@
             orders.forEach(o => {
                 if (o.status !== 'Completado') return; // Solo contamos ventas reales
 
-                const orderDate = new Date(o.id); // Usamos el ID (Date.now) como fecha exacta
-                const diffTime = today - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate());
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const orderDate = new Date(Number(o.id)); // CORRECCIÓN: Aseguramos que lea el ID como Número
+                const diffTime = today.getTime() - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()).getTime();
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); // CORRECCIÓN: Math.round evita errores de zona horaria
 
                 // Cálculos del día de hoy
-                if (diffDays <= 0 && orderDate >= today) {
+                if (diffDays === 0) {
                     ingresosBrutos += o.total;
                     pedidosCompletados++;
                     
@@ -939,9 +979,20 @@
                 }
 
                 // Cálculos para el diagrama (Últimos 7 días)
-                const dayIndex = 6 - (orderDate >= today ? 0 : diffDays);
+                const dayIndex = 6 - diffDays;
                 if (dayIndex >= 0 && dayIndex <= 6) {
                     chartData[dayIndex] += o.total;
+                }
+            });
+
+            // Gastos de Proveedor de Hoy
+            purchases.forEach(p => {
+                const pDate = new Date(Number(p.id)); // CORRECCIÓN: Aseguramos que lea el ID como Número
+                const diffTime = today.getTime() - new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate()).getTime();
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 0) {
+                    gastosProveedor += p.total;
                 }
             });
 
@@ -950,6 +1001,9 @@
             // Actualizar Tarjetas DOM
             const elBrutos = document.getElementById('report-brutos');
             if(elBrutos) elBrutos.innerText = `$${ingresosBrutos.toLocaleString()}`;
+            
+            const elProveedor = document.getElementById('report-proveedor');
+            if(elProveedor) elProveedor.innerText = `$${gastosProveedor.toLocaleString()}`;
             
             const elGanancias = document.getElementById('report-ganancias');
             if(elGanancias) elGanancias.innerText = `$${gananciasNetas.toLocaleString()}`;
@@ -1017,14 +1071,15 @@
             let ingresosBrutos = 0;
             let costoTotal = 0;
             let pedidosCompletados = 0;
+            let gastosProveedor = 0;
             let diasLimite = type === 'diario' ? 0 : 6; // 0 = solo hoy, 6 = hoy + últimos 6 días
 
             orders.forEach(o => {
                 if (o.status !== 'Completado') return; // Excluimos pendientes o cancelados
 
-                const orderDate = new Date(o.id);
-                const diffTime = today - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate());
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const orderDate = new Date(Number(o.id)); // CORRECCIÓN
+                const diffTime = today.getTime() - new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()).getTime();
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); // CORRECCIÓN
 
                 // Si entra en el rango de fechas que pedimos (hoy o ultimos 7 dias)
                 if (diffDays >= 0 && diffDays <= diasLimite) {
@@ -1043,6 +1098,16 @@
                 }
             });
 
+            purchases.forEach(p => {
+                const pDate = new Date(Number(p.id)); // CORRECCIÓN
+                const diffTime = today.getTime() - new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate()).getTime();
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); // CORRECCIÓN
+                
+                if (diffDays >= 0 && diffDays <= diasLimite) {
+                    gastosProveedor += p.total;
+                }
+            });
+
             const gananciasNetas = ingresosBrutos - costoTotal;
             const titulo = type === 'diario' ? 'DIARIO (Hoy)' : 'SEMANAL (Últ. 7 días)';
 
@@ -1050,6 +1115,7 @@
             let msg = `*📊 REPORTE FINANCIERO ${titulo}* 🥊\n\n`;
             msg += `*📦 Pedidos Completados:* ${pedidosCompletados}\n`;
             msg += `*💵 Ingresos Brutos:* $${ingresosBrutos.toLocaleString()}\n`;
+            msg += `*🛒 Inversión Proveedor:* $${gastosProveedor.toLocaleString()}\n`;
             msg += `*📈 Ganancias Netas:* $${gananciasNetas.toLocaleString()}\n\n`;
             msg += `_Generado desde Bolis del Ring App_`;
 
@@ -1075,6 +1141,7 @@
             localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
             localStorage.setItem('bolis_ring_workers', JSON.stringify(workers));
             localStorage.setItem('bolis_ring_admins', JSON.stringify(admins));
+            localStorage.setItem('bolis_ring_purchases', JSON.stringify(purchases));
         }
 
         async function saveGitHubConfig() {
@@ -1186,7 +1253,7 @@
                 window.scrollTo(0,0);
             }
             
-            renderProducts(); renderPromos(); renderOrders(); renderWorkers(); renderAdmins();
+            renderProducts(); renderPromos(); renderOrders(); renderWorkers(); renderAdmins(); renderProvider();
         }
 
         function addToCart(id) {
@@ -1464,6 +1531,119 @@
 
         // --- FIN FUNCIONES DE ADMINISTRADORES --- //
 
+        // --- FUNCIONES DE PROVEEDOR --- //
+        function renderProvider() {
+            const select = document.getElementById('purchase-product');
+            if (select) {
+                select.innerHTML = '<option value="">Selecciona un Luchador...</option>' + 
+                    products.map(p => `<option value="${p.id}" data-cost="${p.cost || 0}">${p.name} (Stock: ${p.stock})</option>`).join('');
+            }
+
+            const grid = document.getElementById('admin-purchases-grid');
+            if (!grid) return;
+            
+            if (purchases.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-slate-500 font-bold py-8 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay historial de compras al proveedor.</div>';
+                return;
+            }
+
+            grid.innerHTML = [...purchases].reverse().map(p => `
+                <div class="bg-white rounded-[2rem] p-6 shadow-md border-2 border-slate-200 flex flex-col transition-all hover:shadow-lg">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="text-[10px] font-black uppercase text-slate-500"><i class="fas fa-box text-teal-500 mr-1"></i> ${p.date}</h4>
+                        <span class="text-lg font-black text-slate-800">$${p.total.toLocaleString()}</span>
+                    </div>
+                    <h5 class="text-xl font-luck uppercase text-slate-800">${p.productName}</h5>
+                    <div class="flex justify-between items-end mt-auto pt-2 border-t border-slate-100">
+                        <p class="text-sm font-bold text-slate-600"><span class="text-red-600">+${p.qty}</span> unidades surtidas</p>
+                        <button onclick="deletePurchase('${p.id}')" class="text-red-400 hover:text-red-600 font-black text-xs uppercase bg-red-50 px-3 py-1 rounded-lg transition-colors" title="Deshacer compra y restar stock">
+                            Deshacer ↩
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function calcPurchaseTotal() {
+            const select = document.getElementById('purchase-product');
+            const qty = parseInt(document.getElementById('purchase-qty').value) || 0;
+            if (select && select.selectedIndex > 0) {
+                const cost = parseInt(select.options[select.selectedIndex].dataset.cost) || 0;
+                if(cost > 0 && qty > 0) {
+                    document.getElementById('purchase-total').value = cost * qty;
+                }
+            } else {
+                document.getElementById('purchase-total').value = '';
+            }
+        }
+
+        function addPurchase() {
+            verifyAction(async () => {
+                const select = document.getElementById('purchase-product');
+                const qty = parseInt(document.getElementById('purchase-qty').value);
+                const total = parseInt(document.getElementById('purchase-total').value);
+                
+                if (!select.value || qty <= 0 || total < 0) {
+                    showNotice("Revisa los datos de la compra", false);
+                    return;
+                }
+
+                const prodId = select.value;
+                const product = products.find(p => p.id.toString() === prodId);
+                
+                if (product) {
+                    // Actualizar stock
+                    product.stock += qty;
+                    // Opcionalmente actualizar el costo unitario del producto si hubo un cambio
+                    if(qty > 0 && total > 0) {
+                        product.cost = Math.round(total / qty);
+                    }
+                    
+                    purchases.push({
+                        id: Date.now().toString(),
+                        productId: prodId,
+                        productName: product.name,
+                        qty: qty,
+                        total: total,
+                        date: new Date().toLocaleString('es-CO')
+                    });
+
+                    saveData();
+                    renderProvider();
+                    renderProducts(); 
+                    renderReports();
+                    document.getElementById('add-purchase-form').reset();
+                    await syncDataToGitHub();
+                    showNotice("¡Inventario Surtido! 📦", true);
+                }
+            });
+        }
+
+        function deletePurchase(id) {
+            if(!confirm("¿Deseas deshacer esta compra? Se restará el stock añadido.")) return;
+            
+            verifyAction(async () => {
+                const pIndex = purchases.findIndex(p => p.id.toString() === id.toString());
+                if (pIndex > -1) {
+                    const purchase = purchases[pIndex];
+                    
+                    const product = products.find(p => p.id.toString() === purchase.productId);
+                    if (product) {
+                        product.stock = Math.max(0, product.stock - purchase.qty);
+                    }
+
+                    purchases.splice(pIndex, 1);
+                    saveData();
+                    renderProvider();
+                    renderProducts();
+                    renderReports();
+                    await syncDataToGitHub();
+                    showNotice("Compra Deshecha", true);
+                }
+            });
+        }
+        // --- FIN FUNCIONES DE PROVEEDOR --- //
+
         function switchAdminTab(tabId) {
             // Validación de seguridad extra para entrar a la pestaña Admon
             if (tabId === 'admin-sec-admins') {
@@ -1500,7 +1680,7 @@
         }
 
         window.onload = async () => {
-            renderProducts(); renderPromos(); renderOrders(); renderReports(); renderWorkers(); renderAdmins();
+            renderProducts(); renderPromos(); renderOrders(); renderReports(); renderWorkers(); renderAdmins(); renderProvider();
             await syncDataFromGitHub();
             setInterval(renderPromos, 60000);
         };
