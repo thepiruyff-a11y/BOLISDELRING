@@ -192,6 +192,33 @@
       "total": 2000,
       "status": "Pendiente",
       "date": "8/5/2026, 1:05:24 p. m."
+    },
+    {
+      "id": 1778264096983,
+      "name": "Jheicol ",
+      "phone": "3205814355",
+      "address": "Calle 7",
+      "items": [
+        {
+          "name": "🔥 COMBO 2X1 <br><span class=\"text-[9px] text-slate-400 font-bold block mt-1 leading-tight\">(1x UVA, 1x LULO)</span>",
+          "qty": 1,
+          "price": 2000,
+          "cost": 0,
+          "flavors": [
+            {
+              "name": "UVA",
+              "qty": 1
+            },
+            {
+              "name": "LULO",
+              "qty": 1
+            }
+          ]
+        }
+      ],
+      "total": 2000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 1:14:56 p. m."
     }
   ],
   "workers": [
