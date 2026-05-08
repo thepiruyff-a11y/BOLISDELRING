@@ -101,18 +101,7 @@
       "cost": 848
     }
   ],
-  "promos": [
-    {
-      "id": "1778261276646",
-      "name": "COMBO 2X1",
-      "desc": "3 BOLIS POR EL PRECIO DE 1",
-      "price": 2000,
-      "oldPrice": 4000,
-      "expiry": "2026-05-08T12:28",
-      "color": "from-slate-700 to-slate-900",
-      "icon": "fa-star"
-    }
-  ],
+  "promos": [],
   "orders": [
     {
       "id": 1778260834069,
