@@ -14,7 +14,7 @@
       "id": 4,
       "name": "Coco El Enmascarado",
       "price": 2000,
-      "stock": 2,
+      "stock": 5,
       "category": "Técnico",
       "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
       "color": "bg-slate-50",
@@ -102,26 +102,7 @@
     }
   ],
   "promos": [],
-  "orders": [
-    {
-      "id": 1778278436415,
-      "name": "Jan",
-      "phone": "3205814355",
-      "address": "Calle 7",
-      "items": [
-        {
-          "name": "Coco El Enmascarado",
-          "qty": 3,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        }
-      ],
-      "total": 6000,
-      "status": "Completado",
-      "date": "8/5/2026, 5:13:56 p. m."
-    }
-  ],
+  "orders": [],
   "workers": [
     {
       "id": "1778259504565",
