@@ -153,23 +153,6 @@
       "total": 8000,
       "status": "Completado",
       "date": "8/5/2026, 12:25:34 p. m."
-    },
-    {
-      "id": 1778261589742,
-      "name": "Lu",
-      "phone": "3188243686",
-      "address": "Buenaventura ",
-      "items": [
-        {
-          "name": "🔥 COMBO 2X1",
-          "qty": 1,
-          "price": 2000,
-          "cost": 0
-        }
-      ],
-      "total": 2000,
-      "status": "Pendiente",
-      "date": "8/5/2026, 12:33:09 p. m."
     }
   ],
   "workers": [
