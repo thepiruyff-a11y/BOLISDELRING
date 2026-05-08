@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Maracumango El Rayo",
       "price": 2000,
-      "stock": 0,
+      "stock": 2,
       "category": "Rudo",
       "image": "https://i.ytimg.com/vi/9qDS1wJY9ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD-rwbzRq8DMtMdIeZngaMR-zgrCg",
       "color": "bg-orange-50",
@@ -122,6 +122,16 @@
       "name": "jheicol",
       "phone": "573205814365",
       "permanent": false
+    }
+  ],
+  "purchases": [
+    {
+      "id": "1778222587666",
+      "productId": "1",
+      "productName": "Maracumango El Rayo",
+      "qty": 2,
+      "total": 1696,
+      "date": "8/5/2026, 1:43:07 a. m."
     }
   ]
 }
