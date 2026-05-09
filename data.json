@@ -111,7 +111,19 @@
       "color": "bg-slate-50"
     }
   ],
-  "promos": [],
+  "promos": [
+    {
+      "id": "1778298213995",
+      "name": "COMBO 2X1",
+      "desc": "2 bolis por el precio de 1",
+      "price": 2000,
+      "oldPrice": 4000,
+      "qty": 2,
+      "expiry": "2026-05-08T22:45",
+      "color": "from-slate-700 to-slate-900",
+      "icon": "fa-star"
+    }
+  ],
   "orders": [
     {
       "id": 1778297455805,
