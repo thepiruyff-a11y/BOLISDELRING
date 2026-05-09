@@ -149,6 +149,40 @@
       "total": 8000,
       "status": "Pendiente",
       "date": "8/5/2026, 10:30:55 p. m."
+    },
+    {
+      "id": 1778298252937,
+      "name": "jan",
+      "phone": "3025239510",
+      "address": "pampalinda",
+      "items": [
+        {
+          "name": "Coco El Enmascarado",
+          "qty": 5,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        },
+        {
+          "name": "🔥 COMBO 2X1 <br><span class=\"text-[9px] text-slate-400 font-bold block mt-1 leading-tight\">(1x LULO, 1x UVA)</span>",
+          "qty": 1,
+          "price": 2000,
+          "cost": 0,
+          "flavors": [
+            {
+              "name": "LULO",
+              "qty": 1
+            },
+            {
+              "name": "UVA",
+              "qty": 1
+            }
+          ]
+        }
+      ],
+      "total": 12000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 10:44:12 p. m."
     }
   ],
   "workers": [
