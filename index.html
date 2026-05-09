@@ -49,11 +49,6 @@
         
         <!-- Controles Públicos -->
         <div id="nav-public-items" class="flex items-center gap-4">
-            <div class="hidden lg:flex gap-6 mr-4">
-                <a href="#promociones" class="text-xs font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-widest">Promociones</a>
-                <a href="#catalogo" class="text-xs font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-widest">Cartelera</a>
-                <a href="#contacto" class="text-xs font-black text-slate-600 hover:text-red-600 transition-colors uppercase tracking-widest">Contacto</a>
-            </div>
             <button onclick="openSecurity()" class="p-2 text-slate-400 hover:text-red-600 transition-colors" title="Acceso Promotor">
                 <i class="fas fa-shield-alt text-xl"></i>
             </button>
@@ -76,49 +71,98 @@
 
     <!-- ================= VISTA PÚBLICA (CLIENTE) ================= -->
     <div id="view-public">
-        <header class="relative hero-bg py-24 px-6 overflow-hidden text-white">
-            <div class="hero-overlay"></div>
-            <div class="max-w-4xl mx-auto text-center relative z-10">
-                <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2 uppercase">
-                    ¡El peso pesado de la frescura!
-                </span>
-                <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg uppercase italic">¡Un golpe de sabor 100% natural! 🥊</h2>
-                <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto">
-                    Bolis artesanales <span class="text-yellow-400">sin conservantes ni colorantes</span>. ¡La lucha definitiva contra el calor!
-                </p>
-                <a href="#catalogo" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 uppercase">
-                    Ver la cartelera
-                </a>
-            </div>
-        </header>
+        <!-- BARRA DE SUBPÁGINAS -->
+        <div id="public-subpages-bar" class="bg-white border-b border-slate-200 sticky top-[60px] z-40 flex justify-center shadow-sm px-2 overflow-x-auto hide-scrollbar">
+            <button onclick="switchPublicPage('home')" id="nav-btn-home" class="flex-1 sm:flex-none py-3 px-4 text-xs sm:text-sm font-black text-red-600 border-b-4 border-red-600 transition-colors uppercase tracking-widest flex items-center justify-center gap-2 whitespace-nowrap">
+                <i class="fas fa-home text-lg"></i> Inicio
+            </button>
+            <button onclick="switchPublicPage('events')" id="nav-btn-events" class="flex-1 sm:flex-none py-3 px-4 text-xs sm:text-sm font-black text-slate-400 hover:text-red-600 border-b-4 border-transparent transition-colors uppercase tracking-widest flex items-center justify-center gap-2 whitespace-nowrap">
+                <i class="fas fa-glass-cheers text-lg"></i> Eventos
+            </button>
+            <a href="#contacto" class="flex-1 sm:flex-none py-3 px-4 text-xs sm:text-sm font-black text-slate-400 hover:text-red-600 border-b-4 border-transparent transition-colors uppercase tracking-widest flex items-center justify-center gap-2 whitespace-nowrap">
+                <i class="fas fa-phone-alt text-lg"></i> Contacto
+            </a>
+        </div>
 
-        <main class="max-w-6xl mx-auto p-6">
-            <section id="promociones" class="mb-20 scroll-mt-24">
-                <div class="text-center mb-10">
-                    <span class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-2 inline-block shadow-lg">Eventos Especiales</span>
-                    <h3 class="text-4xl md:text-5xl font-luck text-slate-900 uppercase">¡COMBOS DE CAMPEONATO! 🏆</h3>
+        <!-- ================= PÁGINA: INICIO ================= -->
+        <div id="page-home">
+            <header class="relative hero-bg py-24 px-6 overflow-hidden text-white">
+                <div class="hero-overlay"></div>
+                <div class="max-w-4xl mx-auto text-center relative z-10">
+                    <span class="inline-block bg-yellow-400 text-slate-900 px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg transform -rotate-2 uppercase">
+                        ¡El peso pesado de la frescura!
+                    </span>
+                    <h2 class="text-5xl md:text-7xl font-luck mb-6 drop-shadow-lg uppercase italic">¡Un golpe de sabor 100% natural! 🥊</h2>
+                    <p class="text-white text-lg md:text-xl mb-8 font-bold max-w-2xl mx-auto">
+                        Bolis artesanales <span class="text-yellow-400">sin conservantes ni colorantes</span>. ¡La lucha definitiva contra el calor!
+                    </p>
+                    <button onclick="document.getElementById('catalogo').scrollIntoView()" class="inline-block bg-red-600 text-white px-10 py-4 rounded-xl font-black text-xl hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-[0_10px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 uppercase">
+                        Ver la cartelera
+                    </button>
                 </div>
-                <div id="promo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-            </section>
+            </header>
 
-            <section id="catalogo" class="mb-16 scroll-mt-24">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-6 gap-4 border-b-4 border-red-600 pb-4">
-                    <div>
-                        <h3 class="text-4xl font-luck text-slate-800 uppercase">Cartelera de Sabores</h3>
-                        <p class="text-slate-500 font-bold text-sm italic">Bolis 100% naturales, sin conservantes ni colorantes</p>
+            <main class="max-w-6xl mx-auto p-6">
+                <!-- Sección Promociones -->
+                <section id="promociones" class="mb-20 scroll-mt-24 hidden">
+                    <div class="text-center mb-10">
+                        <span class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-2 inline-block shadow-lg">Ofertas Especiales</span>
+                        <h3 class="text-4xl md:text-5xl font-luck text-slate-900 uppercase">¡PROMOCIONES DE CAMPEONATO! 🏆</h3>
                     </div>
+                    <div id="promo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                </section>
+
+                <section id="catalogo" class="mb-16 scroll-mt-24">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-6 gap-4 border-b-4 border-red-600 pb-4">
+                        <div>
+                            <h3 class="text-4xl font-luck text-slate-800 uppercase">Cartelera de Sabores</h3>
+                            <p class="text-slate-500 font-bold text-sm italic">Bolis 100% naturales, sin conservantes ni colorantes</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtros de Categoría -->
+                    <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start">
+                        <button onclick="setFilter('Todos')" data-category="Todos" class="filter-btn bg-red-600 text-white px-6 py-2 rounded-full font-black uppercase text-xs shadow-md transition-all">Todos</button>
+                        <button onclick="setFilter('Técnico')" data-category="Técnico" class="filter-btn bg-slate-200 text-slate-600 hover:bg-slate-300 px-6 py-2 rounded-full font-black uppercase text-xs transition-all">Técnicos (Leche)</button>
+                        <button onclick="setFilter('Rudo')" data-category="Rudo" class="filter-btn bg-slate-200 text-slate-600 hover:bg-slate-300 px-6 py-2 rounded-full font-black uppercase text-xs transition-all">Rudos (Agua)</button>
+                    </div>
+
+                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]"></div>
+                </section>
+            </main>
+        </div>
+
+        <!-- ================= PÁGINA: EVENTOS ================= -->
+        <div id="page-events" class="hidden">
+            <header class="relative bg-indigo-900 py-16 px-6 overflow-hidden text-white border-b-8 border-indigo-500">
+                <div class="absolute inset-0 opacity-10 pointer-events-none">
+                    <i class="fas fa-glass-cheers text-[20rem] absolute -bottom-10 -right-10 rotate-12"></i>
+                    <i class="fas fa-birthday-cake text-[15rem] absolute top-10 -left-10 -rotate-12"></i>
                 </div>
-                
-                <!-- Filtros de Categoría -->
-                <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start">
-                    <button onclick="setFilter('Todos')" data-category="Todos" class="filter-btn bg-red-600 text-white px-6 py-2 rounded-full font-black uppercase text-xs shadow-md transition-all">Todos</button>
-                    <button onclick="setFilter('Técnico')" data-category="Técnico" class="filter-btn bg-slate-200 text-slate-600 hover:bg-slate-300 px-6 py-2 rounded-full font-black uppercase text-xs transition-all">Técnicos (Leche)</button>
-                    <button onclick="setFilter('Rudo')" data-category="Rudo" class="filter-btn bg-slate-200 text-slate-600 hover:bg-slate-300 px-6 py-2 rounded-full font-black uppercase text-xs transition-all">Rudos (Agua)</button>
+                <div class="max-w-4xl mx-auto text-center relative z-10">
+                    <span class="inline-block bg-indigo-500 text-white px-4 py-1 rounded-full font-black text-sm mb-4 shadow-lg uppercase tracking-widest">
+                        Para tus Fiestas
+                    </span>
+                    <h2 class="text-5xl md:text-6xl font-luck mb-4 drop-shadow-lg uppercase italic">Paquetes de Eventos 🎉</h2>
+                    <p class="text-indigo-200 text-lg font-bold max-w-2xl mx-auto">
+                        Lleva el campeonato a tu celebración. Elige uno de nuestros paquetes y personaliza los sabores para tus invitados.
+                    </p>
+                </div>
+            </header>
+
+            <main class="max-w-6xl mx-auto p-6 min-h-[50vh]">
+                <!-- Botón para volver al menú principal -->
+                <div class="mb-2 mt-4">
+                    <button onclick="switchPublicPage('home')" class="flex items-center gap-2 text-slate-500 hover:text-indigo-600 font-black uppercase text-sm transition-colors bg-white px-5 py-3 rounded-xl shadow-sm border-2 border-slate-200 hover:border-indigo-300 hover:shadow-md group">
+                        <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Volver al Inicio
+                    </button>
                 </div>
 
-                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]"></div>
-            </section>
-        </main>
+                <section id="eventos" class="mb-16 mt-6">
+                    <div id="event-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                </section>
+            </main>
+        </div>
 
         <footer id="contacto" class="bg-slate-950 text-white pt-20 pb-8 px-6 rounded-t-[3rem] border-t-8 border-red-600 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
@@ -171,7 +215,8 @@
             <!-- Menú de Pestañas -->
             <div class="flex flex-wrap justify-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-lg border-2 border-slate-100">
                 <button onclick="switchAdminTab('admin-sec-products')" id="tab-btn-products" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-red-600 text-white shadow-lg transition-all"><i class="fas fa-box-open mr-2"></i> Cartelera</button>
-                <button onclick="switchAdminTab('admin-sec-promos')" id="tab-btn-promos" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-star mr-2"></i> Eventos</button>
+                <button onclick="switchAdminTab('admin-sec-promos')" id="tab-btn-promos" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-tag mr-2"></i> Promociones</button>
+                <button onclick="switchAdminTab('admin-sec-events')" id="tab-btn-events" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-glass-cheers mr-2"></i> Eventos</button>
                 <button onclick="switchAdminTab('admin-sec-orders')" id="tab-btn-orders" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-clipboard-list mr-2"></i> Pedidos</button>
                 <button onclick="switchAdminTab('admin-sec-reports')" id="tab-btn-reports" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-chart-bar mr-2"></i> Informes</button>
                 <button onclick="switchAdminTab('admin-sec-provider')" id="tab-btn-provider" class="admin-tab-btn flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black uppercase text-sm bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i class="fas fa-truck-loading mr-2"></i> Proveedor</button>
@@ -211,10 +256,10 @@
             <!-- Promociones Admin -->
             <section id="admin-sec-promos" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
                 <div class="flex flex-col lg:flex-row gap-8">
-                    <!-- Formulario Nuevo Evento -->
+                    <!-- Formulario Nueva Promoción -->
                     <div class="lg:w-1/3">
                         <div class="bg-red-600 rounded-[2rem] p-6 shadow-xl text-white border-b-8 border-red-800 sticky top-24">
-                            <h3 class="text-2xl font-luck mb-4 uppercase"><i class="fas fa-calendar-plus mr-2"></i> Nuevo Evento</h3>
+                            <h3 class="text-2xl font-luck mb-4 uppercase"><i class="fas fa-tag mr-2"></i> Nueva Promoción</h3>
                             <form id="add-promo-form" class="space-y-3" onsubmit="event.preventDefault(); addNewPromo();">
                                 <input type="text" id="new-promo-name" placeholder="Nombre (Ej: Combo Mortal)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
                                 <input type="text" id="new-promo-desc" placeholder="Descripción breve" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
@@ -228,15 +273,44 @@
                                     <input type="datetime-local" id="new-promo-expiry" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
                                 </div>
                                 <button type="submit" class="w-full bg-yellow-400 text-slate-900 py-3 rounded-xl font-black hover:bg-white transition-all uppercase tracking-widest shadow-lg mt-2">
-                                    ¡Lanzar!
+                                    ¡Lanzar Promoción!
                                 </button>
                             </form>
                         </div>
                     </div>
-                    <!-- Lista de Eventos Editables -->
+                    <!-- Lista de Promociones Editables -->
                     <div class="lg:w-2/3">
-                        <h3 class="text-3xl font-luck text-slate-800 uppercase mb-4">Eventos Activos</h3>
+                        <h3 class="text-3xl font-luck text-slate-800 uppercase mb-4">Promociones Activas</h3>
                         <div id="admin-promo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Eventos Admin (Paquetes) -->
+            <section id="admin-sec-events" class="admin-section hidden bg-slate-200 rounded-[2.5rem] p-8 border-4 border-slate-300">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Formulario Nuevo Paquete -->
+                    <div class="lg:w-1/3">
+                        <div class="bg-indigo-600 rounded-[2rem] p-6 shadow-xl text-white border-b-8 border-indigo-800 sticky top-24">
+                            <h3 class="text-2xl font-luck mb-4 uppercase"><i class="fas fa-glass-cheers mr-2"></i> Nuevo Paquete</h3>
+                            <form id="add-event-form" class="space-y-3" onsubmit="event.preventDefault(); addNewEventPackage();">
+                                <input type="text" id="new-evt-name" placeholder="Nombre (Ej: Paquete 50 Bolis)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                <input type="text" id="new-evt-desc" placeholder="Descripción breve" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" id="new-evt-price" placeholder="Precio Total ($)" required class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm">
+                                    <input type="number" id="new-evt-qty" placeholder="Cant. Bolis" required min="1" value="50" class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm" title="¿Cuántos bolis incluye el paquete?">
+                                </div>
+                                <input type="url" id="new-evt-image" placeholder="URL de la imagen (Opcional)" class="w-full p-3 rounded-xl text-slate-900 font-bold outline-none text-sm focus:border-yellow-400 border-2 border-transparent">
+                                <button type="submit" class="w-full bg-yellow-400 text-slate-900 py-3 rounded-xl font-black hover:bg-white transition-all uppercase tracking-widest shadow-lg mt-2">
+                                    ¡Crear Paquete!
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Lista de Paquetes Editables -->
+                    <div class="lg:w-2/3">
+                        <h3 class="text-3xl font-luck text-slate-800 uppercase mb-4">Paquetes para Eventos</h3>
+                        <div id="admin-event-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
                     </div>
                 </div>
             </section>
@@ -455,7 +529,7 @@
 
     <!-- Modales y Componentes Globales -->
     
-    <!-- Modal Elección Combo (NUEVO) -->
+    <!-- Modal Elección Sabores para Paquetes y Combos -->
     <div id="combo-modal">
         <div class="bg-white rounded-[2rem] p-8 shadow-2xl border-4 border-slate-900 max-w-sm w-full relative transform transition-all flex flex-col max-h-[90vh]">
             <button onclick="closeComboModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-600 transition-colors"><i class="fas fa-times text-2xl"></i></button>
@@ -467,7 +541,7 @@
                 <!-- Los sabores se llenan con JS -->
             </div>
             <button id="combo-confirm-btn" onclick="confirmCombo()" disabled class="w-full bg-red-600 disabled:bg-slate-300 text-white font-black py-4 rounded-xl text-lg uppercase tracking-wider transition-all shadow-lg active:scale-95">
-                Añadir Combo 🥊
+                Confirmar Paquete 🥊
             </button>
         </div>
     </div>
@@ -576,7 +650,7 @@
             { id: 2, name: 'Mango "El Justiciero"', cost: 1000, price: 2000, stock: 20, category: 'Rudo', image: 'https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg', color: 'bg-yellow-50' }
         ];
 
-        // Añadida la variable "qty" para determinar cuántos bolis permite el combo
+        // Promociones y Combos
         const defaultPromos = [
             { id: 101, name: 'Triángulo Infernal', desc: '3 bolis por precio de infarto.', price: 5000, oldPrice: 6000, qty: 3, color: 'from-yellow-400 to-orange-500', icon: 'fa-bolt', expiry: '' },
             { id: 102, name: 'La Cuadrilla del Ring', desc: '6 bolis para todo el equipo.', price: 10000, oldPrice: 12000, qty: 6, color: 'from-red-600 to-red-800', icon: 'fa-fist-raised', expiry: '' }
@@ -589,18 +663,20 @@
 
         let products = JSON.parse(localStorage.getItem('bolis_ring_db')) || defaultProducts;
         let promos = JSON.parse(localStorage.getItem('bolis_ring_promos')) || defaultPromos;
+        let eventsPackages = JSON.parse(localStorage.getItem('bolis_ring_events')) || []; 
         let orders = JSON.parse(localStorage.getItem('bolis_ring_orders')) || [];
         let workers = JSON.parse(localStorage.getItem('bolis_ring_workers')) || [];
         let admins = JSON.parse(localStorage.getItem('bolis_ring_admins')) || defaultAdmins;
         let purchases = JSON.parse(localStorage.getItem('bolis_ring_purchases')) || [];
         let cart = [];
         let currentFilter = 'Todos'; 
-        let currentOrderFilter = 'Pendiente'; // Filtro por defecto en el panel de pedidos
+        let currentOrderFilter = 'Pendiente';
 
-        // Variables globales para la selección de combo en el cliente
         let activeComboIndex = null;
-        let activeComboSelection = {}; // Formato: { "id_producto": cantidad_elegida }
+        let activeComboType = null; 
+        let activeComboSelection = {}; 
 
+        // ================= CONEXIÓN CON GITHUB =================
         function getGHConfig() {
             return {
                 token: localStorage.getItem('gh_token') || PUBLIC_TOKEN,
@@ -626,7 +702,7 @@
                     sha = data.sha;
                 }
 
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos, orders, workers, admins, purchases }, null, 2))));
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify({ products, promos, eventsPackages, orders, workers, admins, purchases }, null, 2))));
                 const putRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${cfg.token}`, 'Content-Type': 'application/json' },
@@ -653,19 +729,16 @@
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(data.content))));
                     products = decoded.products || products;
                     promos = decoded.promos || promos;
+                    eventsPackages = decoded.eventsPackages || eventsPackages; 
                     orders = decoded.orders || orders;
                     workers = decoded.workers || workers;
                     admins = decoded.admins || admins;
                     purchases = decoded.purchases || purchases;
-                    localStorage.setItem('bolis_ring_db', JSON.stringify(products));
-                    localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
-                    localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
-                    localStorage.setItem('bolis_ring_workers', JSON.stringify(workers));
-                    localStorage.setItem('bolis_ring_admins', JSON.stringify(admins));
-                    localStorage.setItem('bolis_ring_purchases', JSON.stringify(purchases));
-                    cleanOldData(); // Limpiar automáticamente registros de +30 días al cargar la nube
+                    saveData();
+                    cleanOldData(); 
                     renderProducts();
                     renderPromos();
+                    renderEvents(); 
                     renderOrders();
                     renderReports();
                     renderWorkers();
@@ -676,6 +749,7 @@
             finally { if(icon) icon.classList.remove('sync-spinner'); }
         }
 
+        // ================= UTILIDADES =================
         function getTimeRemaining(expiryDate) {
             if (!expiryDate) return null;
             const total = Date.parse(expiryDate) - Date.parse(new Date());
@@ -686,7 +760,6 @@
             return { total, days, hours, minutes };
         }
 
-        // ====== LIMPIEZA AUTOMÁTICA DE DATOS (30 DÍAS) ====== //
         function cleanOldData() {
             const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
             const now = Date.now();
@@ -702,34 +775,42 @@
 
             if (changed) {
                 saveData();
-                console.log("Sistema de limpieza: Se eliminaron registros antiguos (pedidos o surtidos de más de 30 días).");
+                console.log("Sistema de limpieza: Se eliminaron registros antiguos.");
             }
         }
 
+        function showNotice(msg, isSuccess = false, duration = 2500) {
+            const t = document.createElement('div');
+            t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl text-white font-black shadow-xl transition-all duration-300 uppercase text-[10px] flex items-center gap-2 transform translate-y-10 opacity-0`;
+            t.style.backgroundColor = isSuccess ? '#16a34a' : '#0f172a';
+            t.innerHTML = msg; document.body.appendChild(t);
+            setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1'; }, 10);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, duration);
+        }
+
+        // ================= PROMOCIONES Y EVENTOS (ADMIN) =================
         function renderPromos() {
             const publicGrid = document.getElementById('promo-grid');
             const adminGrid = document.getElementById('admin-promo-grid');
             const promoSection = document.getElementById('promociones');
             
-            // 1. Eliminar automáticamente los eventos finalizados
             let hasExpired = false;
             promos = promos.filter(p => {
                 const timeLeft = getTimeRemaining(p.expiry);
                 if (p.expiry && !timeLeft) {
                     hasExpired = true;
-                    return false; // Descartar evento
+                    return false; 
                 }
                 return true;
             });
 
             if (hasExpired) {
                 saveData();
-                syncDataToGitHub(); // Sincronizar en segundo plano
+                syncDataToGitHub(); 
             }
 
-            // 2. Ocultar sección si no hay eventos activos
             if (promoSection) {
-                const activePromos = promos.filter(p => p.expiry && getTimeRemaining(p.expiry));
+                const activePromos = promos.filter(p => p.expiry === '' || getTimeRemaining(p.expiry));
                 if (activePromos.length === 0) {
                     promoSection.classList.add('hidden');
                 } else {
@@ -737,14 +818,13 @@
                 }
             }
             
-            // Renderizado Vista Pública
             if (publicGrid) {
                 publicGrid.innerHTML = promos.map((p, index) => {
                     const timeLeft = getTimeRemaining(p.expiry);
-                    if (!p.expiry) return ''; 
+                    if (p.expiry && !timeLeft) return ''; 
 
                     return `
-                    <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white hover:scale-[1.02] cursor-pointer" onclick="openComboModal('${index}')">
+                    <div class="relative bg-gradient-to-br ${p.color || 'from-slate-600 to-slate-800'} rounded-[2.5rem] p-8 ${p.color?.includes('yellow') ? 'text-slate-900' : 'text-white'} shadow-xl overflow-hidden group transition-all border-4 border-white hover:scale-[1.02] cursor-pointer" onclick="openPackageModal('promo', '${index}')">
                         <div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform">
                             <i class="fas ${p.icon || 'fa-star'} text-[15rem]"></i>
                         </div>
@@ -775,7 +855,6 @@
                 }).join('');
             }
 
-            // Renderizado Vista Promotor
             if (adminGrid) {
                 adminGrid.innerHTML = promos.map((p, index) => {
                     return `
@@ -785,7 +864,7 @@
                                 <span class="text-[10px] font-black uppercase"><i class="fas fa-edit"></i> Edición Rápida</span>
                                 <button onclick="deletePromo('${index}')" class="hover:text-red-400 transition-colors bg-red-600/50 p-2 rounded-lg" title="Eliminar"><i class="fas fa-trash"></i></button>
                             </div>
-                            <input type="text" value="${p.name}" onchange="updatePromoProperty('${index}', 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre del Evento">
+                            <input type="text" value="${p.name}" onchange="updatePromoProperty('${index}', 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre de Promoción">
                             <textarea onchange="updatePromoProperty('${index}', 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-12" placeholder="Descripción">${p.desc}</textarea>
                             
                             <div class="grid grid-cols-3 gap-2">
@@ -812,10 +891,146 @@
             }
         }
 
+        async function addNewPromo() {
+            const name = document.getElementById('new-promo-name').value;
+            const desc = document.getElementById('new-promo-desc').value;
+            const price = parseInt(document.getElementById('new-promo-price').value);
+            const oldPrice = parseInt(document.getElementById('new-promo-old').value);
+            const qty = parseInt(document.getElementById('new-promo-qty').value) || 1;
+            const expiry = document.getElementById('new-promo-expiry').value;
+            
+            promos.push({
+                id: Date.now().toString(),
+                name, desc, price, oldPrice, qty, expiry,
+                color: 'from-slate-700 to-slate-900',
+                icon: 'fa-star'
+            });
+            
+            saveData(); renderPromos(); document.getElementById('add-promo-form').reset();
+            showNotice("¡Promoción Publicada! 🏆", true);
+            await syncDataToGitHub();
+        }
+
+        async function deletePromo(index) {
+            if(!confirm("¿Deseas eliminar esta promoción?")) return;
+            promos.splice(index, 1);
+            saveData(); renderPromos(); await syncDataToGitHub();
+            showNotice("Promoción Eliminada", true);
+        }
+
+        async function updatePromoProperty(idx, property, value) {
+            if (promos[idx]) {
+                promos[idx][property] = (property === 'price' || property === 'oldPrice' || property === 'qty') ? parseInt(value) : value;
+                saveData(); renderPromos(); await syncDataToGitHub();
+            }
+        }
+
+        function renderEvents() {
+            const publicGrid = document.getElementById('event-grid');
+            const adminGrid = document.getElementById('admin-event-grid');
+            
+            if (publicGrid) {
+                if (eventsPackages.length === 0) {
+                    publicGrid.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400 font-bold uppercase text-sm border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white"><i class="fas fa-calendar-times text-4xl mb-4 block opacity-50"></i>Aún no hay paquetes de eventos disponibles.</div>`;
+                } else {
+                    publicGrid.innerHTML = eventsPackages.map((p, index) => {
+                        const bgElement = p.image 
+                            ? `<img src="${p.image}" class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500" alt="Evento" onerror="this.style.display='none'">`
+                            : `<div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform"><i class="fas fa-glass-cheers text-[15rem]"></i></div>`;
+
+                        return `
+                        <div class="relative bg-gradient-to-br from-indigo-800 to-purple-900 rounded-[2.5rem] p-8 text-white shadow-xl overflow-hidden group transition-all border-4 border-white hover:scale-[1.02] cursor-pointer" onclick="openPackageModal('event', '${index}')">
+                            ${bgElement}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-start mb-4 gap-2 flex-wrap">
+                                    <span class="bg-black/40 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black uppercase inline-block italic border border-white/10">Paquete Para Eventos</span>
+                                </div>
+                                <h4 class="text-4xl font-luck leading-none mb-2 italic uppercase drop-shadow-md">${p.name}</h4>
+                                <p class="font-bold text-sm mb-4 opacity-90 drop-shadow-md">${p.desc}</p>
+                                
+                                <div class="mb-6">
+                                    <span class="bg-white/20 border border-white/40 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-xs font-black uppercase inline-block shadow-sm">
+                                        <i class="fas fa-box-open mr-1"></i> Contiene ${p.qty || 1} bolis (Sabores a elección)
+                                    </span>
+                                </div>
+
+                                <div class="flex items-end gap-3">
+                                    <span class="text-5xl font-black drop-shadow-lg">$${p.price.toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                    }).join('');
+                }
+            }
+
+            if (adminGrid) {
+                adminGrid.innerHTML = eventsPackages.map((p, index) => {
+                    return `
+                    <div class="relative bg-gradient-to-br from-indigo-500 to-purple-700 rounded-[2rem] p-6 shadow-lg border-2 border-dashed border-indigo-300 overflow-hidden">
+                        ${p.image ? `<img src="${p.image}" class="absolute inset-0 w-full h-full object-cover opacity-10" onerror="this.style.display='none'">` : ''}
+                        <div class="relative z-10 space-y-3 bg-white/30 p-4 rounded-2xl border border-white/30 backdrop-blur-md">
+                            <div class="flex justify-between items-center text-white">
+                                <span class="text-[10px] font-black uppercase"><i class="fas fa-edit"></i> Edición Rápida</span>
+                                <button onclick="deleteEventPackage('${index}')" class="hover:text-red-400 transition-colors bg-red-600/50 p-2 rounded-lg" title="Eliminar"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <input type="text" value="${p.name}" onchange="updateEventProperty('${index}', 'name', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-slate-900 uppercase text-sm" placeholder="Nombre de Paquete">
+                            <textarea onchange="updateEventProperty('${index}', 'desc', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-bold text-slate-800 text-xs h-12" placeholder="Descripción">${p.desc}</textarea>
+                            
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-white text-[8px] font-black uppercase block mb-1 drop-shadow-md">Precio Total</label>
+                                    <input type="number" value="${p.price}" onchange="updateEventProperty('${index}', 'price', this.value)" class="w-full bg-white/90 rounded-xl px-2 py-2 font-black text-xs text-slate-900">
+                                </div>
+                                <div>
+                                    <label class="text-white text-[8px] font-black uppercase block mb-1 drop-shadow-md">Cant. Bolis</label>
+                                    <input type="number" value="${p.qty || 1}" onchange="updateEventProperty('${index}', 'qty', this.value)" min="1" class="w-full bg-white/90 rounded-xl px-2 py-2 font-black text-xs text-slate-900">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-white text-[8px] font-black uppercase block mb-1 drop-shadow-md">URL de Imagen</label>
+                                <input type="url" value="${p.image || ''}" onchange="updateEventProperty('${index}', 'image', this.value)" class="w-full bg-white/90 rounded-xl px-3 py-2 font-black text-xs text-slate-900" placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        async function addNewEventPackage() {
+            const name = document.getElementById('new-evt-name').value;
+            const desc = document.getElementById('new-evt-desc').value;
+            const price = parseInt(document.getElementById('new-evt-price').value);
+            const qty = parseInt(document.getElementById('new-evt-qty').value) || 1;
+            const image = document.getElementById('new-evt-image').value || '';
+            
+            eventsPackages.push({
+                id: Date.now().toString(),
+                name, desc, price, qty, image
+            });
+            
+            saveData(); renderEvents(); document.getElementById('add-event-form').reset();
+            showNotice("¡Paquete de Evento Creado! 🎉", true);
+            await syncDataToGitHub();
+        }
+
+        async function deleteEventPackage(index) {
+            if(!confirm("¿Deseas eliminar este paquete?")) return;
+            eventsPackages.splice(index, 1);
+            saveData(); renderEvents(); await syncDataToGitHub();
+            showNotice("Paquete Eliminado", true);
+        }
+
+        async function updateEventProperty(idx, property, value) {
+            if (eventsPackages[idx]) {
+                eventsPackages[idx][property] = (property === 'price' || property === 'qty') ? parseInt(value) : value;
+                saveData(); renderEvents(); await syncDataToGitHub();
+            }
+        }
+
+        // ================= PRODUCTOS =================
         function setFilter(category) {
             currentFilter = category;
-            
-            // Actualizar el estilo visual de los botones
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 if(btn.dataset.category === category) {
                     btn.classList.remove('bg-slate-200', 'text-slate-600');
@@ -825,7 +1040,6 @@
                     btn.classList.add('bg-slate-200', 'text-slate-600');
                 }
             });
-            
             renderProducts(); 
         }
 
@@ -833,7 +1047,6 @@
             const publicGrid = document.getElementById('product-grid');
             const adminGrid = document.getElementById('admin-product-grid');
 
-            // Renderizado Vista Pública
             if (publicGrid) {
                 let filteredProducts = products;
                 if (currentFilter !== 'Todos') {
@@ -867,7 +1080,6 @@
                 }
             }
 
-            // Renderizado Vista Promotor
             if (adminGrid) {
                 const inStock = products.filter(p => p.stock > 0);
                 const outOfStock = products.filter(p => p.stock <= 0);
@@ -924,638 +1136,35 @@
             }
         }
 
-        async function updatePromoProperty(idx, property, value) {
-            if (promos[idx]) {
-                promos[idx][property] = (property === 'price' || property === 'oldPrice' || property === 'qty') ? parseInt(value) : value;
-                saveData(); renderPromos(); await syncDataToGitHub();
-            }
-        }
-
-        // ====== GESTIÓN DE PEDIDOS Y FILTROS ====== //
-
-        function updateOrderFilterCounts() {
-            const dateFilterEl = document.getElementById('order-date-filter');
-            const selectedDateStr = dateFilterEl ? dateFilterEl.value : '';
-
-            let baseOrders = orders;
-            
-            // Si hay una fecha seleccionada, filtramos la base para los contadores
-            if (selectedDateStr) {
-                 baseOrders = orders.filter(o => {
-                    const orderDateObj = new Date(Number(o.id));
-                    const year = orderDateObj.getFullYear();
-                    const month = String(orderDateObj.getMonth() + 1).padStart(2, '0');
-                    const day = String(orderDateObj.getDate()).padStart(2, '0');
-                    return `${year}-${month}-${day}` === selectedDateStr;
-                });
-            }
-
-            const counts = {
-                'Todos': baseOrders.length,
-                'Pendiente': baseOrders.filter(o => o.status === 'Pendiente').length,
-                'Completado': baseOrders.filter(o => o.status === 'Completado').length,
-                'Cancelado': baseOrders.filter(o => o.status === 'Cancelado').length,
-                'Reembolsado': baseOrders.filter(o => o.status === 'Reembolsado').length
-            };
-            
-            document.querySelectorAll('.order-filter-btn').forEach(btn => {
-                const st = btn.dataset.orderStatus;
-                const badge = btn.querySelector('.count-badge');
-                if(badge) badge.innerText = counts[st];
-            });
-        }
-
-        function setOrderFilter(status) {
-            currentOrderFilter = status;
-            
-            document.querySelectorAll('.order-filter-btn').forEach(btn => {
-                const btnStatus = btn.dataset.orderStatus;
-                
-                // Reiniciar estilos al básico
-                btn.className = `order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300`;
-                
-                // Estilos Activos por cada estado
-                if (btnStatus === status) {
-                    btn.classList.remove('bg-slate-200', 'text-slate-600', 'hover:bg-slate-300');
-                    btn.classList.add('shadow-md');
-                    if (status === 'Todos') btn.classList.add('bg-slate-800', 'text-white');
-                    if (status === 'Pendiente') btn.classList.add('bg-yellow-400', 'text-yellow-900');
-                    if (status === 'Completado') btn.classList.add('bg-green-500', 'text-white');
-                    if (status === 'Cancelado') btn.classList.add('bg-red-500', 'text-white');
-                    if (status === 'Reembolsado') btn.classList.add('bg-purple-500', 'text-white');
-                }
-            });
-            
-            renderOrders();
-        }
-
-        function renderOrders() {
-            const grid = document.getElementById('admin-orders-grid');
-            if (!grid) return;
-
-            updateOrderFilterCounts(); // Actualiza los números en las pestañas
-
-            const dateFilterEl = document.getElementById('order-date-filter');
-            const selectedDateStr = dateFilterEl ? dateFilterEl.value : '';
-
-            let filteredOrders = orders;
-            
-            // 1. Filtrar por Fecha
-            if (selectedDateStr) {
-                filteredOrders = filteredOrders.filter(o => {
-                    const orderDateObj = new Date(Number(o.id));
-                    const year = orderDateObj.getFullYear();
-                    const month = String(orderDateObj.getMonth() + 1).padStart(2, '0');
-                    const day = String(orderDateObj.getDate()).padStart(2, '0');
-                    return `${year}-${month}-${day}` === selectedDateStr;
-                });
-            }
-
-            // 2. Filtrar por Estado
-            if (currentOrderFilter !== 'Todos') {
-                filteredOrders = filteredOrders.filter(o => o.status === currentOrderFilter);
-            }
-
-            if (filteredOrders.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center text-slate-500 font-bold py-10 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay pedidos para mostrar con estos filtros.</div>`;
-                return;
-            }
-
-            grid.innerHTML = [...filteredOrders].reverse().map(o => {
-                const statusColors = {
-                    'Pendiente': 'bg-yellow-100 text-yellow-800 border-yellow-300',
-                    'Completado': 'bg-green-100 text-green-800 border-green-300',
-                    'Cancelado': 'bg-red-100 text-red-800 border-red-300',
-                    'Reembolsado': 'bg-purple-100 text-purple-800 border-purple-300'
-                };
-                const sc = statusColors[o.status] || statusColors['Pendiente'];
-
-                return `
-                <div class="bg-white rounded-[2rem] p-6 shadow-md border-2 border-slate-200 flex flex-col relative transition-all hover:shadow-xl">
-                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-black uppercase border-2 ${sc}">
-                        ${o.status}
-                    </div>
-                    <h4 class="text-xl font-luck uppercase text-slate-900 mb-1 pr-24">#${o.id.toString().slice(-4)} - ${o.name}</h4>
-                    <p class="text-xs font-bold text-slate-500 mb-4"><i class="fas fa-clock mr-1"></i> ${o.date}</p>
-                    
-                    <div class="space-y-1 mb-4 text-xs font-bold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                        <p><i class="fas fa-phone-alt mr-2 text-slate-400"></i> ${o.phone}</p>
-                        <p><i class="fas fa-map-marker-alt mr-2 text-slate-400"></i> ${o.address}</p>
-                    </div>
-                    
-                    <div class="mb-4 flex-1">
-                        <h5 class="text-[10px] font-black uppercase text-slate-500 mb-2 border-b pb-1">Artículos:</h5>
-                        <ul class="space-y-2 text-[11px] font-bold text-slate-800">
-                            ${o.items.map(i => {
-                                // Extraer el nombre principal sin el HTML extra de los sabores
-                                let displayName = i.name.split('<br>')[0];
-                                
-                                // Formatear los sub-sabores si existen
-                                let flavorsHtml = '';
-                                if (i.flavors && i.flavors.length > 0) {
-                                    flavorsHtml = `<ul class="pl-4 mt-1 space-y-0.5 text-[10px] text-slate-500 border-l-2 border-slate-200 ml-1">` + 
-                                        i.flavors.map(f => `<li>• ${f.qty * i.qty}x ${f.name}</li>`).join('') + 
-                                        `</ul>`;
-                                }
-                                
-                                return `<li class="mb-1"><span class="text-red-600 mr-1">${i.qty}x</span> ${displayName} ${flavorsHtml}</li>`;
-                            }).join('')}
-                        </ul>
-                    </div>
-                    
-                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 mb-4">
-                        <span class="text-[10px] font-black uppercase text-slate-500">Cobrado</span>
-                        <span class="text-2xl font-black text-red-600">$${o.total.toLocaleString()}</span>
-                    </div>
-                    
-                    <div class="flex gap-2">
-                        <select onchange="updateOrderStatus('${o.id}', this.value)" class="flex-1 p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-red-500 cursor-pointer bg-slate-50">
-                            <option value="Pendiente" ${o.status === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
-                            <option value="Completado" ${o.status === 'Completado' ? 'selected' : ''}>✅ Completado</option>
-                            <option value="Cancelado" ${o.status === 'Cancelado' ? 'selected' : ''}>❌ Cancelado</option>
-                            <option value="Reembolsado" ${o.status === 'Reembolsado' ? 'selected' : ''}>💸 Reembolsado</option>
-                        </select>
-                        <button onclick="deleteOrder('${o.id}')" class="bg-red-100 text-red-600 px-4 rounded-xl hover:bg-red-600 hover:text-white transition-colors" title="Eliminar Pedido">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        async function updateOrderStatus(id, newStatus) {
-            const order = orders.find(o => o.id.toString() === id.toString());
-            if (order) {
-                const oldStatus = order.status;
-                order.status = newStatus;
-
-                // Lógica avanzada de stock (Soporta Combos)
-                if (oldStatus !== 'Completado' && newStatus === 'Completado') {
-                    // Descontar stock del inventario
-                    order.items.forEach(item => {
-                        if (item.flavors && item.flavors.length > 0) {
-                            item.flavors.forEach(f => {
-                                const prod = products.find(p => p.name === f.name);
-                                if (prod && typeof prod.stock !== 'undefined') {
-                                    prod.stock = Math.max(0, prod.stock - (f.qty * item.qty));
-                                }
-                            });
-                        } else {
-                            const prod = products.find(p => p.name === item.name);
-                            if (prod && typeof prod.stock !== 'undefined') {
-                                prod.stock = Math.max(0, prod.stock - item.qty);
-                            }
-                        }
-                    });
-                } else if (oldStatus === 'Completado' && newStatus !== 'Completado') {
-                    // Devolver stock al inventario
-                    order.items.forEach(item => {
-                        if (item.flavors && item.flavors.length > 0) {
-                            item.flavors.forEach(f => {
-                                const prod = products.find(p => p.name === f.name);
-                                if (prod && typeof prod.stock !== 'undefined') {
-                                    prod.stock += (f.qty * item.qty);
-                                }
-                            });
-                        } else {
-                            const prod = products.find(p => p.name === item.name);
-                            if (prod && typeof prod.stock !== 'undefined') {
-                                prod.stock += item.qty;
-                            }
-                        }
-                    });
-                }
-
-                saveData();
-                renderOrders(); 
-                renderProducts(); 
-                renderReports();
-                await syncDataToGitHub();
-                showNotice(`Estado de pedido actualizado`, true);
-            }
-        }
-
-        async function deleteOrder(id) {
-            if(!confirm("¿Estás seguro de que deseas eliminar este pedido del historial?")) return;
-            
-            const orderIndex = orders.findIndex(o => o.id.toString() === id.toString());
-            if (orderIndex > -1) {
-                const order = orders[orderIndex];
-                
-                // Si se elimina un pedido completado, devolvemos el stock (Soporta combos)
-                if (order.status === 'Completado') {
-                    order.items.forEach(item => {
-                        if (item.flavors && item.flavors.length > 0) {
-                            item.flavors.forEach(f => {
-                                const prod = products.find(p => p.name === f.name);
-                                if (prod && typeof prod.stock !== 'undefined') prod.stock += (f.qty * item.qty);
-                            });
-                        } else {
-                            const prod = products.find(p => p.name === item.name);
-                            if (prod && typeof prod.stock !== 'undefined') prod.stock += item.qty;
-                        }
-                    });
-                }
-                
-                orders.splice(orderIndex, 1);
-                saveData();
-                renderOrders();
-                renderProducts(); 
-                renderReports();
-                await syncDataToGitHub();
-                showNotice("Pedido Eliminado", true);
-            }
-        }
-
-        function renderReports() {
-            const dateFilterEl = document.getElementById('report-date-filter');
-            let targetDate = new Date();
-            let dateLabel = "(Hoy)";
-
-            if (dateFilterEl && dateFilterEl.value) {
-                const [y, m, d] = dateFilterEl.value.split('-');
-                targetDate = new Date(y, m - 1, d);
-                
-                const todayCheck = new Date();
-                if (!(todayCheck.getFullYear() === targetDate.getFullYear() && todayCheck.getMonth() === targetDate.getMonth() && todayCheck.getDate() === targetDate.getDate())) {
-                    dateLabel = `(${targetDate.toLocaleDateString('es-CO')})`;
-                }
-            }
-            
-            targetDate.setHours(0, 0, 0, 0);
-            
-            // Actualizar etiquetas en la UI
-            document.querySelectorAll('.report-date-label').forEach(el => el.innerText = dateLabel);
-
-            let ingresosBrutos = 0;
-            let costoTotal = 0;
-            let pedidosCompletados = 0;
-            let gastosProveedor = 0;
-            
-            const chartData = [0, 0, 0, 0, 0, 0, 0]; 
-            const todayForChart = new Date();
-            todayForChart.setHours(0, 0, 0, 0);
-
-            orders.forEach(o => {
-                if (o.status !== 'Completado') return; 
-
-                const orderDateObj = new Date(Number(o.id)); 
-                const orderDateMidnight = new Date(orderDateObj.getFullYear(), orderDateObj.getMonth(), orderDateObj.getDate());
-
-                // Tarjetas resumen: Filtrar por la fecha seleccionada
-                if (orderDateMidnight.getTime() === targetDate.getTime()) {
-                    ingresosBrutos += o.total;
-                    pedidosCompletados++;
-                    
-                    o.items.forEach(item => {
-                        // REVISIÓN DEL CÁLCULO DE COSTO PARA INCLUIR SABORES DE COMBOS
-                        if (item.flavors && item.flavors.length > 0) {
-                            // Sumar el costo individual de cada sabor seleccionado dentro del combo
-                            let comboCost = 0;
-                            item.flavors.forEach(f => {
-                                const prod = products.find(p => p.name === f.name);
-                                comboCost += (prod ? (prod.cost || 0) : 0) * f.qty;
-                            });
-                            costoTotal += (comboCost * item.qty);
-                        } else {
-                            // Producto normal
-                            let itemCost = item.cost;
-                            if (itemCost === undefined || itemCost === 0) {
-                                const prod = products.find(p => p.name === item.name);
-                                itemCost = prod ? (prod.cost || 0) : 0;
-                            }
-                            costoTotal += (itemCost * item.qty);
-                        }
-                    });
-                }
-
-                // Para el gráfico: usar siempre últimos 7 días desde hoy para ver productividad general
-                const diffTimeChart = todayForChart.getTime() - orderDateMidnight.getTime();
-                const diffDaysChart = Math.round(diffTimeChart / (1000 * 60 * 60 * 24)); 
-                const dayIndex = 6 - diffDaysChart;
-                if (dayIndex >= 0 && dayIndex <= 6) {
-                    chartData[dayIndex] += o.total;
-                }
-            });
-
-            purchases.forEach(p => {
-                const pDate = new Date(Number(p.id)); 
-                const purchaseDateMidnight = new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate());
-                
-                if (purchaseDateMidnight.getTime() === targetDate.getTime()) {
-                    gastosProveedor += p.total;
-                }
-            });
-
-            const gananciasNetas = ingresosBrutos - costoTotal;
-
-            const elBrutos = document.getElementById('report-brutos');
-            if(elBrutos) elBrutos.innerText = `$${ingresosBrutos.toLocaleString()}`;
-            
-            const elProveedor = document.getElementById('report-proveedor');
-            if(elProveedor) elProveedor.innerText = `$${gastosProveedor.toLocaleString()}`;
-            
-            const elGanancias = document.getElementById('report-ganancias');
-            if(elGanancias) elGanancias.innerText = `$${gananciasNetas.toLocaleString()}`;
-            
-            const elCompletados = document.getElementById('report-completados');
-            if(elCompletados) elCompletados.innerText = pedidosCompletados;
-
-            const chartContainer = document.getElementById('report-chart');
-            if(chartContainer) {
-                const maxVal = Math.max(...chartData, 1); 
-                
-                chartContainer.innerHTML = chartData.map((val, idx) => {
-                    const height = (val / maxVal) * 100;
-                    const d = new Date(todayForChart);
-                    d.setDate(d.getDate() - (6 - idx));
-                    const dayName = d.toLocaleDateString('es-CO', { weekday: 'short' });
-                    const isToday = idx === 6;
-                    
-                    return `
-                    <div class="flex flex-col items-center justify-end h-full w-10 sm:w-16">
-                        <div class="w-full ${isToday ? 'bg-red-500 hover:bg-red-400' : 'bg-slate-300 hover:bg-slate-400'} rounded-t-lg relative group transition-all duration-500 ease-out" style="height: ${Math.max(height, 2)}%">
-                            <div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] sm:text-xs font-bold px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none shadow-lg">
-                                $${val.toLocaleString()}
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-black uppercase mt-3 text-slate-500 ${isToday ? 'text-red-500' : ''}">${dayName}</span>
-                    </div>`;
-                }).join('');
-            }
-        }
-
-        function openReportSender() {
-            // Actualizar título del select de reporte diario con la fecha seleccionada
-            const dateFilterEl = document.getElementById('report-date-filter');
-            let dateStr = "Hoy";
-            if (dateFilterEl && dateFilterEl.value) {
-                const [y, m, d] = dateFilterEl.value.split('-');
-                const td = new Date(y, m - 1, d);
-                const today = new Date();
-                if (!(today.getFullYear() === td.getFullYear() && today.getMonth() === td.getMonth() && today.getDate() === td.getDate())) {
-                    dateStr = td.toLocaleDateString('es-CO');
-                }
-            }
-            const typeSelect = document.getElementById('report-type');
-            if(typeSelect && typeSelect.options[0]) {
-                typeSelect.options[0].text = `📅 Informe del Día (${dateStr})`;
-            }
-
-            const listAdmin = document.getElementById('report-admin-list');
-            listAdmin.innerHTML = admins.map(a => `
-                <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-slate-200 rounded-lg transition-colors">
-                    <input type="checkbox" value="${a.phone}" class="admin-checkbox w-4 h-4 text-green-600 rounded focus:ring-green-500 cursor-pointer" checked>
-                    <span class="text-xs font-bold text-slate-700">${a.name}</span>
-                </label>
-            `).join('');
-            document.getElementById('report-modal').style.display = 'flex';
-        }
-
-        function closeReportSender() {
-            document.getElementById('report-modal').style.display = 'none';
-        }
-
-        function sendReport() {
-            const type = document.getElementById('report-type').value;
-            const checkboxes = document.querySelectorAll('.admin-checkbox:checked');
-            const phones = Array.from(checkboxes).map(cb => cb.value.replace(/\D/g, ''));
-            
-            if(phones.length === 0) {
-                showNotice("Selecciona al menos un destinatario", false);
-                return;
-            }
-
-            let targetDate = new Date();
-            const dateFilterEl = document.getElementById('report-date-filter');
-            let isSpecificDay = false;
-            let displayDateStr = targetDate.toLocaleDateString('es-CO');
-
-            if (type === 'dia' && dateFilterEl && dateFilterEl.value) {
-                 const [y, m, d] = dateFilterEl.value.split('-');
-                 targetDate = new Date(y, m - 1, d);
-                 displayDateStr = targetDate.toLocaleDateString('es-CO');
-                 isSpecificDay = true;
-            }
-            targetDate.setHours(0,0,0,0);
-            
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            
-            let ingresosBrutos = 0;
-            let costoTotal = 0;
-            let pedidosCompletados = 0;
-            let gastosProveedor = 0;
-
-            orders.forEach(o => {
-                if (o.status !== 'Completado') return; 
-
-                const orderDateObj = new Date(Number(o.id)); 
-                const orderMidnight = new Date(orderDateObj.getFullYear(), orderDateObj.getMonth(), orderDateObj.getDate());
-                
-                let includeInReport = false;
-                if (type === 'dia') {
-                    if (isSpecificDay) {
-                        includeInReport = (orderMidnight.getTime() === targetDate.getTime());
-                    } else {
-                        includeInReport = (orderMidnight.getTime() === today.getTime());
-                    }
-                } else {
-                    const diffTime = today.getTime() - orderMidnight.getTime();
-                    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
-                    includeInReport = (diffDays >= 0 && diffDays <= 6);
-                }
-
-                if (includeInReport) {
-                    ingresosBrutos += o.total;
-                    pedidosCompletados++;
-                    
-                    o.items.forEach(item => {
-                        // REVISIÓN DEL CÁLCULO DE COSTO DE COMBOS PARA WHATSAPP
-                        if (item.flavors && item.flavors.length > 0) {
-                            let comboCost = 0;
-                            item.flavors.forEach(f => {
-                                const prod = products.find(p => p.name === f.name);
-                                comboCost += (prod ? (prod.cost || 0) : 0) * f.qty;
-                            });
-                            costoTotal += (comboCost * item.qty);
-                        } else {
-                            let itemCost = item.cost;
-                            if (itemCost === undefined || itemCost === 0) {
-                                const prod = products.find(p => p.name === item.name);
-                                itemCost = prod ? (prod.cost || 0) : 0;
-                            }
-                            costoTotal += (itemCost * item.qty);
-                        }
-                    });
-                }
-            });
-
-            purchases.forEach(p => {
-                const pDate = new Date(Number(p.id)); 
-                const purchaseMidnight = new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate());
-                
-                let includeInReport = false;
-                if (type === 'dia') {
-                    if (isSpecificDay) {
-                        includeInReport = (purchaseMidnight.getTime() === targetDate.getTime());
-                    } else {
-                        includeInReport = (purchaseMidnight.getTime() === today.getTime());
-                    }
-                } else {
-                    const diffTime = today.getTime() - purchaseMidnight.getTime();
-                    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
-                    includeInReport = (diffDays >= 0 && diffDays <= 6);
-                }
-                
-                if (includeInReport) {
-                    gastosProveedor += p.total;
-                }
-            });
-
-            const gananciasNetas = ingresosBrutos - costoTotal;
-            const titulo = type === 'dia' ? 'DIARIO' : 'SEMANAL';
-            const strFecha = type === 'dia' ? displayDateStr : `Últimos 7 días (${new Date().toLocaleDateString('es-CO')})`;
-
-            let msg = `*📊 REPORTE FINANCIERO ${titulo}* 🥊\n\n`;
-            msg += `*🗓️ Fecha:* ${strFecha}\n`;
-            msg += `*📦 Pedidos Completados:* ${pedidosCompletados}\n`;
-            msg += `*💵 Ingresos Brutos:* $${ingresosBrutos.toLocaleString()}\n`;
-            msg += `*🛒 Inversión Proveedor:* $${gastosProveedor.toLocaleString()}\n`;
-            msg += `*📈 Ganancias Netas:* $${gananciasNetas.toLocaleString()}\n\n`;
-            msg += `_Generado desde Bolis del Ring App_`;
-
-            if (type === 'dia' && !isSpecificDay) {
-                const todayStr = new Date().toISOString().split('T')[0];
-                localStorage.setItem('bolis_ring_last_report', todayStr);
-            }
-
-            phones.forEach((phone, index) => {
-                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, `_blank_${index}`);
-            });
-            
-            closeReportSender();
-            showNotice(`Enviando a ${phones.length} contacto(s)...`, true);
-        }
-
-        function saveData() {
-            localStorage.setItem('bolis_ring_db', JSON.stringify(products));
-            localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
-            localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
-            localStorage.setItem('bolis_ring_workers', JSON.stringify(workers));
-            localStorage.setItem('bolis_ring_admins', JSON.stringify(admins));
-            localStorage.setItem('bolis_ring_purchases', JSON.stringify(purchases));
-        }
-
-        async function saveGitHubConfig() {
-            localStorage.setItem('gh_token', document.getElementById('gh-token').value);
-            localStorage.setItem('gh_owner', document.getElementById('gh-owner').value);
-            localStorage.setItem('gh_repo', document.getElementById('gh-repo').value);
-            localStorage.setItem('gh_path', document.getElementById('gh-path').value);
-            showNotice("¡Configuración Guardada! 🛡️", true);
+        async function addNewProduct() {
+            const name = document.getElementById('new-name').value;
+            const cost = parseInt(document.getElementById('new-cost').value);
+            const price = parseInt(document.getElementById('new-price').value);
+            const stock = parseInt(document.getElementById('new-stock').value);
+            const category = document.getElementById('new-category').value;
+            const image = document.getElementById('new-image').value;
+            products.push({ id: Date.now().toString(), name, cost, price, stock, category, image, color: 'bg-slate-50' });
+            saveData(); renderProducts(); document.getElementById('add-product-form').reset();
             await syncDataToGitHub();
+            showNotice("¡Nuevo Luchador al Cuadrilátero! 🥊", true);
         }
 
-        function openSecurity() {
-            if (isPromotor) return toggleAdminMode(false);
-            document.getElementById('pass-input').value = ""; 
-            document.getElementById('security-modal').style.display = 'flex';
-            document.getElementById('pass-input').focus();
+        async function deleteProduct(id) {
+            if(!confirm("¿Deseas eliminar este producto?")) return;
+            products = products.filter(p => p.id.toString() !== id.toString());
+            saveData(); renderProducts(); await syncDataToGitHub();
+            showNotice("Luchador Retirado", true);
         }
 
-        function closeSecurity() { document.getElementById('security-modal').style.display = 'none'; }
-
-        function verifySecurity() {
-            if (document.getElementById('pass-input').value === CLAVE) {
-                toggleAdminMode(true); closeSecurity();
-            } else { showNotice("Clave Incorrecta ❌"); }
-        }
-
-        document.getElementById('pass-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') verifySecurity();
-        });
-
-        let pendingAdminAction = null;
-
-        function openAdminSecurity(callback) {
-            pendingAdminAction = callback;
-            document.getElementById('admin-pass-input').value = "";
-            document.getElementById('admin-security-modal').style.display = 'flex';
-            document.getElementById('admin-pass-input').focus();
-        }
-
-        function closeAdminSecurity() {
-            document.getElementById('admin-security-modal').style.display = 'none';
-            pendingAdminAction = null;
-        }
-
-        function submitAdminSecurity() {
-            if (document.getElementById('admin-pass-input').value === CLAVE) {
-                const accionAConfirmar = pendingAdminAction; 
-                closeAdminSecurity();
-                if (accionAConfirmar) accionAConfirmar();
-            } else {
-                showNotice("Clave Incorrecta ❌");
-            }
-        }
-
-        document.getElementById('admin-pass-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') submitAdminSecurity();
-        });
-
-        function toggleAdminMode(activate) {
-            isPromotor = activate;
-            
-            document.getElementById('view-public').classList.toggle('hidden', isPromotor);
-            document.getElementById('view-admin').classList.toggle('hidden', !isPromotor);
-            document.getElementById('nav-public-items').classList.toggle('hidden', isPromotor);
-            document.getElementById('nav-admin-items').classList.toggle('hidden', !isPromotor);
-            document.getElementById('promotor-tag').classList.toggle('hidden', !isPromotor);
-            
-            if (isPromotor) {
-                const cfg = getGHConfig();
-                document.getElementById('gh-token').value = cfg.token || '';
-                document.getElementById('gh-owner').value = cfg.owner || '';
-                document.getElementById('gh-repo').value = cfg.repo || '';
-                document.getElementById('gh-path').value = cfg.path;
-                switchAdminTab('admin-sec-reports'); 
-                window.scrollTo(0,0);
-                showNotice("¡Modo Promotor Activado! 🛠️", true);
-
-                const agotados = products.filter(p => p.stock <= 0).length;
-                if (agotados > 0) {
-                    setTimeout(() => {
-                        showNotice(`⚠️ Atención: Tienes ${agotados} luchador(es) agotado(s)`, false, 10000);
-                    }, 3000);
-                }
-
-                setTimeout(() => {
-                    const lastReport = localStorage.getItem('bolis_ring_last_report');
-                    const todayStr = new Date().toISOString().split('T')[0];
-                    
-                    if (lastReport !== todayStr) {
-                        if(confirm("📊 Asistente: Aún no has enviado el Informe Diario de hoy a los Administradores.\n\n¿Deseas enviarlo ahora?")) {
-                            switchAdminTab('admin-sec-reports');
-                            openReportSender();
-                        }
-                    }
-                }, 6000);
-
-            } else {
-                showNotice("De vuelta al Ring 🥊", true);
-                window.scrollTo(0,0);
-            }
-            
-            renderProducts(); renderPromos(); renderOrders(); renderWorkers(); renderAdmins(); renderProvider();
-        }
-
-        // ====== LÓGICA DE SELECCIÓN DE COMBOS ====== //
-        function openComboModal(idx) {
+        // ================= SELECCIÓN DE COMBOS Y PAQUETES =================
+        function openPackageModal(type, idx) {
+            activeComboType = type;
             activeComboIndex = idx;
             activeComboSelection = {};
-            const promo = promos[idx];
             
-            document.getElementById('combo-modal-title').innerText = promo.name;
+            const item = activeComboType === 'promo' ? promos[idx] : eventsPackages[idx];
+            
+            document.getElementById('combo-modal-title').innerText = item.name;
             document.getElementById('combo-modal').style.display = 'flex';
             
             renderComboFlavors();
@@ -1566,8 +1175,8 @@
         }
 
         function renderComboFlavors() {
-            const promo = promos[activeComboIndex];
-            const maxQty = promo.qty || 1;
+            const sourceItem = activeComboType === 'promo' ? promos[activeComboIndex] : eventsPackages[activeComboIndex];
+            const maxQty = sourceItem.qty || 1;
             let currentTotal = Object.values(activeComboSelection).reduce((a, b) => a + b, 0);
             
             document.getElementById('combo-modal-desc').innerText = `Seleccionados: ${currentTotal} de ${maxQty} bolis`;
@@ -1576,14 +1185,20 @@
             const inStockProducts = products.filter(p => p.stock > 0);
             
             if(inStockProducts.length === 0) {
-                 list.innerHTML = `<p class="text-center text-red-500 font-bold py-6">No hay bolis en stock para armar este combo ❌</p>`;
+                 list.innerHTML = `<p class="text-center text-red-500 font-bold py-6">No hay bolis en stock para armar esto ❌</p>`;
                  document.getElementById('combo-confirm-btn').disabled = true;
                  return;
             }
 
+            // Definir de a cuántos se agregan (5 para eventos, 1 para promos)
+            const step = activeComboType === 'event' ? 5 : 1;
+
             list.innerHTML = inStockProducts.map(p => {
                 const selQty = activeComboSelection[p.id] || 0;
-                const canAdd = (currentTotal < maxQty) && (selQty < p.stock);
+                const amountToAdd = Math.min(step, maxQty - currentTotal);
+                const canAdd = (currentTotal < maxQty) && (selQty + amountToAdd <= p.stock);
+                const canSub = selQty > 0;
+                const remainingStock = p.stock - selQty; // Calcula el stock visual restante
                 
                 return `
                 <div class="flex items-center justify-between bg-slate-50 p-3 rounded-2xl border ${selQty > 0 ? 'border-red-400 bg-red-50' : 'border-slate-200'}">
@@ -1591,11 +1206,11 @@
                         <img src="${p.image}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm" onerror="this.src='https://placehold.co/100x100/eee/999?text=Boli'">
                         <div>
                             <h5 class="text-xs font-black uppercase text-slate-800">${p.name}</h5>
-                            <span class="text-[9px] font-bold text-slate-500">Disponible: ${p.stock}</span>
+                            <span class="text-[9px] font-bold ${remainingStock === 0 ? 'text-red-500' : 'text-slate-500'}">Disponible: ${remainingStock}</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-1">
-                        <button onclick="updateComboFlavor('${p.id}', -1)" class="w-8 h-8 rounded-full bg-white text-slate-600 font-black shadow-sm flex items-center justify-center hover:bg-slate-200 ${selQty > 0 ? '' : 'opacity-30 pointer-events-none'}">-</button>
+                        <button onclick="updateComboFlavor('${p.id}', -1)" class="w-8 h-8 rounded-full bg-white text-slate-600 font-black shadow-sm flex items-center justify-center hover:bg-slate-200 ${canSub ? '' : 'opacity-30 pointer-events-none'}">-</button>
                         <span class="font-black text-sm w-5 text-center">${selQty}</span>
                         <button onclick="updateComboFlavor('${p.id}', 1)" class="w-8 h-8 rounded-full bg-white text-slate-600 font-black shadow-sm flex items-center justify-center hover:bg-slate-200 ${canAdd ? '' : 'opacity-30 pointer-events-none'}">+</button>
                     </div>
@@ -1611,33 +1226,40 @@
             }
         }
 
-        function updateComboFlavor(productId, delta) {
-            const promo = promos[activeComboIndex];
-            const maxQty = promo.qty || 1;
+        function updateComboFlavor(productId, sign) {
+            const sourceItem = activeComboType === 'promo' ? promos[activeComboIndex] : eventsPackages[activeComboIndex];
+            const maxQty = sourceItem.qty || 1;
             let currentTotal = Object.values(activeComboSelection).reduce((a, b) => a + b, 0);
             
             if (!activeComboSelection[productId]) activeComboSelection[productId] = 0;
             
-            if (delta > 0) {
-                if (currentTotal < maxQty) {
+            // Definir de a cuántos se agregan o restan
+            const step = activeComboType === 'event' ? 5 : 1;
+            
+            if (sign > 0) {
+                const amountToAdd = Math.min(step, maxQty - currentTotal);
+                if (amountToAdd > 0) {
                     const prod = products.find(p => p.id.toString() === productId.toString());
-                    if (activeComboSelection[productId] < prod.stock) {
-                        activeComboSelection[productId]++;
+                    if (activeComboSelection[productId] + amountToAdd <= prod.stock) {
+                        activeComboSelection[productId] += amountToAdd;
+                    } else {
+                        showNotice(`¡Solo quedan ${prod.stock} de este sabor! 🛑`, false);
                     }
                 }
             } else {
                 if (activeComboSelection[productId] > 0) {
-                    activeComboSelection[productId]--;
+                    const amountToSub = Math.min(step, activeComboSelection[productId]);
+                    activeComboSelection[productId] -= amountToSub;
                 }
             }
             
-            if (activeComboSelection[productId] === 0) delete activeComboSelection[productId];
+            if (activeComboSelection[productId] <= 0) delete activeComboSelection[productId];
             
             renderComboFlavors();
         }
 
         function confirmCombo() {
-            const promo = promos[activeComboIndex];
+            const sourceItem = activeComboType === 'promo' ? promos[activeComboIndex] : eventsPackages[activeComboIndex];
             
             let flavorTexts = [];
             let flavorData = []; 
@@ -1651,7 +1273,7 @@
             const flavorStr = ` <br><span class="text-[9px] text-slate-400 font-bold block mt-1 leading-tight">(${flavorTexts.join(', ')})</span>`;
             
             const comboHash = Object.entries(activeComboSelection).sort().map(e => `${e[0]}-${e[1]}`).join('_');
-            const cartItemId = `p-${promo.id}-${comboHash}`;
+            const cartItemId = `p-${activeComboType}-${sourceItem.id}-${comboHash}`;
             
             const item = cart.find(i => i.id === cartItemId);
             if (item) {
@@ -1659,8 +1281,8 @@
             } else {
                 cart.push({ 
                     id: cartItemId, 
-                    name: `🔥 ${promo.name}${flavorStr}`, 
-                    price: promo.price, 
+                    name: `🔥 ${sourceItem.name}${flavorStr}`, 
+                    price: sourceItem.price, 
                     qty: 1,
                     flavors: flavorData 
                 });
@@ -1668,10 +1290,10 @@
             
             updateCartUI();
             closeComboModal();
-            showNotice(`${promo.name} preparado 🏆`, true);
+            showNotice(`${sourceItem.name} preparado 🏆`, true);
         }
-        // =========================================== //
 
+        // ================= CARRITO Y CHECKOUT =================
         function addToCart(id) {
             const p = products.find(i => i.id.toString() === id.toString());
             if (!p || p.stock <= 0) return;
@@ -1817,7 +1439,6 @@
                     deliveryPhone = assignedAdmin.phone.replace(/\D/g, ''); 
                 }
 
-                // MEJORADO EL MENSAJE PARA WHATSAPP (MUESTRA LOS SABORES ORDENADOS)
                 let msg = `*PEDIDO BOLIS DEL RING* 🥊\n\n*Retador:* ${n}\n*Dirección:* ${a}\n\n*EQUIPO:*\n`;
                 cart.forEach(i => {
                     const cleanName = i.name.split('<br>')[0].trim();
@@ -1841,51 +1462,627 @@
             }
         }
 
-        async function addNewProduct() {
-            const name = document.getElementById('new-name').value;
-            const cost = parseInt(document.getElementById('new-cost').value);
-            const price = parseInt(document.getElementById('new-price').value);
-            const stock = parseInt(document.getElementById('new-stock').value);
-            const category = document.getElementById('new-category').value;
-            const image = document.getElementById('new-image').value;
-            products.push({ id: Date.now().toString(), name, cost, price, stock, category, image, color: 'bg-slate-50' });
-            saveData(); renderProducts(); document.getElementById('add-product-form').reset();
-            await syncDataToGitHub();
-            showNotice("¡Nuevo Luchador al Cuadrilátero! 🥊", true);
-        }
+        // ================= PEDIDOS (ADMIN) =================
+        function updateOrderFilterCounts() {
+            const dateFilterEl = document.getElementById('order-date-filter');
+            const selectedDateStr = dateFilterEl ? dateFilterEl.value : '';
 
-        async function deleteProduct(id) {
-            products = products.filter(p => p.id.toString() !== id.toString());
-            saveData(); renderProducts(); await syncDataToGitHub();
-            showNotice("Luchador Retirado", true);
-        }
-
-        async function addNewPromo() {
-            const name = document.getElementById('new-promo-name').value;
-            const desc = document.getElementById('new-promo-desc').value;
-            const price = parseInt(document.getElementById('new-promo-price').value);
-            const oldPrice = parseInt(document.getElementById('new-promo-old').value);
-            const qty = parseInt(document.getElementById('new-promo-qty').value) || 1;
-            const expiry = document.getElementById('new-promo-expiry').value;
+            let baseOrders = orders;
             
-            promos.push({
-                id: Date.now().toString(),
-                name, desc, price, oldPrice, qty, expiry,
-                color: 'from-slate-700 to-slate-900',
-                icon: 'fa-star'
+            if (selectedDateStr) {
+                 baseOrders = orders.filter(o => {
+                    const orderDateObj = new Date(Number(o.id));
+                    const year = orderDateObj.getFullYear();
+                    const month = String(orderDateObj.getMonth() + 1).padStart(2, '0');
+                    const day = String(orderDateObj.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}` === selectedDateStr;
+                });
+            }
+
+            const counts = {
+                'Todos': baseOrders.length,
+                'Pendiente': baseOrders.filter(o => o.status === 'Pendiente').length,
+                'Completado': baseOrders.filter(o => o.status === 'Completado').length,
+                'Cancelado': baseOrders.filter(o => o.status === 'Cancelado').length,
+                'Reembolsado': baseOrders.filter(o => o.status === 'Reembolsado').length
+            };
+            
+            document.querySelectorAll('.order-filter-btn').forEach(btn => {
+                const st = btn.dataset.orderStatus;
+                const badge = btn.querySelector('.count-badge');
+                if(badge) badge.innerText = counts[st];
+            });
+        }
+
+        function setOrderFilter(status) {
+            currentOrderFilter = status;
+            
+            document.querySelectorAll('.order-filter-btn').forEach(btn => {
+                const btnStatus = btn.dataset.orderStatus;
+                
+                btn.className = `order-filter-btn bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-black uppercase text-xs transition-all flex items-center gap-2 hover:bg-slate-300`;
+                
+                if (btnStatus === status) {
+                    btn.classList.remove('bg-slate-200', 'text-slate-600', 'hover:bg-slate-300');
+                    btn.classList.add('shadow-md');
+                    if (status === 'Todos') btn.classList.add('bg-slate-800', 'text-white');
+                    if (status === 'Pendiente') btn.classList.add('bg-yellow-400', 'text-yellow-900');
+                    if (status === 'Completado') btn.classList.add('bg-green-500', 'text-white');
+                    if (status === 'Cancelado') btn.classList.add('bg-red-500', 'text-white');
+                    if (status === 'Reembolsado') btn.classList.add('bg-purple-500', 'text-white');
+                }
             });
             
-            saveData(); renderPromos(); document.getElementById('add-promo-form').reset();
-            showNotice("¡Evento Publicado! 🏆", true);
+            renderOrders();
+        }
+
+        function renderOrders() {
+            const grid = document.getElementById('admin-orders-grid');
+            if (!grid) return;
+
+            updateOrderFilterCounts(); 
+
+            const dateFilterEl = document.getElementById('order-date-filter');
+            const selectedDateStr = dateFilterEl ? dateFilterEl.value : '';
+
+            let filteredOrders = orders;
+            
+            if (selectedDateStr) {
+                filteredOrders = filteredOrders.filter(o => {
+                    const orderDateObj = new Date(Number(o.id));
+                    const year = orderDateObj.getFullYear();
+                    const month = String(orderDateObj.getMonth() + 1).padStart(2, '0');
+                    const day = String(orderDateObj.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}` === selectedDateStr;
+                });
+            }
+
+            if (currentOrderFilter !== 'Todos') {
+                filteredOrders = filteredOrders.filter(o => o.status === currentOrderFilter);
+            }
+
+            if (filteredOrders.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center text-slate-500 font-bold py-10 bg-white rounded-[2rem] border-2 border-dashed border-slate-300">No hay pedidos para mostrar con estos filtros.</div>`;
+                return;
+            }
+
+            grid.innerHTML = [...filteredOrders].reverse().map(o => {
+                const statusColors = {
+                    'Pendiente': 'bg-yellow-100 text-yellow-800 border-yellow-300',
+                    'Completado': 'bg-green-100 text-green-800 border-green-300',
+                    'Cancelado': 'bg-red-100 text-red-800 border-red-300',
+                    'Reembolsado': 'bg-purple-100 text-purple-800 border-purple-300'
+                };
+                const sc = statusColors[o.status] || statusColors['Pendiente'];
+
+                return `
+                <div class="bg-white rounded-[2rem] p-6 shadow-md border-2 border-slate-200 flex flex-col relative transition-all hover:shadow-xl">
+                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-black uppercase border-2 ${sc}">
+                        ${o.status}
+                    </div>
+                    <h4 class="text-xl font-luck uppercase text-slate-900 mb-1 pr-24">#${o.id.toString().slice(-4)} - ${o.name}</h4>
+                    <p class="text-xs font-bold text-slate-500 mb-4"><i class="fas fa-clock mr-1"></i> ${o.date}</p>
+                    
+                    <div class="space-y-1 mb-4 text-xs font-bold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <p><i class="fas fa-phone-alt mr-2 text-slate-400"></i> ${o.phone}</p>
+                        <p><i class="fas fa-map-marker-alt mr-2 text-slate-400"></i> ${o.address}</p>
+                    </div>
+                    
+                    <div class="mb-4 flex-1">
+                        <h5 class="text-[10px] font-black uppercase text-slate-500 mb-2 border-b pb-1">Artículos:</h5>
+                        <ul class="space-y-2 text-[11px] font-bold text-slate-800">
+                            ${o.items.map(i => {
+                                let displayName = i.name.split('<br>')[0];
+                                let flavorsHtml = '';
+                                if (i.flavors && i.flavors.length > 0) {
+                                    flavorsHtml = `<ul class="pl-4 mt-1 space-y-0.5 text-[10px] text-slate-500 border-l-2 border-slate-200 ml-1">` + 
+                                        i.flavors.map(f => `<li>• ${f.qty * i.qty}x ${f.name}</li>`).join('') + 
+                                        `</ul>`;
+                                }
+                                return `<li class="mb-1"><span class="text-red-600 mr-1">${i.qty}x</span> ${displayName} ${flavorsHtml}</li>`;
+                            }).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 mb-4">
+                        <span class="text-[10px] font-black uppercase text-slate-500">Cobrado</span>
+                        <span class="text-2xl font-black text-red-600">$${o.total.toLocaleString()}</span>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <select onchange="updateOrderStatus('${o.id}', this.value)" class="flex-1 p-3 rounded-xl border-2 border-slate-200 font-bold text-xs outline-none focus:border-red-500 cursor-pointer bg-slate-50">
+                            <option value="Pendiente" ${o.status === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+                            <option value="Completado" ${o.status === 'Completado' ? 'selected' : ''}>✅ Completado</option>
+                            <option value="Cancelado" ${o.status === 'Cancelado' ? 'selected' : ''}>❌ Cancelado</option>
+                            <option value="Reembolsado" ${o.status === 'Reembolsado' ? 'selected' : ''}>💸 Reembolsado</option>
+                        </select>
+                        <button onclick="deleteOrder('${o.id}')" class="bg-red-100 text-red-600 px-4 rounded-xl hover:bg-red-600 hover:text-white transition-colors" title="Eliminar Pedido">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        async function updateOrderStatus(id, newStatus) {
+            const order = orders.find(o => o.id.toString() === id.toString());
+            if (order) {
+                const oldStatus = order.status;
+                order.status = newStatus;
+
+                if (oldStatus !== 'Completado' && newStatus === 'Completado') {
+                    order.items.forEach(item => {
+                        if (item.flavors && item.flavors.length > 0) {
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                if (prod && typeof prod.stock !== 'undefined') {
+                                    prod.stock = Math.max(0, prod.stock - (f.qty * item.qty));
+                                }
+                            });
+                        } else {
+                            const prod = products.find(p => p.name === item.name);
+                            if (prod && typeof prod.stock !== 'undefined') {
+                                prod.stock = Math.max(0, prod.stock - item.qty);
+                            }
+                        }
+                    });
+                } else if (oldStatus === 'Completado' && newStatus !== 'Completado') {
+                    order.items.forEach(item => {
+                        if (item.flavors && item.flavors.length > 0) {
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                if (prod && typeof prod.stock !== 'undefined') {
+                                    prod.stock += (f.qty * item.qty);
+                                }
+                            });
+                        } else {
+                            const prod = products.find(p => p.name === item.name);
+                            if (prod && typeof prod.stock !== 'undefined') {
+                                prod.stock += item.qty;
+                            }
+                        }
+                    });
+                }
+
+                saveData();
+                renderOrders(); 
+                renderProducts(); 
+                renderReports();
+                await syncDataToGitHub();
+                showNotice(`Estado de pedido actualizado`, true);
+            }
+        }
+
+        async function deleteOrder(id) {
+            if(!confirm("¿Estás seguro de que deseas eliminar este pedido del historial?")) return;
+            
+            const orderIndex = orders.findIndex(o => o.id.toString() === id.toString());
+            if (orderIndex > -1) {
+                const order = orders[orderIndex];
+                
+                if (order.status === 'Completado') {
+                    order.items.forEach(item => {
+                        if (item.flavors && item.flavors.length > 0) {
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                if (prod && typeof prod.stock !== 'undefined') prod.stock += (f.qty * item.qty);
+                            });
+                        } else {
+                            const prod = products.find(p => p.name === item.name);
+                            if (prod && typeof prod.stock !== 'undefined') prod.stock += item.qty;
+                        }
+                    });
+                }
+                
+                orders.splice(orderIndex, 1);
+                saveData();
+                renderOrders();
+                renderProducts(); 
+                renderReports();
+                await syncDataToGitHub();
+                showNotice("Pedido Eliminado", true);
+            }
+        }
+
+        // ================= REPORTES (ADMIN) =================
+        function renderReports() {
+            const dateFilterEl = document.getElementById('report-date-filter');
+            let targetDate = new Date();
+            let dateLabel = "(Hoy)";
+
+            if (dateFilterEl && dateFilterEl.value) {
+                const [y, m, d] = dateFilterEl.value.split('-');
+                targetDate = new Date(y, m - 1, d);
+                
+                const todayCheck = new Date();
+                if (!(todayCheck.getFullYear() === targetDate.getFullYear() && todayCheck.getMonth() === targetDate.getMonth() && todayCheck.getDate() === targetDate.getDate())) {
+                    dateLabel = `(${targetDate.toLocaleDateString('es-CO')})`;
+                }
+            }
+            
+            targetDate.setHours(0, 0, 0, 0);
+            
+            document.querySelectorAll('.report-date-label').forEach(el => el.innerText = dateLabel);
+
+            let ingresosBrutos = 0;
+            let costoTotal = 0;
+            let pedidosCompletados = 0;
+            let gastosProveedor = 0;
+            
+            const chartData = [0, 0, 0, 0, 0, 0, 0]; 
+            const todayForChart = new Date();
+            todayForChart.setHours(0, 0, 0, 0);
+
+            orders.forEach(o => {
+                if (o.status !== 'Completado') return; 
+
+                const orderDateObj = new Date(Number(o.id)); 
+                const orderDateMidnight = new Date(orderDateObj.getFullYear(), orderDateObj.getMonth(), orderDateObj.getDate());
+
+                if (orderDateMidnight.getTime() === targetDate.getTime()) {
+                    ingresosBrutos += o.total;
+                    pedidosCompletados++;
+                    
+                    o.items.forEach(item => {
+                        if (item.flavors && item.flavors.length > 0) {
+                            let comboCost = 0;
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                comboCost += (prod ? (prod.cost || 0) : 0) * f.qty;
+                            });
+                            costoTotal += (comboCost * item.qty);
+                        } else {
+                            let itemCost = item.cost;
+                            if (itemCost === undefined || itemCost === 0) {
+                                const prod = products.find(p => p.name === item.name);
+                                itemCost = prod ? (prod.cost || 0) : 0;
+                            }
+                            costoTotal += (itemCost * item.qty);
+                        }
+                    });
+                }
+
+                const diffTimeChart = todayForChart.getTime() - orderDateMidnight.getTime();
+                const diffDaysChart = Math.round(diffTimeChart / (1000 * 60 * 60 * 24)); 
+                const dayIndex = 6 - diffDaysChart;
+                if (dayIndex >= 0 && dayIndex <= 6) {
+                    chartData[dayIndex] += o.total;
+                }
+            });
+
+            purchases.forEach(p => {
+                const pDate = new Date(Number(p.id)); 
+                const purchaseDateMidnight = new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate());
+                
+                if (purchaseDateMidnight.getTime() === targetDate.getTime()) {
+                    gastosProveedor += p.total;
+                }
+            });
+
+            const gananciasNetas = ingresosBrutos - costoTotal;
+
+            const elBrutos = document.getElementById('report-brutos');
+            if(elBrutos) elBrutos.innerText = `$${ingresosBrutos.toLocaleString()}`;
+            
+            const elProveedor = document.getElementById('report-proveedor');
+            if(elProveedor) elProveedor.innerText = `$${gastosProveedor.toLocaleString()}`;
+            
+            const elGanancias = document.getElementById('report-ganancias');
+            if(elGanancias) elGanancias.innerText = `$${gananciasNetas.toLocaleString()}`;
+            
+            const elCompletados = document.getElementById('report-completados');
+            if(elCompletados) elCompletados.innerText = pedidosCompletados;
+
+            const chartContainer = document.getElementById('report-chart');
+            if(chartContainer) {
+                const maxVal = Math.max(...chartData, 1); 
+                
+                chartContainer.innerHTML = chartData.map((val, idx) => {
+                    const height = (val / maxVal) * 100;
+                    const d = new Date(todayForChart);
+                    d.setDate(d.getDate() - (6 - idx));
+                    const dayName = d.toLocaleDateString('es-CO', { weekday: 'short' });
+                    const isToday = idx === 6;
+                    
+                    return `
+                    <div class="flex flex-col items-center justify-end h-full w-10 sm:w-16">
+                        <div class="w-full ${isToday ? 'bg-red-500 hover:bg-red-400' : 'bg-slate-300 hover:bg-slate-400'} rounded-t-lg relative group transition-all duration-500 ease-out" style="height: ${Math.max(height, 2)}%">
+                            <div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] sm:text-xs font-bold px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none shadow-lg">
+                                $${val.toLocaleString()}
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-black uppercase mt-3 text-slate-500 ${isToday ? 'text-red-500' : ''}">${dayName}</span>
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        function openReportSender() {
+            const dateFilterEl = document.getElementById('report-date-filter');
+            let dateStr = "Hoy";
+            if (dateFilterEl && dateFilterEl.value) {
+                const [y, m, d] = dateFilterEl.value.split('-');
+                const td = new Date(y, m - 1, d);
+                const today = new Date();
+                if (!(today.getFullYear() === td.getFullYear() && today.getMonth() === td.getMonth() && today.getDate() === td.getDate())) {
+                    dateStr = td.toLocaleDateString('es-CO');
+                }
+            }
+            const typeSelect = document.getElementById('report-type');
+            if(typeSelect && typeSelect.options[0]) {
+                typeSelect.options[0].text = `📅 Informe del Día (${dateStr})`;
+            }
+
+            const listAdmin = document.getElementById('report-admin-list');
+            listAdmin.innerHTML = admins.map(a => `
+                <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-slate-200 rounded-lg transition-colors">
+                    <input type="checkbox" value="${a.phone}" class="admin-checkbox w-4 h-4 text-green-600 rounded focus:ring-green-500 cursor-pointer" checked>
+                    <span class="text-xs font-bold text-slate-700">${a.name}</span>
+                </label>
+            `).join('');
+            document.getElementById('report-modal').style.display = 'flex';
+        }
+
+        function closeReportSender() {
+            document.getElementById('report-modal').style.display = 'none';
+        }
+
+        function sendReport() {
+            const type = document.getElementById('report-type').value;
+            const checkboxes = document.querySelectorAll('.admin-checkbox:checked');
+            const phones = Array.from(checkboxes).map(cb => cb.value.replace(/\D/g, ''));
+            
+            if(phones.length === 0) {
+                showNotice("Selecciona al menos un destinatario", false);
+                return;
+            }
+
+            let targetDate = new Date();
+            const dateFilterEl = document.getElementById('report-date-filter');
+            let isSpecificDay = false;
+            let displayDateStr = targetDate.toLocaleDateString('es-CO');
+
+            if (type === 'dia' && dateFilterEl && dateFilterEl.value) {
+                 const [y, m, d] = dateFilterEl.value.split('-');
+                 targetDate = new Date(y, m - 1, d);
+                 displayDateStr = targetDate.toLocaleDateString('es-CO');
+                 isSpecificDay = true;
+            }
+            targetDate.setHours(0,0,0,0);
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            let ingresosBrutos = 0;
+            let costoTotal = 0;
+            let pedidosCompletados = 0;
+            let gastosProveedor = 0;
+
+            orders.forEach(o => {
+                if (o.status !== 'Completado') return; 
+
+                const orderDateObj = new Date(Number(o.id)); 
+                const orderMidnight = new Date(orderDateObj.getFullYear(), orderDateObj.getMonth(), orderDateObj.getDate());
+                
+                let includeInReport = false;
+                if (type === 'dia') {
+                    if (isSpecificDay) {
+                        includeInReport = (orderMidnight.getTime() === targetDate.getTime());
+                    } else {
+                        includeInReport = (orderMidnight.getTime() === today.getTime());
+                    }
+                } else {
+                    const diffTime = today.getTime() - orderMidnight.getTime();
+                    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+                    includeInReport = (diffDays >= 0 && diffDays <= 6);
+                }
+
+                if (includeInReport) {
+                    ingresosBrutos += o.total;
+                    pedidosCompletados++;
+                    
+                    o.items.forEach(item => {
+                        if (item.flavors && item.flavors.length > 0) {
+                            let comboCost = 0;
+                            item.flavors.forEach(f => {
+                                const prod = products.find(p => p.name === f.name);
+                                comboCost += (prod ? (prod.cost || 0) : 0) * f.qty;
+                            });
+                            costoTotal += (comboCost * item.qty);
+                        } else {
+                            let itemCost = item.cost;
+                            if (itemCost === undefined || itemCost === 0) {
+                                const prod = products.find(p => p.name === item.name);
+                                itemCost = prod ? (prod.cost || 0) : 0;
+                            }
+                            costoTotal += (itemCost * item.qty);
+                        }
+                    });
+                }
+            });
+
+            purchases.forEach(p => {
+                const pDate = new Date(Number(p.id)); 
+                const purchaseMidnight = new Date(pDate.getFullYear(), pDate.getMonth(), pDate.getDate());
+                
+                let includeInReport = false;
+                if (type === 'dia') {
+                    if (isSpecificDay) {
+                        includeInReport = (purchaseMidnight.getTime() === targetDate.getTime());
+                    } else {
+                        includeInReport = (purchaseMidnight.getTime() === today.getTime());
+                    }
+                } else {
+                    const diffTime = today.getTime() - purchaseMidnight.getTime();
+                    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+                    includeInReport = (diffDays >= 0 && diffDays <= 6);
+                }
+                
+                if (includeInReport) {
+                    gastosProveedor += p.total;
+                }
+            });
+
+            const gananciasNetas = ingresosBrutos - costoTotal;
+            const titulo = type === 'dia' ? 'DIARIO' : 'SEMANAL';
+            const strFecha = type === 'dia' ? displayDateStr : `Últimos 7 días (${new Date().toLocaleDateString('es-CO')})`;
+
+            let msg = `*📊 REPORTE FINANCIERO ${titulo}* 🥊\n\n`;
+            msg += `*🗓️ Fecha:* ${strFecha}\n`;
+            msg += `*📦 Pedidos Completados:* ${pedidosCompletados}\n`;
+            msg += `*💵 Ingresos Brutos:* $${ingresosBrutos.toLocaleString()}\n`;
+            msg += `*🛒 Inversión Proveedor:* $${gastosProveedor.toLocaleString()}\n`;
+            msg += `*📈 Ganancias Netas:* $${gananciasNetas.toLocaleString()}\n\n`;
+            msg += `_Generado desde Bolis del Ring App_`;
+
+            if (type === 'dia' && !isSpecificDay) {
+                const todayStr = new Date().toISOString().split('T')[0];
+                localStorage.setItem('bolis_ring_last_report', todayStr);
+            }
+
+            phones.forEach((phone, index) => {
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, `_blank_${index}`);
+            });
+            
+            closeReportSender();
+            showNotice(`Enviando a ${phones.length} contacto(s)...`, true);
+        }
+
+        // ================= SEGURIDAD Y CONFIGURACIÓN =================
+        function saveData() {
+            localStorage.setItem('bolis_ring_db', JSON.stringify(products));
+            localStorage.setItem('bolis_ring_promos', JSON.stringify(promos));
+            localStorage.setItem('bolis_ring_events', JSON.stringify(eventsPackages));
+            localStorage.setItem('bolis_ring_orders', JSON.stringify(orders));
+            localStorage.setItem('bolis_ring_workers', JSON.stringify(workers));
+            localStorage.setItem('bolis_ring_admins', JSON.stringify(admins));
+            localStorage.setItem('bolis_ring_purchases', JSON.stringify(purchases));
+        }
+
+        async function saveGitHubConfig() {
+            localStorage.setItem('gh_token', document.getElementById('gh-token').value);
+            localStorage.setItem('gh_owner', document.getElementById('gh-owner').value);
+            localStorage.setItem('gh_repo', document.getElementById('gh-repo').value);
+            localStorage.setItem('gh_path', document.getElementById('gh-path').value);
+            showNotice("¡Configuración Guardada! 🛡️", true);
             await syncDataToGitHub();
         }
 
-        async function deletePromo(index) {
-            promos.splice(index, 1);
-            saveData(); renderPromos(); await syncDataToGitHub();
-            showNotice("Evento Eliminado", true);
+        function openSecurity() {
+            if (isPromotor) return toggleAdminMode(false);
+            document.getElementById('pass-input').value = ""; 
+            document.getElementById('security-modal').style.display = 'flex';
+            document.getElementById('pass-input').focus();
         }
 
+        function closeSecurity() { document.getElementById('security-modal').style.display = 'none'; }
+
+        function verifySecurity() {
+            if (document.getElementById('pass-input').value === CLAVE) {
+                toggleAdminMode(true); closeSecurity();
+            } else { showNotice("Clave Incorrecta ❌"); }
+        }
+
+        document.getElementById('pass-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') verifySecurity();
+        });
+
+        let pendingAdminAction = null;
+
+        function openAdminSecurity(callback) {
+            pendingAdminAction = callback;
+            document.getElementById('admin-pass-input').value = "";
+            document.getElementById('admin-security-modal').style.display = 'flex';
+            document.getElementById('admin-pass-input').focus();
+        }
+
+        function closeAdminSecurity() {
+            document.getElementById('admin-security-modal').style.display = 'none';
+            pendingAdminAction = null;
+        }
+
+        function submitAdminSecurity() {
+            if (document.getElementById('admin-pass-input').value === CLAVE) {
+                const accionAConfirmar = pendingAdminAction; 
+                closeAdminSecurity();
+                if (accionAConfirmar) accionAConfirmar();
+            } else {
+                showNotice("Clave Incorrecta ❌");
+            }
+        }
+
+        document.getElementById('admin-pass-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') submitAdminSecurity();
+        });
+
+        function switchPublicPage(page) {
+            document.getElementById('page-home').classList.add('hidden');
+            document.getElementById('page-events').classList.add('hidden');
+            
+            document.getElementById('nav-btn-home').classList.remove('text-red-600', 'border-red-600');
+            document.getElementById('nav-btn-home').classList.add('text-slate-400', 'border-transparent');
+            document.getElementById('nav-btn-events').classList.remove('text-red-600', 'border-red-600');
+            document.getElementById('nav-btn-events').classList.add('text-slate-400', 'border-transparent');
+
+            if (page === 'home') {
+                document.getElementById('page-home').classList.remove('hidden');
+                document.getElementById('nav-btn-home').classList.remove('text-slate-400', 'border-transparent');
+                document.getElementById('nav-btn-home').classList.add('text-red-600', 'border-red-600');
+            } else if (page === 'events') {
+                document.getElementById('page-events').classList.remove('hidden');
+                document.getElementById('nav-btn-events').classList.remove('text-slate-400', 'border-transparent');
+                document.getElementById('nav-btn-events').classList.add('text-red-600', 'border-red-600');
+            }
+            window.scrollTo(0,0);
+        }
+
+        function toggleAdminMode(activate) {
+            isPromotor = activate;
+            
+            document.getElementById('view-public').classList.toggle('hidden', isPromotor);
+            document.getElementById('view-admin').classList.toggle('hidden', !isPromotor);
+            document.getElementById('nav-public-items').classList.toggle('hidden', isPromotor);
+            document.getElementById('nav-admin-items').classList.toggle('hidden', !isPromotor);
+            document.getElementById('promotor-tag').classList.toggle('hidden', !isPromotor);
+            
+            if (isPromotor) {
+                const cfg = getGHConfig();
+                document.getElementById('gh-token').value = cfg.token || '';
+                document.getElementById('gh-owner').value = cfg.owner || '';
+                document.getElementById('gh-repo').value = cfg.repo || '';
+                document.getElementById('gh-path').value = cfg.path;
+                switchAdminTab('admin-sec-reports'); 
+                window.scrollTo(0,0);
+                showNotice("¡Modo Promotor Activado! 🛠️", true);
+
+                const agotados = products.filter(p => p.stock <= 0).length;
+                if (agotados > 0) {
+                    setTimeout(() => {
+                        showNotice(`⚠️ Atención: Tienes ${agotados} luchador(es) agotado(s)`, false, 10000);
+                    }, 3000);
+                }
+
+                setTimeout(() => {
+                    const lastReport = localStorage.getItem('bolis_ring_last_report');
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    
+                    if (lastReport !== todayStr) {
+                        if(confirm("📊 Asistente: Aún no has enviado el Informe Diario de hoy a los Administradores.\n\n¿Deseas enviarlo ahora?")) {
+                            switchAdminTab('admin-sec-reports');
+                            openReportSender();
+                        }
+                    }
+                }, 6000);
+
+            } else {
+                showNotice("De vuelta al Ring 🥊", true);
+                window.scrollTo(0,0);
+            }
+            
+            renderProducts(); renderPromos(); renderEvents(); renderOrders(); renderWorkers(); renderAdmins(); renderProvider();
+        }
+
+        // ================= TRABAJADORES, ADMINS Y PROVEEDOR =================
         function renderWorkers() {
             const grid = document.getElementById('admin-workers-grid');
             if (!grid) return;
@@ -1912,20 +2109,14 @@
             const name = document.getElementById('new-worker-name').value;
             const phone = document.getElementById('new-worker-phone').value;
             workers.push({ id: Date.now().toString(), name, phone });
-            saveData();
-            renderWorkers();
-            document.getElementById('add-worker-form').reset();
-            await syncDataToGitHub();
-            showNotice("¡Trabajador Registrado!", true);
+            saveData(); renderWorkers(); document.getElementById('add-worker-form').reset();
+            await syncDataToGitHub(); showNotice("¡Trabajador Registrado!", true);
         }
 
         async function deleteWorker(id) {
             if(!confirm("¿Deseas eliminar a este trabajador del sistema? Ya no recibirá pedidos.")) return;
             workers = workers.filter(w => w.id.toString() !== id.toString());
-            saveData();
-            renderWorkers();
-            await syncDataToGitHub();
-            showNotice("Trabajador Eliminado", true);
+            saveData(); renderWorkers(); await syncDataToGitHub(); showNotice("Trabajador Eliminado", true);
         }
 
         function verifyAction(callback) {
@@ -1962,11 +2153,8 @@
             if(!name || !phone) return;
 
             admins.push({ id: Date.now().toString(), name, phone, permanent: false });
-            saveData();
-            renderAdmins();
-            document.getElementById('add-admin-form').reset();
-            await syncDataToGitHub();
-            showNotice("¡Administrador Registrado!", true);
+            saveData(); renderAdmins(); document.getElementById('add-admin-form').reset();
+            await syncDataToGitHub(); showNotice("¡Administrador Registrado!", true);
         }
 
         async function editAdminPhone(id) {
@@ -1976,10 +2164,7 @@
             const newPhone = prompt(`Ingresa el nuevo número de WhatsApp para ${admin.name}:`, admin.phone);
             if(newPhone && newPhone.trim() !== '') {
                 admin.phone = newPhone.trim();
-                saveData(); 
-                renderAdmins(); 
-                await syncDataToGitHub();
-                showNotice("Número actualizado correctamente", true);
+                saveData(); renderAdmins(); await syncDataToGitHub(); showNotice("Número actualizado correctamente", true);
             }
         }
 
@@ -1991,10 +2176,7 @@
             
             verifyAction(async () => {
                 admins = admins.filter(a => a.id.toString() !== id.toString());
-                saveData();
-                renderAdmins();
-                await syncDataToGitHub();
-                showNotice("Administrador Eliminado", true);
+                saveData(); renderAdmins(); await syncDataToGitHub(); showNotice("Administrador Eliminado", true);
             });
         }
 
@@ -2065,8 +2247,7 @@
                 const total = parseInt(document.getElementById('purchase-total').value);
                 
                 if (!select.value || qty <= 0 || total < 0) {
-                    showNotice("Revisa los datos de la compra", false);
-                    return;
+                    showNotice("Revisa los datos de la compra", false); return;
                 }
 
                 const prodId = select.value;
@@ -2079,21 +2260,13 @@
                     }
                     
                     purchases.push({
-                        id: Date.now().toString(),
-                        productId: prodId,
-                        productName: product.name,
-                        qty: qty,
-                        total: total,
-                        date: new Date().toLocaleString('es-CO')
+                        id: Date.now().toString(), productId: prodId, productName: product.name,
+                        qty: qty, total: total, date: new Date().toLocaleString('es-CO')
                     });
 
-                    saveData();
-                    renderProvider();
-                    renderProducts(); 
-                    renderReports();
+                    saveData(); renderProvider(); renderProducts(); renderReports();
                     document.getElementById('add-purchase-form').reset();
-                    await syncDataToGitHub();
-                    showNotice("¡Inventario Surtido! 📦", true);
+                    await syncDataToGitHub(); showNotice("¡Inventario Surtido! 📦", true);
                 }
             });
         }
@@ -2105,28 +2278,19 @@
                 const pIndex = purchases.findIndex(p => p.id.toString() === id.toString());
                 if (pIndex > -1) {
                     const purchase = purchases[pIndex];
-                    
                     const product = products.find(p => p.id.toString() === purchase.productId);
                     if (product) {
                         product.stock = Math.max(0, product.stock - purchase.qty);
                     }
-
                     purchases.splice(pIndex, 1);
-                    saveData();
-                    renderProvider();
-                    renderProducts();
-                    renderReports();
-                    await syncDataToGitHub();
-                    showNotice("Compra Deshecha", true);
+                    saveData(); renderProvider(); renderProducts(); renderReports(); await syncDataToGitHub(); showNotice("Compra Deshecha", true);
                 }
             });
         }
 
         function switchAdminTab(tabId) {
             if (tabId === 'admin-sec-admins') {
-                openAdminSecurity(() => {
-                    performTabSwitch(tabId);
-                });
+                openAdminSecurity(() => { performTabSwitch(tabId); });
                 return; 
             }
             performTabSwitch(tabId);
@@ -2141,8 +2305,6 @@
             const tabEl = document.getElementById(tabId);
             if(tabEl) {
                 tabEl.classList.remove('hidden');
-            } else {
-                console.warn("Panel no encontrado: " + tabId);
             }
             const activeBtn = document.getElementById(tabId.replace('admin-sec-', 'tab-btn-'));
             if(activeBtn) {
@@ -2151,18 +2313,9 @@
             }
         }
 
-        function showNotice(msg, isSuccess = false, duration = 2500) {
-            const t = document.createElement('div');
-            t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl text-white font-black shadow-xl transition-all duration-300 uppercase text-[10px] flex items-center gap-2 transform translate-y-10 opacity-0`;
-            t.style.backgroundColor = isSuccess ? '#16a34a' : '#0f172a';
-            t.innerHTML = msg; document.body.appendChild(t);
-            setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1'; }, 10);
-            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, duration);
-        }
-
         window.onload = async () => {
-            cleanOldData(); // Limpieza inicial antes de renderizar
-            renderProducts(); renderPromos(); renderOrders(); renderReports(); renderWorkers(); renderAdmins(); renderProvider();
+            cleanOldData(); 
+            renderProducts(); renderPromos(); renderEvents(); renderOrders(); renderReports(); renderWorkers(); renderAdmins(); renderProvider();
             await syncDataFromGitHub();
             setInterval(renderPromos, 60000);
         };
