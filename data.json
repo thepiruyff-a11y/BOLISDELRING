@@ -102,7 +102,33 @@
     }
   ],
   "promos": [],
-  "orders": [],
+  "orders": [
+    {
+      "id": 1778297455805,
+      "name": "jan",
+      "phone": "3025239510",
+      "address": "pampalinda",
+      "items": [
+        {
+          "name": "Mango El Justiciero",
+          "qty": 2,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        },
+        {
+          "name": "Coco El Enmascarado",
+          "qty": 2,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        }
+      ],
+      "total": 8000,
+      "status": "Pendiente",
+      "date": "8/5/2026, 10:30:55 p. m."
+    }
+  ],
   "workers": [
     {
       "id": "1778259504565",
