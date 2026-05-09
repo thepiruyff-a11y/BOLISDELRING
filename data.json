@@ -112,6 +112,15 @@
     }
   ],
   "promos": [],
+  "eventsPackages": [
+    {
+      "id": "1778301142966",
+      "name": "paquete cumpleaños",
+      "desc": "50 bolis",
+      "price": 80000,
+      "qty": 52
+    }
+  ],
   "orders": [
     {
       "id": 1778297455805,
