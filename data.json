@@ -112,7 +112,16 @@
     }
   ],
   "promos": [],
-  "eventsPackages": [],
+  "eventsPackages": [
+    {
+      "id": "1778456572050",
+      "name": "combo familiar",
+      "desc": "familia",
+      "price": 40000,
+      "qty": 50,
+      "image": ""
+    }
+  ],
   "orders": [
     {
       "id": 1778297455805,
