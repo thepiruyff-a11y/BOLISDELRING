@@ -112,15 +112,7 @@
     }
   ],
   "promos": [],
-  "eventsPackages": [
-    {
-      "id": "1778303091256",
-      "name": "paquete cumpleaños",
-      "desc": "paquete incluye 25 bolis, Una caja con el nombre del cumpleañero ",
-      "price": 40000,
-      "qty": 25
-    }
-  ],
+  "eventsPackages": [],
   "orders": [
     {
       "id": 1778297455805,
