@@ -99,16 +99,6 @@
       "image": "https://i.postimg.cc/d1ktjpQ9/240009be-118d-4591-b3dd-f56c5caa9ef2.jpg",
       "color": "bg-slate-50",
       "cost": 848
-    },
-    {
-      "id": "1778298132600",
-      "name": "jan",
-      "cost": 1000,
-      "price": 2000,
-      "stock": 0,
-      "category": "Rudo",
-      "image": "https://i.postimg.cc/dVSK5p2H/Chat-GPT-Image-20-feb-2026-12-42-24.png",
-      "color": "bg-slate-50"
     }
   ],
   "promos": [],
