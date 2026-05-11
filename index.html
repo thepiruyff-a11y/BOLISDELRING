@@ -1397,7 +1397,7 @@
             for (const [prodId, qty] of Object.entries(activeComboSelection)) {
                 const prod = products.find(p => p.id.toString() === prodId.toString());
                 flavorTexts.push(`${qty}x ${prod.name}`);
-                flavorData.push({ name: prod.name, qty: qty, cost: prod.cost || 0 }); // Snapshot del costo
+                flavorData.push({ name: prod.name, qty: qty, cost: prod.cost || 0 });
             }
             
             const flavorStr = ` <br><span class="text-[10px] text-slate-500 font-bold block mt-2 leading-tight bg-slate-100 p-2 rounded-lg border border-slate-200">(${flavorTexts.join(', ')})</span>`;
@@ -1803,7 +1803,10 @@
             ['diario', 'semanal', 'mensual'].forEach(v => {
                 const btn = document.getElementById(`btn-rep-${v}`);
                 if(btn) {
-                    btn.className = `report-tab-btn px-6 py-3 rounded-xl font-black text-xs sm:text-sm uppercase brutal-btn transition-all ${v === view ? 'bg-red-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border-4 border-transparent'}`;
+                    btn.className = `report-tab-btn px-6 py-3 rounded-xl font-black text-xs sm:text-sm uppercase bg-slate-50 text-slate-600 border-4 border-transparent hover:border-slate-900 hover:text-slate-900 transition-all brutal-btn`;
+                    if(v === view) {
+                        btn.className = `report-tab-btn px-6 py-3 rounded-xl font-black text-xs sm:text-sm uppercase bg-red-600 text-white brutal-btn transition-all`;
+                    }
                 }
             });
             renderReports();
@@ -1860,7 +1863,6 @@
                             let comboCost = 0;
                             item.flavors.forEach(f => {
                                 const prod = products.find(p => p.name === f.name);
-                                // Si guardamos el costo al hacer pedido, lo usamos, si no, fallback
                                 comboCost += (f.cost !== undefined ? f.cost : (prod ? (prod.cost || 0) : 0)) * f.qty;
                                 
                                 if (!productStats[f.name]) productStats[f.name] = 0;
@@ -1925,12 +1927,12 @@
                 }
             }
 
-            // Generar Gráfico
+            // Generar Gráfico (Orden invertido: Más nuevo a la izquierda, más viejo a la derecha)
             let chartBars = [];
             let maxChartVal = 1;
 
             if (currentReportView === 'diario') {
-                for(let i = 6; i >= 0; i--) {
+                for(let i = 0; i <= 6; i++) {
                     let dStart = new Date(baseDate);
                     dStart.setDate(dStart.getDate() - i);
                     dStart.setHours(0,0,0,0);
@@ -1945,12 +1947,13 @@
                         }
                     });
 
-                    chartBars.push({ label: dStart.toLocaleDateString('es-CO', { weekday: 'short' }), value: dayIncome, isHighlight: i === 0 });
+                    let label = i === 0 ? 'HOY' : dStart.toLocaleDateString('es-CO', { weekday: 'short' });
+                    chartBars.push({ label: label.toUpperCase(), value: dayIncome, isHighlight: i === 0 });
                 }
                 document.getElementById('chart-title').innerText = "Ventas (Últimos 7 Días)";
 
             } else if (currentReportView === 'semanal') {
-                for(let i = 3; i >= 0; i--) {
+                for(let i = 0; i <= 3; i++) {
                     let dEnd = new Date(baseDate);
                     dEnd.setDate(dEnd.getDate() - (i*7));
                     dEnd.setHours(23,59,59,999);
@@ -1965,13 +1968,14 @@
                             if(od >= dStart && od <= dEnd) weekIncome += o.total;
                         }
                     });
-
-                    chartBars.push({ label: `Sem ${4-i}`, tooltip: `${dStart.getDate()}/${dStart.getMonth()+1} - ${dEnd.getDate()}/${dEnd.getMonth()+1}`, value: weekIncome, isHighlight: i === 0 });
+                    
+                    let label = i === 0 ? 'ACTUAL' : `HACE ${i} SEM`;
+                    chartBars.push({ label: label, tooltip: `${dStart.getDate()}/${dStart.getMonth()+1} - ${dEnd.getDate()}/${dEnd.getMonth()+1}`, value: weekIncome, isHighlight: i === 0 });
                 }
                 document.getElementById('chart-title').innerText = "Ventas Semanales (Últ. Mes)";
 
             } else if (currentReportView === 'mensual') {
-                for(let i = 5; i >= 0; i--) {
+                for(let i = 0; i <= 5; i++) {
                     let dStart = new Date(baseDate.getFullYear(), baseDate.getMonth() - i, 1);
                     let dEnd = new Date(baseDate.getFullYear(), baseDate.getMonth() - i + 1, 0, 23, 59, 59, 999);
 
@@ -1983,7 +1987,11 @@
                         }
                     });
 
-                    chartBars.push({ label: dStart.toLocaleDateString('es-CO', { month: 'short' }).substring(0,3), value: monthIncome, isHighlight: i === 0 });
+                    // Usamos el día 15 para extraer el nombre del mes y evitar errores de zona horaria (timezone shift)
+                    let safeLabelDate = new Date(baseDate.getFullYear(), baseDate.getMonth() - i, 15);
+                    let labelStr = safeLabelDate.toLocaleDateString('es-CO', { month: 'short' }).substring(0,3).toUpperCase();
+                    
+                    chartBars.push({ label: labelStr, value: monthIncome, isHighlight: i === 0 });
                 }
                 document.getElementById('chart-title').innerText = "Ventas Mensuales (Semestre)";
             }
@@ -2085,11 +2093,14 @@
                 </tr>
             `;
 
-            for(let i = 5; i >= 0; i--) {
+            for(let i = 0; i <= 5; i++) {
                 let dStart = new Date(baseDate.getFullYear(), baseDate.getMonth() - i, 1);
                 let dEnd = new Date(baseDate.getFullYear(), baseDate.getMonth() - i + 1, 0, 23, 59, 59, 999);
                 let stats = getStatsForPeriod(dStart, dEnd);
-                let mesNombre = dStart.toLocaleString('es-CO', { month: 'long', year: 'numeric' });
+                
+                let safeDate = new Date(baseDate.getFullYear(), baseDate.getMonth() - i, 15);
+                let mesNombre = safeDate.toLocaleString('es-CO', { month: 'long', year: 'numeric' });
+                
                 let margen = stats.ingresos > 0 ? ((stats.ganancias / stats.ingresos) * 100).toFixed(1) + "%" : "0%";
                 tableHTML += `<tr><td class="text-left">${mesNombre.toUpperCase()}</td><td>${stats.pedidos}</td><td>$${stats.ingresos}</td><td>$${stats.gastosProv}</td><td>$${stats.costo}</td><td>$${stats.ganancias}</td><td>${margen}</td></tr>`;
             }
@@ -2102,7 +2113,7 @@
                     <td>Semana</td><td colspan="2">Periodo (Fechas)</td><td>Pedidos</td><td>Ingresos Brutos</td><td>Ganancia Neta</td><td>Margen (%)</td>
                 </tr>
             `;
-            for(let i = 3; i >= 0; i--) {
+            for(let i = 0; i <= 3; i++) {
                 let dEnd = new Date(baseDate);
                 dEnd.setDate(dEnd.getDate() - (i*7));
                 dEnd.setHours(23,59,59,999);
@@ -2112,7 +2123,8 @@
                 let stats = getStatsForPeriod(dStart, dEnd);
                 let periodo = `${dStart.toLocaleDateString('es-CO')} al ${dEnd.toLocaleDateString('es-CO')}`;
                 let margen = stats.ingresos > 0 ? ((stats.ganancias / stats.ingresos) * 100).toFixed(1) + "%" : "0%";
-                tableHTML += `<tr><td class="text-left">Semana ${4-i}</td><td colspan="2" class="text-left">${periodo}</td><td>${stats.pedidos}</td><td>$${stats.ingresos}</td><td>$${stats.ganancias}</td><td>${margen}</td></tr>`;
+                let semLabel = i === 0 ? "Semana Actual" : `Hace ${i} Sem`;
+                tableHTML += `<tr><td class="text-left">${semLabel}</td><td colspan="2" class="text-left">${periodo}</td><td>${stats.pedidos}</td><td>$${stats.ingresos}</td><td>$${stats.ganancias}</td><td>${margen}</td></tr>`;
             }
 
             // DIARIO
@@ -2123,7 +2135,7 @@
                     <td>Fecha</td><td>Dia de la Semana</td><td>Pedidos</td><td>Ingresos Brutos</td><td>Inv. Proveedor</td><td>Costo Produccion</td><td>Ganancia Neta</td>
                 </tr>
             `;
-            for(let i = 6; i >= 0; i--) {
+            for(let i = 0; i <= 6; i++) {
                 let dStart = new Date(baseDate);
                 dStart.setDate(dStart.getDate() - i);
                 dStart.setHours(0,0,0,0);
@@ -2162,7 +2174,7 @@
 
             tableHTML += `
                 <tr><td colspan="7" style="border: none;"></td></tr>
-                <tr><td colspan="7" class="sub-header">4. TOP LUCHADORES (Ventas Acumuladas del Mes)</td></tr>
+                <tr><td colspan="7" class="sub-header">4. TOP LUCHADORES (Ventas Acumuladas del Mes Actual)</td></tr>
                 <tr class="col-title">
                     <td>Ranking</td><td colspan="3">Nombre del Producto</td><td colspan="2">Unidades Vendidas</td><td>Ingresos Generados</td>
                 </tr>
