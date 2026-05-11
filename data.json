@@ -162,61 +162,6 @@
       "total": 12000,
       "status": "Completado",
       "date": "8/5/2026, 10:44:12 p. m."
-    },
-    {
-      "id": 1778456745514,
-      "name": "Cesar ",
-      "phone": "3205814355",
-      "address": "Calle 7",
-      "items": [
-        {
-          "name": "🔥 combo familiar <br><span class=\"text-[9px] text-slate-400 font-bold block mt-1 leading-tight\">(10x Maracumango El Rayo, 5x Mango El Justiciero, 5x LULO, 5x UVA, 5x GUANABANA, 5x MARACUYA, 5x FRESA, 5x PIÑA, 5x NARANJA)</span>",
-          "qty": 1,
-          "price": 40000,
-          "cost": 0,
-          "flavors": [
-            {
-              "name": "Maracumango El Rayo",
-              "qty": 10
-            },
-            {
-              "name": "Mango El Justiciero",
-              "qty": 5
-            },
-            {
-              "name": "LULO",
-              "qty": 5
-            },
-            {
-              "name": "UVA",
-              "qty": 5
-            },
-            {
-              "name": "GUANABANA",
-              "qty": 5
-            },
-            {
-              "name": "MARACUYA",
-              "qty": 5
-            },
-            {
-              "name": "FRESA",
-              "qty": 5
-            },
-            {
-              "name": "PIÑA",
-              "qty": 5
-            },
-            {
-              "name": "NARANJA",
-              "qty": 5
-            }
-          ]
-        }
-      ],
-      "total": 40000,
-      "status": "Pendiente",
-      "date": "10/5/2026, 6:45:45 p. m."
     }
   ],
   "workers": [
