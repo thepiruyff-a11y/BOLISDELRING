@@ -14,7 +14,7 @@
       "id": 4,
       "name": "Coco El Enmascarado",
       "price": 2000,
-      "stock": 3,
+      "stock": 8,
       "category": "Técnico",
       "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
       "color": "bg-slate-50",
@@ -34,7 +34,7 @@
       "id": 1778169292395,
       "name": "LULO",
       "price": 2000,
-      "stock": 9,
+      "stock": 10,
       "category": "Técnico",
       "image": "https://i.postimg.cc/ZnwYLmtN/c1b49da1-d979-4f90-a3f1-7a65cedf748c.jpg",
       "color": "bg-slate-50",
@@ -44,7 +44,7 @@
       "id": 1778169324158,
       "name": "UVA",
       "price": 2000,
-      "stock": 9,
+      "stock": 10,
       "category": "Rudo",
       "image": "https://i.postimg.cc/R01BRmKR/55917265-71c7-4857-9e9b-20a9af948c39.jpg",
       "color": "bg-slate-50",
@@ -103,42 +103,7 @@
   ],
   "promos": [],
   "eventsPackages": [],
-  "orders": [
-    {
-      "id": 1778298252937,
-      "name": "jan",
-      "phone": "3025239510",
-      "address": "pampalinda",
-      "items": [
-        {
-          "name": "Coco El Enmascarado",
-          "qty": 5,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        },
-        {
-          "name": "🔥 COMBO 2X1 <br><span class=\"text-[9px] text-slate-400 font-bold block mt-1 leading-tight\">(1x LULO, 1x UVA)</span>",
-          "qty": 1,
-          "price": 2000,
-          "cost": 0,
-          "flavors": [
-            {
-              "name": "LULO",
-              "qty": 1
-            },
-            {
-              "name": "UVA",
-              "qty": 1
-            }
-          ]
-        }
-      ],
-      "total": 12000,
-      "status": "Completado",
-      "date": "8/5/2026, 10:44:12 p. m."
-    }
-  ],
+  "orders": [],
   "workers": [
     {
       "id": "1778259504565",
