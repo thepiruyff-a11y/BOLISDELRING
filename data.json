@@ -164,24 +164,6 @@
       "date": "8/5/2026, 10:44:12 p. m."
     },
     {
-      "id": 1778456529506,
-      "name": "Cesar ",
-      "phone": "3262852167",
-      "address": "Calle 7",
-      "items": [
-        {
-          "name": "Maracumango El Rayo",
-          "qty": 1,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        }
-      ],
-      "total": 2000,
-      "status": "Pendiente",
-      "date": "10/5/2026, 6:42:09 p. m."
-    },
-    {
       "id": 1778456745514,
       "name": "Cesar ",
       "phone": "3205814355",
