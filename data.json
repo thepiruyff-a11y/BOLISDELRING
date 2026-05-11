@@ -14,7 +14,7 @@
       "id": 4,
       "name": "Coco El Enmascarado",
       "price": 2000,
-      "stock": 1,
+      "stock": 3,
       "category": "Técnico",
       "image": "https://i.postimg.cc/CKxNvHqf/Chat-GPT-Image-7-may-2026-00-02-50.png",
       "color": "bg-slate-50",
@@ -24,7 +24,7 @@
       "id": 2,
       "name": "Mango El Justiciero",
       "price": 2000,
-      "stock": 18,
+      "stock": 20,
       "category": "Rudo",
       "image": "https://i.postimg.cc/9XYDM3kx/076a3ce4-5ca8-440a-af2f-e7a345c9e0cf.jpg",
       "color": "bg-yellow-50",
@@ -104,31 +104,6 @@
   "promos": [],
   "eventsPackages": [],
   "orders": [
-    {
-      "id": 1778297455805,
-      "name": "jan",
-      "phone": "3025239510",
-      "address": "pampalinda",
-      "items": [
-        {
-          "name": "Mango El Justiciero",
-          "qty": 2,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        },
-        {
-          "name": "Coco El Enmascarado",
-          "qty": 2,
-          "price": 2000,
-          "cost": 848,
-          "flavors": null
-        }
-      ],
-      "total": 8000,
-      "status": "Completado",
-      "date": "8/5/2026, 10:30:55 p. m."
-    },
     {
       "id": 1778298252937,
       "name": "jan",
