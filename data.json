@@ -103,7 +103,33 @@
   ],
   "promos": [],
   "eventsPackages": [],
-  "orders": [],
+  "orders": [
+    {
+      "id": 1781369145485,
+      "name": "jhj",
+      "phone": "3025239510",
+      "address": "b/tura",
+      "items": [
+        {
+          "name": "Maracumango El Rayo",
+          "qty": 1,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        },
+        {
+          "name": "Coco El Enmascarado",
+          "qty": 1,
+          "price": 2000,
+          "cost": 848,
+          "flavors": null
+        }
+      ],
+      "total": 4000,
+      "status": "Pendiente",
+      "date": "13/6/2026, 11:45:45 a. m."
+    }
+  ],
   "workers": [
     {
       "id": "1778259504565",
@@ -131,14 +157,5 @@
       "permanent": false
     }
   ],
-  "purchases": [
-    {
-      "id": "1778299442830",
-      "productId": "1",
-      "productName": "Maracumango El Rayo",
-      "qty": 20,
-      "total": 16960,
-      "date": "8/5/2026, 11:04:02 p. m."
-    }
-  ]
+  "purchases": []
 }
